@@ -4,7 +4,6 @@ import YouTube, { YouTubeProps } from 'react-youtube';
 export const Example = () => {
 
     let playerRef = useRef<any>()
-    let player!: any
 
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         // access to player in all event handlers via event.target
