@@ -1,18 +1,21 @@
 import React, { useRef } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
+import { setSong } from '../store/music-player/music-player.reducer';
+import { useAppDispatch, useAppSelector } from '../store/store.hooks';
 
 export const Example = () => {
+    const currSong = useAppSelector(state => state.musicPlayer.currSong)
+    const dispatch = useAppDispatch()
+    // const currSong = useSelector((state: RootState) => state.musicPlayerModule) // needs to define a state interface!
+    const videoIds = ['hTWKbfoikeg', 'fregObNcHC8', 'vabnZ9-ex7o']
 
     let playerRef = useRef<any>()
 
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
-        // access to player in all event handlers via event.target
-        event.target.playVideo();
         playerRef.current = event.target
     }
     const startVideo = () => {
         playerRef.current.playVideo()
-        // console.log('playerRef.current: ',playerRef)
     }
     const opts = {
         height: '390',
@@ -21,20 +24,18 @@ export const Example = () => {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
         },
-    };
+    }
+    const changeSong = () => {
+        dispatch(setSong('fregObNcHC8'))
 
+    }
+    console.log(currSong)
     return (
         <>
-            <YouTube videoId="2g811Eo7K8U" opts={opts} onReady={onPlayerReady} />
+            <YouTube videoId={currSong} opts={opts} onReady={onPlayerReady} />
             <button onClick={startVideo}>play</button>
+            <button onClick={changeSong}>Change Song </button>
         </>
     )
-
-
-    // _onReady(event: any) {
-    //     // access to player in all event handlers via event.target
-
-    //     event.target.pauseVideo();
-    // }
 }
 
