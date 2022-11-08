@@ -16,8 +16,11 @@ export const MusicPlayer = () => {
     const [songTimer, setSongTimer] = useState(0)
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         playerRef.current = event.target
+        console.log(event.target.getDuration()) // we can get duration from here is in seconds needs to mulyiply it
+        console.log(event.target.getCurrentTime()) // allso in seconds 
+        console.log(event.target.setVolume(50))
+        // getCurrentTime,getDuration,unmute,setVolume
         startVideo()
-        // isSongPlaying.current = true
         // pauseVideo()
 
     }
@@ -27,7 +30,7 @@ export const MusicPlayer = () => {
             if (currSong && songTimer >= currSong.duration) {
                 window.clearInterval(durationIntervalId.current)
             }
-            setSongTimer(prev => prev + 500)
+            setSongTimer(playerRef.current.getCurrentTime() * 1000)
         }, 500)
     }
 
@@ -66,7 +69,6 @@ export const MusicPlayer = () => {
         dispatch(setSong(song as Song))
 
     }
-
 
     return (
         <>
