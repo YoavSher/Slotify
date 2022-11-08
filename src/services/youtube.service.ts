@@ -6,7 +6,7 @@ interface Song {
     description: string,
     image: string,
     publishTime: string,
-    duration: string
+    duration: number
 }
 
 export const youtubeService = {
@@ -28,7 +28,7 @@ async function getDataFromYoutube(term: string) {
         // const durationData = `https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`
         const durationData = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`)
         const durations = durationData.data.items.map((item: any) => _translateDuration(item.contentDetails.duration))
-        const songs = res.data.items.map((song: Song,idx:number) => {
+        const songs = res.data.items.map((song: Song, idx: number) => {
             const currSong = _getVideoProps(song)
             currSong.duration = durations[idx]
             return currSong

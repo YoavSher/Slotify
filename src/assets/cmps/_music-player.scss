@@ -1,0 +1,14 @@
+.music-player {
+    background-color: #181818;
+    height: 90px;
+    width: 100%;
+    padding: 0 16px;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+
+    .iframe-container {
+        height: 0;
+        width: 0;
+    }
+}

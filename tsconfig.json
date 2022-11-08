@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/cmps/music-player.tsx"  ]
 }
