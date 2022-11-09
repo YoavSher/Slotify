@@ -1,22 +1,22 @@
 import { ChangeEvent, ReactEventHandler, useState } from "react"
+import { Song } from "../interfaces/song"
 import { youtubeService } from "../services/youtube.service"
 
 
 export const Search = () => {
 
     const [searchTerm, setSearchTerm] = useState('')
-    const [results, setResults] = useState(null)
+    const [results, setResults] = useState<Song[] | null | undefined>(null)
 
     const handleTextChange = (ev: ChangeEvent<HTMLInputElement>) => {
         const { value } = ev.target
         setSearchTerm(value)
-        // console.log('searchTerm:', searchTerm)
     }
 
     const onSearch = async () => {
         try {
             const resData = await youtubeService.getDataFromYoutube(searchTerm)
-            setResults(resData)
+            if (resData) setResults(resData)
             console.log('results:', results)
             console.log('resData:', resData)
         } catch (err) {
@@ -33,10 +33,10 @@ export const Search = () => {
             {results && <section className="search-results">
                 <div className="top-result">
                     <h1>Top Result</h1>
-                    {/* <div >
+                    <div >
                         <h3>{results[0].title}</h3>
                         <img src={results[0].image} alt="" />
-                    </div> */}
+                    </div>
                 </div>
             </section>}
         </section>

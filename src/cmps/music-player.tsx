@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { Song } from '../interfaces/song';
 import { utilService } from '../services/util.service';
@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from '../store/store.hooks';
 export const MusicPlayer = () => {
     const currSong = useAppSelector(state => state.musicPlayer.currSong)
     const dispatch = useAppDispatch()
-    // const currSong = useSelector((state: RootState) => state.musicPlayerModule) // needs to define a state interface!
 
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
@@ -18,10 +17,10 @@ export const MusicPlayer = () => {
         playerRef.current = event.target
         console.log(event.target.getDuration()) // we can get duration from here is in seconds needs to mulyiply it
         console.log(event.target.getCurrentTime()) // allso in seconds 
-        console.log(event.target.setVolume(50))
+        console.log(event.target.setVolume(50)) // from 1 to 100 with a meter bar
         // getCurrentTime,getDuration,unmute,setVolume
-        startVideo()
-        // pauseVideo()
+        // startVideo()
+        pauseVideo()
 
     }
 
@@ -48,6 +47,10 @@ export const MusicPlayer = () => {
         setIsSongPlaying(false)
         window.clearInterval(durationIntervalId.current)
     }
+    const onVolumeChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        playerRef.current.setVolume(ev.target.value)
+
+    }
     const opts = {
         height: '0',
         width: '0',
@@ -57,15 +60,25 @@ export const MusicPlayer = () => {
         },
     }
     const changeSong = () => {
-        const song = {
+        const song1 = {
             description: 'Official Music Video for Smells Like Teen Spirit performed by Nirvana. Nevermind (30th Anniversary Edition) is available now: ...',
-            duration: 279000,
-            id: 'hTWKbfoikeg',
-            image: 'https://i.ytimg.com/vi/hTWKbfoikeg/default.jpg',
+            duration: 198000,
+            id: 'PAK5blgfKWM',
+            image: 'https://i.ytimg.com/vi/PAK5blgfKWM/default.jpg',
             publishTime: '2009-06-16T22:14:25Z',
-            title: 'Nirvana - Smells Like Teen Spirit'
+            title: 'The Doors - Alabama Song'
 
         }
+        const song2 = {
+            description: 'Official Music Video for Smells Like Teen Spirit performed by Nirvana. Nevermind (30th Anniversary Edition) is available now: ...',
+            duration: 198000,
+            id: '44oCg-G7bQ4',
+            image: 'https://i.ytimg.com/vi/PAK5blgfKWM/default.jpg',
+            publishTime: '2009-06-16T22:14:25Z',
+            title: 'The Doors - Alabama Song'
+
+        }
+        const song = (Math.random() > 0.5) ? song1 : song2
         dispatch(setSong(song as Song))
 
     }
@@ -78,6 +91,8 @@ export const MusicPlayer = () => {
                     <p>{utilService.millisToMinutesAndSeconds(currSong.duration)}</p>
                     |
                     <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>
+                    |
+                    <input type="range" min="0" defaultValue="50" max="100" onInput={onVolumeChange} />
                 </>}
                 <button onClick={changeSong}>Change Song </button>
                 <button onClick={onClickPlay}>{isSongPlaying ? 'pause' : 'play'}</button>
