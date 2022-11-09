@@ -1,8 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import routes from './routes';
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
+// import './App.css';
 import { Example } from './cmps/stam';
 
 function App() {
