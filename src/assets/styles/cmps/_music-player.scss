@@ -8,6 +8,37 @@
     grid-area: now-playing-bar;
     display: flex;
 
+    // volume input opacity 0.38 is better for background
+    span.css-ok908x-MuiSlider-root {
+        .css-1rblxne-MuiSlider-root .css-14pt78w-MuiSlider-rail {
+            opacity: 0.38;
+        }
+
+        &:hover {
+            .css-1gv0vcd-MuiSlider-track {
+                color: #1db954;
+            }
+        }
+
+        .css-1gv0vcd-MuiSlider-track {
+            border: 0;
+        }
+    }
+
+    span.css-1rblxne-MuiSlider-root {
+        .css-1rblxne-MuiSlider-root .MuiSlider-rai {
+            opacity: 0.38;
+
+        }
+
+        &:hover {
+            .css-1n40zqk-MuiSlider-track {
+                color: #1db954;
+
+            }
+        }
+    }
+
     .iframe-container {
         height: 0;
         width: 0;
