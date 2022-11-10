@@ -5,31 +5,23 @@ import { BsPerson } from 'react-icons/bs'
 import { useAppDispatch } from "../store/store.hooks"
 import { youtubeService } from "../services/youtube.service"
 import { setSearchResults } from "../store/search/search.reducer"
+import { utilService } from "../services/util.service"
 
 
 export const AppHeader = (props: any) => {
-    // const { handleTextChange, searchTerm } = props
-    const [searchTerm, setSearchTerm] = useState('')
+   
     const location = useLocation()
     const dispatch = useAppDispatch()
 
 
 
-    const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        
+        const onSearch = async (ev: ChangeEvent<HTMLInputElement>) => {
         const { value } = ev.target
-        setSearchTerm(value)
-        // handleTextChange(txt)
-    }
-
-    const onSearch = async (ev: MouseEvent<HTMLButtonElement>) => {
-        ev.preventDefault()
-        // ev.stopPropagation()
+        
         try {
-            const resData = await youtubeService.getDataFromYoutube(searchTerm)
-            // setResults(resData)
-            // const songs = resData?.splice(1)
-            // setTopSongs(songs)
-            // console.log('results:', results)
+            const resData = await youtubeService.getDataFromYoutube(value)
+           
             console.log('resData:', resData)
             dispatch(setSearchResults(resData))
         } catch (err) {
@@ -45,9 +37,10 @@ export const AppHeader = (props: any) => {
             </div>
             {location.pathname.includes("/search") && <form>
                 <input type="text"
-                    onChange={handleChange}
-                    value={searchTerm} />
-                <button onClick={onSearch}>Search</button>
+                    onChange={utilService.debounce(onSearch,1000)}
+                    // value={searchTerm} 
+                    />
+                {/* <button onClick={onSearch}>Search</button> */}
             </form>}
             <div className="header-user flex align-center"><span><BsPerson /></span><h4>User</h4></div>
         </section>

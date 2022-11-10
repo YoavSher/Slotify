@@ -18,7 +18,7 @@ async function getDataFromYoutube(term: string) {
         try {
             const res = await axios
                 .get(
-                    `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&videoEmbeddable=true&type=video&key=${API_KEY}&q=${term}`)
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=5&key=${API_KEY}&q=${term}`)
     
             const str = res.data.items.map((item: { id: { videoId: string } }) => '' + `${item.id.videoId}%2C`).join('').slice(0, -3)
             // const durationData = `https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`
@@ -32,9 +32,9 @@ async function getDataFromYoutube(term: string) {
                 // A we can sort both of them by id,B we can do a secondary loop to find the correct id and then take the duration
             })
             console.log('songs:', songs)
-            songsCache[term]=songs as Song[]
+            songsCache[term]=songs 
             _saveToStorage(STORAGE_KEY,songsCache[term])
-            return songs as Song[]
+            return songs 
         } catch (err) {
             console.log('err:', err)
         }

@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import routes from './routes';
 import { Route, Routes } from 'react-router-dom';
 import { MusicPlayer } from './cmps/music-player';
 import './assets/styles/main.scss'
 import { AppNavbar } from './cmps/app-navbar';
 import { AppHeader } from './cmps/app-header';
+import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
+import { useAppDispatch } from './store/store.hooks';
+import { setPlaylists } from './store/playlist/playlist.reducer';
+import { playlistService } from './services/playlist.service';
 
 function App() {
+
+  // const [playlists, setPlaylists] = useState()
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    loadPlayList()
+  }, [])
+  
+  const loadPlayList = async () => {
+    const playlists = await playlistService.query()
+    if (playlists) dispatch(setPlaylists(playlists))
+    // setPlaylists(playlists)
+  }
   return (
     <div className='root-app' >
       <div className="main-app">
-        <AppHeader/>
+        <AppHeader />
         <AppNavbar />
         <main className='content'>
           <Routes>

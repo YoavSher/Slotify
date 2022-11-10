@@ -28,7 +28,7 @@ export const Search = () => {
         }
         console.log('topSongs:', topSongs)
         
-    }, [])
+    }, [searchResults])
 
 
 
