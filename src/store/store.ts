@@ -2,10 +2,12 @@
 import thunk from 'redux-thunk'
 import { configureStore } from '@reduxjs/toolkit'
 import musicPlayerReducer from './music-player/music-player.reducer';
+import searchReducer from './search/search.reducer';
 
 export const store = configureStore({
     reducer: {
-        musicPlayer: musicPlayerReducer
+        musicPlayer: musicPlayerReducer,
+        searchSong: searchReducer
     }
 })
 
