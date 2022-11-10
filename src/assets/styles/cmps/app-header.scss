@@ -1,0 +1,9 @@
+.app-header{
+    grid-area: main-view;
+    height: 64px;
+    min-width: 0;
+    // pointer-events: none;
+    z-index: 2;
+    position: sticky;
+    top: 0;
+}

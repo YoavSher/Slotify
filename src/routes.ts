@@ -13,6 +13,10 @@ const routes = [
         path: 'search',
         component:  Search
     },
+    {
+        path: 'search/:term?',
+        component:  Search
+    },
 ]
 
 export default routes
