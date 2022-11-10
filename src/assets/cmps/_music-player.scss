@@ -1,11 +1,133 @@
 .music-player {
+    box-sizing: border-box;
     background-color: #181818;
     height: 90px;
     width: 100%;
-    padding: 0 16px;
+    padding: 16px;
     position: fixed;
-    bottom: 0;
+    // bottom: 0;
+    bottom: 300px;
     display: flex;
+
+
+    .left-section {
+        width: 30%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .song-image {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        .names-container {
+            .song-name {
+                color: white;
+
+            }
+
+        }
+    }
+
+    .main-player {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+            gap: 14px;
+
+            button:not(.play-pause-btn) {
+                @include cleared-btn;
+                width: 32px;
+                height: 32px;
+                font-size: 28px;
+
+
+            }
+
+            .play-pause-btn {
+                width: 32px;
+                height: 32px;
+                @include play-btn;
+                color: black;
+                background: white;
+                position: relative;
+
+                &.play {
+
+                    font-size: 32px;
+
+                    svg {
+                        position: absolute;
+                        left: 2px;
+                        top: 0px;
+                    }
+                }
+
+                &.pause {
+                    font-size: 20px;
+
+                    svg {
+                        position: absolute;
+                        top: 6px;
+                        left: 6px;
+                    }
+                }
+            }
+        }
+
+        .time-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            span.css-1rblxne-MuiSlider-root {
+                width: calc(100% - 50px);
+                margin: 0px 7px;
+            }
+
+            p {
+                color: #6a6a6a; //should be a var
+                font-size: 11px;
+
+            }
+        }
+    }
+
+    .right-section {
+        display: flex;
+        align-items: center;
+        width: 30%;
+        justify-content: flex-end;
+
+        .volume-btn {
+            @include cleared-btn;
+            width: 32px;
+            height: 32px;
+            font-size: 20px;
+            line-height: 12px;
+        }
+    }
+
+    .dev-button {
+        position: absolute;
+        top: -200px;
+
+        &.one {
+            left: 0px;
+        }
+
+        &.two {
+            left: 50px;
+        }
+
+    }
 
     // volume input opacity 0.38 is better for background
     span.css-ok908x-MuiSlider-root {

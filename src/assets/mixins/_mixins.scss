@@ -1,0 +1,18 @@
+@mixin cleared-btn {
+    border: none;
+    color: hsla(0, 0%, 100%, .7);
+    background-color: transparent;
+
+    &:hover {
+        color: white;
+    }
+}
+
+@mixin play-btn {
+    border-radius: 50%;
+    border: none;
+
+    &:active {
+        background-color: red;
+    }
+}

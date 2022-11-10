@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Song } from '../../interfaces/song'
-import { RootState } from '../store'
-// import rootstate
 interface MusicPlayerState {
     currSong: Song | null
 }

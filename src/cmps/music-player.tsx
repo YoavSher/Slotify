@@ -5,6 +5,10 @@ import { Song } from '../interfaces/song';
 import { utilService } from '../services/util.service';
 import { setSong } from '../store/music-player/music-player.reducer';
 import { useAppDispatch, useAppSelector } from '../store/store.hooks';
+import { timeSliderOptions, volumeSliderOptions } from '../helpers/slider-component-config';
+import { BiPlay, BiVolumeLow, BiVolumeFull, BiVolume } from 'react-icons/bi'
+import { GiPauseButton } from 'react-icons/gi'
+import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
 
 export const MusicPlayer = () => {
     const currSong = useAppSelector(state => state.musicPlayer.currSong)
@@ -15,23 +19,16 @@ export const MusicPlayer = () => {
 
     const [isSongPlaying, setIsSongPlaying] = useState(false)
     const [songTimer, setSongTimer] = useState(0)
+    const prevVolume = useRef(50)
+    const [volume, setVolume] = useState(50)
 
-    // useEffect(() => {
-    //     // need to adress what happens when a song ends or switched in the middle of playing
-    //     // setSongTimer(0)
-    //     // playerRef.current.clearVideo()
-    //     // setIsSongPlaying(false)
-    // }, [currSong])
-
-    const onPlayerReady: YouTubeProps['onReady'] = (event) => {
-        // here i should reset pretty much everything before setting them
-        playerRef.current = event.target
-        console.log(event.target.getDuration()) // we can get duration from here is in seconds needs to mulyiply it
-        console.log(event.target) //   // or do a 2 way data binding that is a bit ugly just to keep it connected
-        // getCurrentTime,getDuration,unmute,setVolume
-        // startVideo()
-        pauseVideo()
-
+    const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
+        playerRef.current = ev.target
+        console.log(ev.target)
+        if (volume) setVolume(playerRef.current.playerInfo.volume)
+        setSongTimer(0)
+        window.clearInterval(durationIntervalId.current)
+        startVideo()
     }
 
     const durationInterval = () => {
@@ -47,68 +44,69 @@ export const MusicPlayer = () => {
         if (isSongPlaying) pauseVideo()
         else startVideo()
     }
+
     const startVideo = () => {
         playerRef.current.playVideo()
         setIsSongPlaying(true)
         durationInterval()
     }
+
     const pauseVideo = () => {
         playerRef.current.pauseVideo()
         setIsSongPlaying(false)
         window.clearInterval(durationIntervalId.current)
     }
-    const onVolumeChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        playerRef.current.setVolume(+ev.target.value)
+
+    const toggleMute = () => {
+        if (volume) mute()
+        else unMute()
+    }
+
+
+    const unMute = () => {
+        onVolumeChange(prevVolume.current)
+    }
+
+    const mute = () => {
+        prevVolume.current = volume
+        onVolumeChange(0)
+    }
+
+    const onVolumeChange = (number: number) => {
+        prevVolume.current = volume
+        if (playerRef.current) playerRef.current.setVolume(number)
+        setVolume(number)
 
     }
+
     const seekTo = (timeInSeconds: number) => {
         playerRef.current.seekTo(timeInSeconds)
     }
 
     const timeBarDebounceId = useRef<number>()
-    const onChangeTime = (time: number) => {
-        // i am replicating the returned function
-        //each time i am being called in this function i want to reset the timeout and start a newone
-        //the function that will happen the later will just put it on the video,but i allso need to stop the video for the while that 
-        //i am debounced
 
+    const onChangeTime = (time: number) => {
         const later = () => {
-            console.log('returning to play')
             window.clearTimeout(timeBarDebounceId.current)
             seekTo(time)
             startVideo()
-            //update the video and start it 
         }
-        console.log('im paused!')
+
         setSongTimer(time * 1000)
         pauseVideo()
         window.clearTimeout(timeBarDebounceId.current)
         timeBarDebounceId.current = window.setTimeout(later, 1000)
-
-
-
-
-
-        // ev: ChangeEvent<HTMLInputElement>
-        console.log(time)
-        // const time = +ev.target.value
-        // i need to debounce it but only for the playerRef.current
-        window.setTimeout(() => {
-
-            playerRef.current.seekTo(time)
-        }, 0)
     }
 
     const opts = {
         height: '0',
         width: '0',
         playerVars: {
-            // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
-        },
+        }
     }
     const changeSong = () => {
-        const song1 = {
+        const song = {
             description: 'Official Music Video for Smells Like Teen Spirit performed by Nirvana. Nevermind (30th Anniversary Edition) is available now: ...',
             duration: 198000,
             id: 'PAK5blgfKWM',
@@ -117,7 +115,12 @@ export const MusicPlayer = () => {
             title: 'The Doors - Alabama Song'
 
         }
-        const song2 = {
+
+        dispatch(setSong(song as Song))
+
+    }
+    const changeSong2 = () => {
+        const song = {
             description: 'Official Music Video for Smells Like Teen Spirit performed by Nirvana. Nevermind (30th Anniversary Edition) is available now: ...',
             duration: 198000,
             id: '44oCg-G7bQ4',
@@ -126,85 +129,72 @@ export const MusicPlayer = () => {
             title: 'The Doors - Alabama Song'
 
         }
-        const song = (Math.random() > 0.5) ? song1 : song2
         dispatch(setSong(song as Song))
-
     }
+
+    const getVolumeIcon = () => {
+        switch (true) {
+            case (volume === 0):
+                return <BiVolume />
+            case (volume < 60):
+                return <BiVolumeLow />
+            case (volume >= 60):
+                return <BiVolumeFull />
+
+        }
+    }
+
     return (
         <>
             <footer className="music-player">
-                {currSong && <><YouTube className="iframe-container" videoId={currSong.id} opts={opts} onReady={onPlayerReady} />
-                    <img src={currSong.image} alt="" />
-                    <p>{utilService.millisToMinutesAndSeconds(currSong.duration)}</p>
-                    |
-                    <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>
-                    |
-                    <Slider
-                        min={0} defaultValue={87} max={100} onInput={onVolumeChange}
-                        sx={{
-                            color: '#fff',
-                            height: 4,
-                            width: 92,
-                            '& .MuiSlider-thumb': {
-                                width: 8,
-                                height: 8,
-                                transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
-                                '&:before': {
-                                    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
-                                },
-                                '&:hover, &.Mui-focusVisible': {
-                                    boxShadow: `0px 0px 0px 8px rgb(255 255 255 / 16%)`
-                                },
-                                '&.Mui-active': {
-                                    width: 20,
-                                    height: 20,
-                                },
-                            },
-                            '& .MuiSlider-rail': {
-                                opacity: 0.28,
-                            },
-                        }}
-                    />
-                    <Slider
-                        aria-label="time-indicator"
-                        size="small"
-                        value={songTimer / 1000}
-                        min={0}
-                        step={1}
-                        max={currSong.duration / 1000}
+                <section className="left-section">
+                    {currSong && <>
 
-                        onChange={(_, value) => onChangeTime(value as number)}
-                        sx={{
-                            color: '#fff',
-                            height: 4,
-                            '& .MuiSlider-thumb': {
-                                width: 8,
-                                height: 8,
-                                transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
-                                '&:before': {
-                                    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
-                                },
-                                '&:hover, &.Mui-focusVisible': {
-                                    boxShadow: `0px 0px 0px 8px rgb(255 255 255 / 16%)`
-                                },
-                                '&.Mui-active': {
-                                    width: 20,
-                                    height: 20,
-                                },
-                            },
-                            '& .MuiSlider-rail': {
-                                opacity: 0.28,
-                            },
-                        }}
-                    />
+                        <YouTube className="iframe-container" videoId={currSong.id} opts={opts} onReady={onPlayerReady} />
+                        <img className="song-image" src={currSong.image} alt="" />
+                        <div className="names-container">
+                            <p className="song-name">{currSong.title}</p>
+                        </div>
 
-                    {/* <p style={{ color: 'white' }}>timer: {songTimer / 1000}
-                        maxduration = {currSong.duration / 1000}</p> */}
-                </>}
-                <button onClick={() => seekTo(songTimer / 1000 + 15)}>Skip 15</button>
-                <button onClick={() => seekTo(songTimer / 1000 - 15)}>Back 15</button>
-                <button onClick={changeSong}>Change Song </button>
-                <button onClick={onClickPlay}>{isSongPlaying ? 'pause' : 'play'}</button>
+                    </>}
+                </section>
+
+                <div className="main-player">
+                    <section className="buttons-container">
+                        <button onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
+                        <button><MdSkipPrevious /></button>
+                        <button className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
+                        <button><MdSkipNext /></button>
+                        <button onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>
+
+                    </section>
+                    <section className="time-container">
+                        {currSong && <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>}
+                        <Slider
+                            aria-label="time-indicator"
+                            size="small"
+                            value={songTimer / 1000}
+                            min={0}
+                            step={1}
+                            disabled={currSong ? false : true}
+                            max={(currSong) ? currSong.duration / 1000 : 100}
+                            onChange={(_, value) => onChangeTime(value as number)}
+                            sx={timeSliderOptions}
+                        />
+                        {currSong && <p>{utilService.millisToMinutesAndSeconds(currSong.duration)}</p>}
+                    </section>
+
+                </div>
+                <section className="right-section">
+                    <button className="volume-btn" onClick={toggleMute} >{getVolumeIcon()}</button>
+                    <Slider
+                        min={0} max={100} value={volume} onChange={(_, value) => onVolumeChange(value as number)}
+                        sx={volumeSliderOptions}
+                    />
+                </section>
+
+                <button className="dev-button one" onClick={changeSong}>Change Song </button>
+                <button className="dev-button two" onClick={changeSong2}>Change Song 2</button>
             </footer>
         </>
     )
