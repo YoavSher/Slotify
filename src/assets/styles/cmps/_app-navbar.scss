@@ -1,6 +1,13 @@
 .app-navbar {
     // flex: 1;
     grid-area: nav-bar;
-   min-width: 200px;
+    min-width: 200px;
     background-color: rgb(57, 55, 55);
+    color: #fff;
+
+    .nav-links {
+        * {
+            color: #fff;
+        }
+    }
 }

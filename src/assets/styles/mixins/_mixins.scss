@@ -16,3 +16,8 @@
         background-color: red;
     }
 }
+
+@mixin nav-btn{
+    border-radius: 50%;
+    border: none;
+}
