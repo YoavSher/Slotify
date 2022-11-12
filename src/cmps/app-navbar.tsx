@@ -6,7 +6,7 @@ export const AppNavbar = () => {
     return (
         <nav className="app-navbar flex column">
             <h1><span><BsSpotify /></span> Slotify</h1>
-            <ul>
+            <ul className="nav-links">
                 <li><Link to="">Home</Link></li>
                 <li><Link to="search">Search</Link></li>
                 {/* <li><Link to="">Your Library</Link></li> */}

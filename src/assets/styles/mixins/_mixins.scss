@@ -16,3 +16,8 @@
         transform: scale(0.93);
     }
 }
+
+@mixin nav-btn{
+    border-radius: 50%;
+    border: none;
+}
