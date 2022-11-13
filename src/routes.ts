@@ -1,6 +1,8 @@
 import { Home } from "./pages/home";
+import { Login } from "./pages/login";
 import { PlaylistDetails } from "./pages/playlist-details";
 import { SearchResults } from "./pages/search-results";
+import { Signup } from "./pages/signup";
 
 
 
@@ -8,7 +10,17 @@ import { SearchResults } from "./pages/search-results";
 const routes = [
     {
         path: '',
-        component:  Home
+        component: Home,
+        children: [
+            {
+                path: 'login',
+                component: Login
+            },
+            {
+                path: 'signup',
+                component: Signup
+            },
+        ]
     },
     {
         path: 'search',
@@ -18,6 +30,7 @@ const routes = [
         path: 'playlist/:playlistId',
         component:  PlaylistDetails
     },
+
 ]
 
 export default routes

@@ -13,11 +13,22 @@
     border: none;
 
     &:active {
-        background-color: red;
+        transform: scale(0.93);
     }
 }
 
-@mixin nav-btn{
+@mixin green-pill-btn {
+    background-color: #1ed760;
+    color: #000000;
+    border-radius: 500px;
+    border: none;
+
+    &:hover {
+        transform: scale(1.03);
+    }
+}
+
+@mixin nav-btn {
     border-radius: 50%;
     border: none;
 }

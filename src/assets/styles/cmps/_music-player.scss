@@ -1,11 +1,10 @@
 .music-player {
     box-sizing: border-box;
-    background-color: #181818;
+    background-color: var(--background-dark);
+    border-top: 1px solid #282828;
     height: 90px;
     width: 100%;
     padding: 16px;
-    // position: fixed;
-    // bottom: 0;
     grid-area: now-playing-bar;
     display: flex;
 
@@ -93,7 +92,7 @@
             }
 
             p {
-                color: #6a6a6a; //should be a var
+                color: var(--text-subdued); //should be a var
                 font-size: 11px;
 
             }

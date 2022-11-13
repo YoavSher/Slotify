@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     loadPlayList()
   }, [])
-  
+
   const loadPlayList = async () => {
     const playlists = await playlistService.query()
     if (playlists) dispatch(setPlaylists(playlists))
@@ -30,7 +30,15 @@ function App() {
         <AppNavbar />
         <main className='content'>
           <Routes>
-            {routes.map(route => <Route key={route.path} path={route.path} element={<route.component />} />)}
+            {routes.map(route => {
+              if (route?.children?.length) {
+                return (
+                  <Route key={route.path} path={route.path} element={<route.component />}>
+                    {route.children.map(childRoute => <Route key={childRoute.path} path={childRoute.path} element={<childRoute.component />} />)}
+                  </Route>)
+              }
+              else return <Route key={route.path} path={route.path} element={<route.component />} />
+            })}
           </Routes>
         </main>
         <MusicPlayer />

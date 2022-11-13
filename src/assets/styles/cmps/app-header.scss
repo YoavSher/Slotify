@@ -2,13 +2,11 @@
     grid-area: main-view;
     height: 64px;
     min-width: 0;
-    // pointer-events: none;
     z-index: 2;
     position: sticky;
     top: 0;
     padding: 0 32px;
-    // opacity: 0;
-    background-color: rgb(83, 83, 83);
+    background-color: var(--background-dark);
     gap: 16px;
 
     .header-nav-btns {
@@ -74,6 +72,35 @@
                         flex: 1;
                     }
                 }
+            }
+        }
+    }
+
+    .header-user {
+        font-size: 16px;
+
+        .login-btn {
+            font-weight: bold;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 32px;
+            height: 48px;
+
+            &:hover {
+                transform: scale(1.03);
+            }
+        }
+
+        .signup-btn {
+            font-weight: bold;
+            @include cleared-btn;
+            padding: 8px 32px 8px 8px;
+            height: 48px;
+
+            &:hover {
+                transform: scale(1.03);
             }
         }
     }
