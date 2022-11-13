@@ -6,7 +6,7 @@
     position: sticky;
     top: 0;
     padding: 0 32px;
-    background-color: rgb(83, 83, 83);
+    background-color: var(--background-dark);
     gap: 16px;
 
     .header-nav-btns {
@@ -78,9 +78,10 @@
             border: none;
             border-radius: 50px;
             padding: 8px 32px;
+            height: 48px;
 
             &:hover {
-                transform: scale(1.07);
+                transform: scale(1.03);
             }
         }
 
@@ -88,9 +89,10 @@
             font-weight: bold;
             @include cleared-btn;
             padding: 8px 32px 8px 8px;
+            height: 48px;
 
             &:hover {
-                transform: scale(1.07);
+                transform: scale(1.03);
             }
         }
     }

@@ -12,6 +12,7 @@ function query(entityType: string): Promise<any> {
     if (entityType !== null) {
         let entities = localStorage.getItem(entityType)
         entities = entities ? JSON.parse(entities) : []
+        _save(entityType, entities)
         return Promise.resolve(entities)
     } else throw 'non existing entity'
 }
