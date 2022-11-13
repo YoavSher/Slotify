@@ -1,5 +1,6 @@
 import { Home } from "./pages/home";
-import { Search } from "./pages/search";
+import { PlaylistDetails } from "./pages/playlist-details";
+import { SearchResults } from "./pages/search-results";
 
 
 
@@ -11,11 +12,11 @@ const routes = [
     },
     {
         path: 'search',
-        component:  Search
+        component:  SearchResults
     },
     {
-        path: 'search/:term?',
-        component:  Search
+        path: 'playlist/:playlistId',
+        component:  PlaylistDetails
     },
 ]
 

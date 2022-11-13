@@ -11,8 +11,12 @@
     position: relative;
     width: 100%;
     flex: 1;
-    .content{
-        grid-area: main-view; 
+
+    .content {
+        grid-area: main-view;
         margin-top: 60px;
+        background-color: #121212;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 }

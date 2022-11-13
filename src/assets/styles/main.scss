@@ -9,7 +9,10 @@
 @import 'cmps/music-player';
 @import 'cmps/app-navbar';
 @import 'cmps/app-header';
+@import 'cmps/playlist-list';
+@import 'cmps/playlist-preview';
 
 // PAGES
 @import 'pages/main-app';
 @import 'pages/search';
+@import 'pages/playlist-details';
