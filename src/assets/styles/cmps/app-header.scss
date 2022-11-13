@@ -1,0 +1,97 @@
+.app-header {
+    grid-area: main-view;
+    height: 64px;
+    min-width: 0;
+    z-index: 2;
+    position: sticky;
+    top: 0;
+    padding: 0 32px;
+    background-color: rgb(83, 83, 83);
+    gap: 16px;
+
+    .header-nav-btns {
+        gap: 16px;
+
+        >* {
+            @include nav-btn;
+            height: 32px;
+            width: 32px;
+            font-size: 1.8em;
+            color: #fff;
+            background-color: rgba(0, 0, 0, .7);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            span {
+                display: inline-flex;
+            }
+        }
+    }
+
+    .search-bar-container {
+        flex: 1;
+        min-width: 0;
+        display: -webkit-box;
+
+        .search-form-container {
+            flex: 0 1 364px;
+            position: relative;
+
+            input {
+                font-size: 0.875rem;
+                border: 0;
+                border-radius: 500px;
+                color: #000;
+                height: 40px;
+                padding: 6px 48px;
+                text-overflow: ellipsis;
+                width: 100%;
+            }
+
+            .search-icon-container {
+                align-items: center;
+                bottom: 0;
+                display: flex;
+                left: 12px;
+                pointer-events: none;
+                position: absolute;
+                right: 12px;
+                top: 0;
+                font-size: 1.7em;
+
+                span {
+                    color: #121212;
+                    flex: 1;
+                }
+            }
+        }
+    }
+
+    .header-user {
+        font-size: 16px;
+
+        .login-btn {
+            font-weight: bold;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 32px;
+
+            &:hover {
+                transform: scale(1.07);
+            }
+        }
+
+        .signup-btn {
+            font-weight: bold;
+            @include cleared-btn;
+            padding: 8px 32px 8px 8px;
+
+            &:hover {
+                transform: scale(1.07);
+            }
+        }
+    }
+}

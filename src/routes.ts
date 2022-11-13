@@ -1,4 +1,5 @@
 import { Home } from "./pages/home";
+import { Login } from "./pages/login";
 import { Search } from "./pages/search";
 
 
@@ -7,16 +8,23 @@ import { Search } from "./pages/search";
 const routes = [
     {
         path: '',
-        component:  Home
+        component: Home,
+        children: [
+            {
+                path: 'login',
+                component: Login
+            },
+        ]
     },
     {
         path: 'search',
-        component:  Search
+        component: Search
     },
     {
         path: 'search/:term?',
-        component:  Search
+        component: Search
     },
+
 ]
 
 export default routes

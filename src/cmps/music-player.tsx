@@ -24,8 +24,7 @@ export const MusicPlayer = () => {
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         playerRef.current = ev.target
-        console.log(ev.target)
-        if (volume) setVolume(playerRef.current.playerInfo.volume)
+        setVolume(playerRef.current.playerInfo.volume)
         setSongTimer(0)
         window.clearInterval(durationIntervalId.current)
         startVideo()
@@ -35,6 +34,11 @@ export const MusicPlayer = () => {
         durationIntervalId.current = window.setInterval(() => {
             if (currSong && songTimer >= currSong.duration) {
                 window.clearInterval(durationIntervalId.current)
+                //allso should update the currSong,maybe we should to the currSong 
+                //send an update and try to +1 for the index on the current playlist and make currSong 
+                // be a computed style function make the current playlist and current songIdx
+                //this way if it's only one song then just put it in the index 0 if it will try to go up
+                // it wont be able
             }
             setSongTimer(playerRef.current.getCurrentTime() * 1000)
         }, 100)

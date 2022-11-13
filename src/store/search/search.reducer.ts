@@ -3,7 +3,7 @@ import { Song } from '../../interfaces/song'
 
 
 interface searchState {
-    searchTerm: string | null,
+    searchTerm: string | null, 
     searchResults: Song[] | null | undefined
 }
 
