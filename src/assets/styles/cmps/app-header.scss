@@ -29,40 +29,48 @@
         }
     }
 
-    .search-bar-container {
-        flex: 1;
+    .search-bar-header {
+        -webkit-box-flex: 1;
+        flex-grow: 1;
         min-width: 0;
-        display: -webkit-box;
 
-        .search-form-container {
-            flex: 0 1 364px;
-            position: relative;
+        .search-bar-container {
+            -webkit-box-align: center;
+            align-items: center;
+            display: -webkit-box;
+            display: flex;
+            gap: 16px;
 
-            input {
-                font-size: 0.875rem;
-                border: 0;
-                border-radius: 500px;
-                color: #000;
-                height: 40px;
-                padding: 6px 48px;
-                text-overflow: ellipsis;
-                width: 100%;
-            }
+            .search-form-container {
+                flex: 0 1 364px;
+                position: relative;
 
-            .search-icon-container {
-                align-items: center;
-                bottom: 0;
-                display: flex;
-                left: 12px;
-                pointer-events: none;
-                position: absolute;
-                right: 12px;
-                top: 0;
-                font-size: 1.7em;
+                input {
+                    font-size: 0.875rem;
+                    border: 0;
+                    border-radius: 500px;
+                    color: #000;
+                    height: 40px;
+                    padding: 6px 48px;
+                    text-overflow: ellipsis;
+                    width: 100%;
+                }
 
-                span {
-                    color: #121212;
-                    flex: 1;
+                .search-icon-container {
+                    align-items: center;
+                    bottom: 0;
+                    display: flex;
+                    left: 12px;
+                    pointer-events: none;
+                    position: absolute;
+                    right: 12px;
+                    top: 0;
+                    font-size: 1.7em;
+
+                    span {
+                        color: #121212;
+                        flex: 1;
+                    }
                 }
             }
         }

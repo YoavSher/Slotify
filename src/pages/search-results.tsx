@@ -1,23 +1,17 @@
-import { ChangeEvent, ReactEventHandler, useState, useEffect } from "react"
+import {useState, useEffect } from "react"
 import { useLocation, useParams } from "react-router-dom"
-import { AppHeader } from "../cmps/app-header"
 import { Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
-import { youtubeService } from "../services/youtube.service"
 import { useAppSelector } from "../store/store.hooks"
 
 
 
-export const Search = () => {
+export const SearchResults = () => {
 
-    // const [searchTerm, setSearchTerm] = useState('')
-    // const [results, setResults] = useState<Song[] | undefined>()
+    
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
-    // let songs: Song[] | undefined
-    // const params = useParams()
-    const location = useLocation()
-    console.log('location:', location)
+   
 
     useEffect(() => {
         console.log('searchResults:', searchResults)

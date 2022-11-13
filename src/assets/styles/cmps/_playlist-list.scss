@@ -1,0 +1,5 @@
+.playlist-list{
+    display: grid;
+    grid-gap: 16px 24px;
+    grid-template: auto/repeat(auto-fill,minmax(max(270px,25%),1fr));
+}
