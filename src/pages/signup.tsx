@@ -1,9 +1,12 @@
 import { MouseEvent, ChangeEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { User, userService } from "../services/user.servie"
+import { useAppDispatch } from "../store/store.hooks"
+import { setUser } from "../store/user/user.reducer"
 export const Signup = () => {
     const [userCred, setUserCred] = useState({ username: 'a', fullName: 'b', password: '', email: '', })
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const onCloseModal = () => {
         navigate(-1)
     }
@@ -15,18 +18,22 @@ export const Signup = () => {
         ev.preventDefault()
         try {
             const user = await userService.signup(userCred as User)
-            //set the store's user!
+            if (user) dispatch(setUser(user))
 
         } catch (err) {
             console.log(err)
         }
-
-
     }
+
+    const isCredValid = () => {
+        return Object.values(userCred).every(field => field)
+    }
+
     const onChangeUserCred = (ev: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = ev.target
         setUserCred(prev => ({ ...prev, [name]: value }))
     }
+
     const inputs = [
         { name: 'username', type: 'text', placeholder: 'User name', value: userCred.username },
         { name: 'fullName', type: 'text', placeholder: 'Full name', value: userCred.fullName },
@@ -44,7 +51,7 @@ export const Signup = () => {
                             placeholder={input.placeholder} value={input.value}
                             key={input.name} onChange={onChangeUserCred} />
                     ))}
-                    <button className="sign-up-btn">Sign up</button>
+                    <button disabled={!isCredValid()} className="sign-up-btn">SIGN UP</button>
                 </form>
 
             </section>

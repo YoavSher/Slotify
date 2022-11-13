@@ -50,7 +50,7 @@ function saveLocalUser(user: User) {
     return user
 }
 
-function getLoggedInUser() {
+function getLoggedInUser(): User | null {
     const loggedInUser = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)
     if (loggedInUser) return JSON.parse(loggedInUser)
     else return null

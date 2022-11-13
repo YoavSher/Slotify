@@ -23,9 +23,6 @@
     border-radius: 500px;
     border: none;
 
-    &:hover {
-        transform: scale(1.03);
-    }
 }
 
 @mixin nav-btn {
