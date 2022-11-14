@@ -1,6 +1,6 @@
 import { MouseEvent, ChangeEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { User, userService } from "../services/user.servie"
+import { User, userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
 export const Signup = () => {

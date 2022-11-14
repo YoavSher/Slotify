@@ -1,6 +1,6 @@
 import { ChangeEvent, MouseEvent, MouseEventHandler, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { userService } from "../services/user.servie"
+import { userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
 
