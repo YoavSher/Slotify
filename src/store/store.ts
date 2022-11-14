@@ -4,12 +4,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import musicPlayerReducer from './music-player/music-player.reducer';
 import searchReducer from './search/search.reducer';
 import playlistReducer from './playlist/playlist.reducer';
+import userReducer from './user/user.reducer';
 
 export const store = configureStore({
     reducer: {
         musicPlayer: musicPlayerReducer,
         searchSong: searchReducer,
-        playlist: playlistReducer
+        playlist: playlistReducer,
+        user: userReducer
     }
 })
 

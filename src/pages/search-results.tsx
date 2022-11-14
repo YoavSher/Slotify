@@ -5,7 +5,8 @@ import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 
 import { Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
-import { useAppSelector } from "../store/store.hooks"
+import { addToPlaylist } from "../store/music-player/music-player.reducer"
+import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 
 
 
@@ -19,6 +20,8 @@ export const SearchResults = () => {
 
 
 
+
+    const dispatch = useAppDispatch()
     useEffect(() => {
         console.log('searchResults:', searchResults)
         if (searchResults) {
@@ -31,6 +34,9 @@ export const SearchResults = () => {
     }, [searchResults])
     
 
+    const addSongToQueue = (song: Song) => {
+        dispatch(addToPlaylist(song))
+    }
     return (
 
         <section className="search-results-page">
@@ -59,6 +65,9 @@ export const SearchResults = () => {
                         <div className="top-songs-results-container">
                             {topSongs?.map(s => {
                                 return <div key={s.id} className="top-songs-results flex align-center  justify-between">
+                                <button onClick={() => {
+                                    addSongToQueue(s)
+                                }}>ADD TO QUEUE</button>
                                     <div className="top-song flex align-center">
                                         <div className="img-container">
                                             <img src={s.image} alt="" />

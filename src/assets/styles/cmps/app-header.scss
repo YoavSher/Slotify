@@ -54,6 +54,10 @@
                     padding: 6px 48px;
                     text-overflow: ellipsis;
                     width: 100%;
+
+                    &:focus {
+                        outline: none;
+                    }
                 }
 
                 .search-icon-container {
@@ -67,6 +71,8 @@
                     top: 0;
                     font-size: 1.7em;
 
+
+
                     span {
                         color: #121212;
                         flex: 1;
@@ -78,6 +84,49 @@
 
     .header-user {
         font-size: 16px;
+        position: relative;
+
+        .user-btn {
+            border-radius: 50%;
+            color: white;
+            border: 2px solid black;
+            box-sizing: border-box;
+            width: 32px;
+            height: 32px;
+            font-size: 26px;
+            background-color: rgba(0, 0, 0, .7);
+
+            svg {
+                position: absolute;
+                top: 2px;
+                right: 3px;
+
+            }
+
+            &:hover {
+                border: none;
+                background-color: #282828;
+            }
+        }
+
+        .user-options-modal {
+            position: absolute;
+            inset: 0px 0px auto auto;
+            margin: 0px;
+            transform: translate(0px, 43px);
+            background: #282828;
+            color: #b3b3b3;
+            border-radius: 4px;
+            padding: 4px;
+            box-shadow: 0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%);
+            min-width: 160px;
+            display: flex;
+            flex-direction: column;
+
+            button {
+                @include cleared-btn;
+            }
+        }
 
         .login-btn {
             font-weight: bold;

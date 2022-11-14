@@ -3,17 +3,21 @@ import React, { ChangeEvent, useRef, useState, useEffect } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { Song } from '../interfaces/song';
 import { utilService } from '../services/util.service';
-import { setSong } from '../store/music-player/music-player.reducer';
+import { decrementPlayingIdx, incrementPlayingIdx, } from '../store/music-player/music-player.reducer';
 import { useAppDispatch, useAppSelector } from '../store/store.hooks';
 import { timeSliderOptions, volumeSliderOptions } from '../helpers/slider-component-config';
 import { BiPlay, BiVolumeLow, BiVolumeFull, BiVolume } from 'react-icons/bi'
 import { GiPauseButton } from 'react-icons/gi'
+import { TiThListOutline } from 'react-icons/ti'
 import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
 
 export const MusicPlayer = () => {
-    const currSong = useAppSelector(state => state.musicPlayer.currSong)
+    const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
+    const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
+    let currSong = playlist?.songs[songIdx]
     const dispatch = useAppDispatch()
 
+    // useEffect(() => { currSong = playlist.songs[songIdx] }, [songIdx, playlist])
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
 
@@ -32,17 +36,17 @@ export const MusicPlayer = () => {
 
     const durationInterval = () => {
         durationIntervalId.current = window.setInterval(() => {
-            if (currSong && songTimer >= currSong.duration) {
+            if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
+                dispatch(incrementPlayingIdx())
+                setSongTimer(0)
                 window.clearInterval(durationIntervalId.current)
-                //allso should update the currSong,maybe we should to the currSong 
-                //send an update and try to +1 for the index on the current playlist and make currSong 
-                // be a computed style function make the current playlist and current songIdx
-                //this way if it's only one song then just put it in the index 0 if it will try to go up
-                // it wont be able
+            } else {
+                setSongTimer(playerRef.current.getCurrentTime() * 1000)
             }
-            setSongTimer(playerRef.current.getCurrentTime() * 1000)
         }, 100)
     }
+
+
 
     const onClickPlay = () => {
         if (isSongPlaying) pauseVideo()
@@ -84,6 +88,7 @@ export const MusicPlayer = () => {
     }
 
     const seekTo = (timeInSeconds: number) => {
+        // here i need to reference and check if the video is over! if so increment
         playerRef.current.seekTo(timeInSeconds)
     }
 
@@ -102,38 +107,23 @@ export const MusicPlayer = () => {
         timeBarDebounceId.current = window.setTimeout(later, 1000)
     }
 
+    const onIndexIncrement = () => {
+        pauseVideo()
+        playerRef.current = null
+        dispatch(incrementPlayingIdx())
+    }
+    const onIndexDecrement = () => {
+        pauseVideo()
+        playerRef.current = null
+        dispatch(decrementPlayingIdx())
+    }
+
     const opts = {
         height: '0',
         width: '0',
         playerVars: {
             autoplay: 1,
         }
-    }
-    const changeSong = () => {
-        const song = {
-            description: 'Official Music Video for Smells Like Teen Spirit performed by Nirvana. Nevermind (30th Anniversary Edition) is available now: ...',
-            duration: 198000,
-            id: 'PAK5blgfKWM',
-            image: 'https://i.ytimg.com/vi/PAK5blgfKWM/default.jpg',
-            publishTime: '2009-06-16T22:14:25Z',
-            title: 'The Doors - Alabama Song'
-
-        }
-
-        dispatch(setSong(song as Song))
-
-    }
-    const changeSong2 = () => {
-        const song = {
-            description: 'Official Music Video for Smells Like Teen Spirit performed by Nirvana. Nevermind (30th Anniversary Edition) is available now: ...',
-            duration: 198000,
-            id: '44oCg-G7bQ4',
-            image: 'https://i.ytimg.com/vi/PAK5blgfKWM/default.jpg',
-            publishTime: '2009-06-16T22:14:25Z',
-            title: 'The Doors - Alabama Song'
-
-        }
-        dispatch(setSong(song as Song))
     }
 
     const getVolumeIcon = () => {
@@ -147,13 +137,16 @@ export const MusicPlayer = () => {
 
         }
     }
+    const getFullDuration = () => {
+        return playerRef.current.playerInfo.duration * 1000 || 0
+    }
+
 
     return (
         <>
             <footer className="music-player">
                 <section className="left-section">
                     {currSong && <>
-
                         <YouTube className="iframe-container" videoId={currSong.id} opts={opts} onReady={onPlayerReady} />
                         <img className="song-image" src={currSong.image} alt="" />
                         <div className="names-container">
@@ -166,18 +159,18 @@ export const MusicPlayer = () => {
                 <div className="main-player">
                     <section className="buttons-container">
                         <button onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
-                        <button><MdSkipPrevious /></button>
+                        <button onClick={onIndexDecrement} ><MdSkipPrevious /></button>
                         <button className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
-                        <button><MdSkipNext /></button>
+                        <button onClick={onIndexIncrement} ><MdSkipNext /></button>
                         <button onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>
 
                     </section>
                     <section className="time-container">
-                        {currSong && <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>}
+                        {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>}
                         <Slider
                             aria-label="time-indicator"
                             size="small"
-                            value={songTimer / 1000}
+                            value={songTimer / 1000 | 0}
                             min={0}
                             step={1}
                             disabled={currSong ? false : true}
@@ -185,20 +178,18 @@ export const MusicPlayer = () => {
                             onChange={(_, value) => onChangeTime(value as number)}
                             sx={timeSliderOptions}
                         />
-                        {currSong && <p>{utilService.millisToMinutesAndSeconds(currSong.duration)}</p>}
+                        {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(getFullDuration())}</p>}
                     </section>
 
                 </div>
                 <section className="right-section">
+                    <button className="queue-btn"><TiThListOutline /></button>
                     <button className="volume-btn" onClick={toggleMute} >{getVolumeIcon()}</button>
                     <Slider
                         min={0} max={100} value={volume} onChange={(_, value) => onVolumeChange(value as number)}
                         sx={volumeSliderOptions}
                     />
                 </section>
-
-                <button className="dev-button one" onClick={changeSong}>Change Song </button>
-                <button className="dev-button two" onClick={changeSong2}>Change Song 2</button>
             </footer>
         </>
     )
