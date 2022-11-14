@@ -14,9 +14,10 @@ import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons
 export const MusicPlayer = () => {
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
-    const currSong = playlist?.songs[songIdx]
+    let currSong = playlist?.songs[songIdx]
     const dispatch = useAppDispatch()
 
+    // useEffect(() => { currSong = playlist.songs[songIdx] }, [songIdx, playlist])
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
 
@@ -35,20 +36,17 @@ export const MusicPlayer = () => {
 
     const durationInterval = () => {
         durationIntervalId.current = window.setInterval(() => {
-            if (currSong && playerRef.current.getCurrentTime() >= playerRef.current.playerInfo.duration) {
-                playerRef.current = null
-                onIndexIncrement()
-                clearInterval()
+            if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
+                dispatch(incrementPlayingIdx())
                 setSongTimer(0)
+                window.clearInterval(durationIntervalId.current)
             } else {
                 setSongTimer(playerRef.current.getCurrentTime() * 1000)
             }
         }, 100)
     }
 
-    const clearInterval = () => {
-        window.clearInterval(durationIntervalId.current)
-    }
+
 
     const onClickPlay = () => {
         if (isSongPlaying) pauseVideo()
@@ -90,6 +88,7 @@ export const MusicPlayer = () => {
     }
 
     const seekTo = (timeInSeconds: number) => {
+        // here i need to reference and check if the video is over! if so increment
         playerRef.current.seekTo(timeInSeconds)
     }
 
@@ -109,10 +108,13 @@ export const MusicPlayer = () => {
     }
 
     const onIndexIncrement = () => {
-        console.log('ingrementing')
+        pauseVideo()
+        playerRef.current = null
         dispatch(incrementPlayingIdx())
     }
     const onIndexDecrement = () => {
+        pauseVideo()
+        playerRef.current = null
         dispatch(decrementPlayingIdx())
     }
 

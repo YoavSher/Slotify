@@ -34,8 +34,8 @@ var playlist1 = {
         {
             "id": "sezc05A4s2g",
             "title": "The Doors - «People Are Strange»",
-            "image":"https://i.ytimg.com/vi/sezc05A4s2g/default.jpg",
-            "duration": 2930000,
+            "image": "https://i.ytimg.com/vi/sezc05A4s2g/default.jpg",
+            "duration": 133000,
             "description": "The 50th anniversary deluxe"
         },
 
@@ -72,7 +72,7 @@ var playlist2 = {
             "addedBy": {}
         },
     ],
-    
+
 }
 var playlist3 = {
     "_id": "5cksxjas89xjsa8xjsa8jxs11",
@@ -105,7 +105,7 @@ var playlist3 = {
             "addedBy": {}
         },
     ],
-    
+
 }
 
 const user = {}

@@ -44,7 +44,7 @@ const musicPlayerSlice = createSlice({
             if (state.currPlayingIdx > 0) state.currPlayingIdx--
         },
         setPlaylist: (state, action: PayloadAction<any>) => { // should turn to a playlist
-            console.log(action.payload)
+            state.currPlayingIdx = 0
             state.currPlaylist = action.payload
         },
     }
