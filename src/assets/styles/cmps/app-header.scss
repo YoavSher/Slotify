@@ -54,6 +54,10 @@
                     padding: 6px 48px;
                     text-overflow: ellipsis;
                     width: 100%;
+
+                    &:focus {
+                        outline: none;
+                    }
                 }
 
                 .search-icon-container {
@@ -66,6 +70,8 @@
                     right: 12px;
                     top: 0;
                     font-size: 1.7em;
+
+
 
                     span {
                         color: #121212;
