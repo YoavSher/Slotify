@@ -26,6 +26,10 @@ const routes = [
         path: 'search',
         component:  SearchResults
     },
+    // {
+    //     path: 'search/:searchTerm',
+    //     component:  SearchResults
+    // }, to use the search form the params
     {
         path: 'playlist/:playlistId',
         component:  PlaylistDetails

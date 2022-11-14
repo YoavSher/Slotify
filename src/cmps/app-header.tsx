@@ -11,7 +11,6 @@ import { SearchBar } from "./search-bar"
 export const AppHeader = () => {
 
     const location = useLocation()
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
     const onGoBack = () => {

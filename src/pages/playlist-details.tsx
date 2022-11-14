@@ -23,10 +23,15 @@ export const PlaylistDetails = () => {
             }
         }
     }
-    if (!playlist) return <h1 style={{color:'white'}}>Loading...</h1>
+    if (!playlist) return <h1 style={{ color: 'white' }}>Loading...</h1>
     return (
         <section className="playlist-details">
+            <header className="playlist-details-header flex">
+                <div className="img-container">
+                    <img src={playlist.imgUrl} alt="" />
+                </div>
             <h1>{playlist.name}</h1>
+            </header>
         </section>
     )
 }

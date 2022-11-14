@@ -1,3 +1,19 @@
 .playlist-details{
-    color: aliceblue;
+   .playlist-details-header{
+    height: 30vh;
+    max-height: 500px;
+    min-height: 340px;
+    gap: 20px;
+    .img-container{
+        align-self: flex-end;
+        height: 192px;
+        margin-inline-end: 24px;
+        min-width: 192px;
+        width: 192px;
+        img{
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+   }
 }
