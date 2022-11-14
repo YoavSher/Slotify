@@ -105,6 +105,15 @@
         width: 30%;
         justify-content: flex-end;
 
+        .queue-btn {
+            @include cleared-btn;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            position: relative;
+            top: 4px;
+        }
+
         .volume-btn {
             @include cleared-btn;
             width: 32px;

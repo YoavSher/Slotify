@@ -1,18 +1,19 @@
-import {useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import { Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
-import { useAppSelector } from "../store/store.hooks"
+import { addToPlaylist } from "../store/music-player/music-player.reducer"
+import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 
 
 
 export const SearchResults = () => {
 
-    
+
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
-   
 
+    const dispatch = useAppDispatch()
     useEffect(() => {
         console.log('searchResults:', searchResults)
         if (searchResults) {
@@ -21,11 +22,13 @@ export const SearchResults = () => {
             console.log('songs:', songs)
         }
         console.log('topSongs:', topSongs)
-        
+
     }, [searchResults])
 
 
-
+    const addSongToQueue = (song: Song) => {
+        dispatch(addToPlaylist(song))
+    }
     return (
         <>
 
@@ -43,6 +46,9 @@ export const SearchResults = () => {
                         <h1>Songs</h1>
                         {topSongs?.map(s => {
                             return <div key={s.id} className="flex align-center justify-between">
+                                <button onClick={() => {
+                                    addSongToQueue(s)
+                                }}>ADD TO QUEUE</button>
                                 <div className="flex">
                                     <img src={s.image} alt="" />
                                     <div>

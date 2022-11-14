@@ -9,6 +9,7 @@ export const youtubeService = {
 const STORAGE_KEY = 'songsCache'
 const API_KEY = 'AIzaSyB68OvbDNN7gFqkCGOoyxLWC36rnRfVEmQ'
 const songsCache = _loadFromStorage(STORAGE_KEY) || {}
+const combinedCleaner = /\([^\)]*\)|\[[^\]]*\]|HD|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|[`~!@#$%^*()_|+=?;:",.<>\{\}\[\]\\\/]|&#39|&quot|&amp;|vevo|music|-topic| - topic|official/ig
 
 async function getDataFromYoutube(term: string) {
 
@@ -18,19 +19,19 @@ async function getDataFromYoutube(term: string) {
         try {
             const res = await axios
                 .get(
-                    `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=5&key=${API_KEY}&q=${term}`)
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=15&key=${API_KEY}&q=${term}`)
 
             const str = res.data.items.map((item: { id: { videoId: string } }) => '' + `${item.id.videoId}%2C`).join('').slice(0, -3)
             // const durationData = `https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`
             const durationData = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`)
             const durations = durationData.data.items.map((item: any) => _translateDuration(item.contentDetails.duration) || 0)
-            const songs = res.data.items.map((s: Song, idx: number) => {
+            let songs = res.data.items.map((s: Song, idx: number) => {
                 const song = _makeSong(s)
                 song.duration = durations[idx]
                 return song
-                // maybe we should improve on the matching of the length and the ccorrect video allthough is works god
-                // A we can sort both of them by id,B we can do a secondary loop to find the correct id and then take the duration
             })
+            songs = songs.filter((song: Song) => song.duration > 0 && song.duration < 900000)
+            songs = songs.splice(0, 5)
             console.log('songs:', songs)
             songsCache[term] = songs
             _saveToStorage(STORAGE_KEY, songsCache[term])
@@ -45,12 +46,11 @@ async function getDataFromYoutube(term: string) {
 
 function _makeSong(video: any) {
     return {
+        title: video.snippet.title.replaceAll(combinedCleaner, '').trim(),
         id: video.id.videoId,
-        title: video.snippet.title,
-        description: video.snippet.description,
         image: video.snippet.thumbnails.default.url,
-        publishTime: video.snippet.publishTime,
-        duration: 0
+        duration: 0,
+        artist: video.snippet.channelTitle.replaceAll(combinedCleaner, '').trim() //maybe take only specific channels
     } as Song
 }
 

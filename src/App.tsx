@@ -12,7 +12,6 @@ import { playlistService } from './services/playlist.service';
 
 function App() {
 
-  // const [playlists, setPlaylists] = useState()
   const dispatch = useAppDispatch()
   useEffect(() => {
     loadPlayList()
@@ -21,7 +20,6 @@ function App() {
   const loadPlayList = async () => {
     const playlists = await playlistService.query()
     if (playlists) dispatch(setPlaylists(playlists))
-    // setPlaylists(playlists)
   }
   return (
     <div className='root-app' >
