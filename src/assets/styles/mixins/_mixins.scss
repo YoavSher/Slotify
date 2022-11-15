@@ -83,9 +83,8 @@
         color: #1ed760;
         border-radius: 55%;
         box-shadow: 0px 3px 5px 0px #000000;
-
-        &:hover {
-            font-size: 3.1rem;
+        &:hover{
+            box-shadow: 0px 3px 5px 0px #000000;
         }
     }
 }

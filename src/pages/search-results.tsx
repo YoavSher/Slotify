@@ -6,6 +6,7 @@ import { Song } from "../interfaces/song"
 
 import { SongPreview } from "../cmps/song-preview"
 import { useAppSelector } from "../store/store.hooks"
+import { Helmet } from "react-helmet"
 
 
 
@@ -36,6 +37,7 @@ export const SearchResults = () => {
     return (
 
         <section className="search-results-page">
+            <Helmet><title>Slotify - Search</title></Helmet>
             <div className="search-results-container">
                 {searchResults && <section className="search-results flex ">
                     <div className="top-result">
