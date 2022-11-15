@@ -7,6 +7,7 @@ import { Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
 import { addToPlaylist } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
+import { Helmet } from "react-helmet"
 
 
 
@@ -40,6 +41,7 @@ export const SearchResults = () => {
     return (
 
         <section className="search-results-page">
+            <Helmet><title>Slotify - Search</title></Helmet>
             <div className="search-results-container">
                 {searchResults && <section className="search-results flex ">
                     <div className="top-result">
@@ -77,7 +79,7 @@ export const SearchResults = () => {
                                             <h5>{s.title}</h5>
 
                                             </div>
-                                            <h6>{s.channel}</h6>
+                                            <h6>{s.artist}</h6>
                                         </div>
                                     </div>
                                     <div className="song-actions flex align-center">

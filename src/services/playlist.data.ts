@@ -12,8 +12,8 @@ var playlist1 = {
     ],
     "createdBy": {
         "_id": "u101",
-        "fullname": "Puki Ben David",
-        "imgUrl": "http://some-photo/"
+        "fullName": "Puki Ben David",
+        "imgUrl": "http://some-photo/",
     },
     "likedByUsers": [],
     "songs": [
@@ -51,7 +51,7 @@ var playlist2 = {
     ],
     "createdBy": {
         "_id": "u101",
-        "fullname": "Puki Ben David",
+        "fullName": "Puki Ben David",
         "imgUrl": "http://some-photo/"
     },
     "likedByUsers": ['{minimal-user}', '{minimal-user}'],
@@ -84,7 +84,7 @@ var playlist3 = {
     ],
     "createdBy": {
         "_id": "u101",
-        "fullname": "Puki Ben David",
+        "fullName": "Puki Ben David",
         "imgUrl": "http://some-photo/"
     },
     "likedByUsers": ['{minimal-user}', '{minimal-user}'],
