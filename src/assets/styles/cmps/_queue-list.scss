@@ -1,0 +1,165 @@
+.queue-page {
+    .queue-song-list {
+        display: flex;
+        flex-direction: column;
+
+        .top-songs-results {
+            border: 1px solid transparent;
+            border-radius: 4px;
+            height: 56px;
+            position: relative;
+            padding: 0 16px;
+
+            &.modal-open {
+                background-color: hsla(0, 0%, 100%, .3);
+            }
+
+
+            &:hover {
+                background-color: hsla(0, 0%, 100%, .1);
+
+                &.modal-open {
+                    background-color: hsla(0, 0%, 100%, .3);
+                }
+
+                .song-actions {
+
+                    p {
+                        color: white;
+                    }
+
+                    .actions-btn {
+                        opacity: 1;
+                    }
+                }
+
+                .top-song {
+                    .index-display {
+                        p {
+                            display: none;
+                        }
+
+                        .play-pause-btn {
+                            display: initial;
+                        }
+
+                    }
+
+                    .song-description {
+                        h6 {
+                            color: white;
+                        }
+                    }
+                }
+            }
+
+            .top-song {
+                .index-display {
+                    margin-right: 16px;
+
+                    p {
+                        margin: 0;
+                        font-size: 20px;
+                        color: #A7A7A7;
+                    }
+
+                    .play-pause-btn {
+                        @include play-pause;
+                        color: white;
+                        background: none;
+                        display: none;
+                        padding: 0;
+                        width: 10px;
+                        position: relative;
+                        right: 11px;
+                    }
+
+                }
+
+                .img-container {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 16px;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .song-description {
+                    .song-title {
+                        h5 {
+                            color: white;
+                            margin: 0 0 8px 0;
+                            font-size: 16px;
+                            font-weight: 100;
+                        }
+                    }
+
+                    h6 {
+                        color: #A7A7A7;
+
+                        font-size: 14px;
+                        font-weight: 100;
+                        margin: 0;
+                    }
+                }
+
+
+            }
+
+            .song-actions {
+                gap: 12px;
+                position: relative;
+
+                p {
+                    color: #A7A7A7;
+                }
+
+                .actions-btn {
+                    padding: 0;
+                    @include cleared-btn;
+                    font-size: 21px;
+                    line-height: 17px;
+                    opacity: 0;
+                }
+
+                .options-modal {
+                    position: absolute;
+                    inset: 0px 0px auto auto;
+                    margin: 0px;
+                    transform: translate(0px, 43px);
+                    background-color: #282828;
+                    color: #b3b3b3;
+                    border-radius: 4px;
+                    padding: 4px;
+                    box-shadow: 0 16px 24px rgb(0 0 0 / 30%), 0 6px 8px rgb(0 0 0 / 20%);
+                    min-width: 160px;
+                    display: flex;
+                    flex-direction: column;
+                    z-index: 100;
+
+                    button {
+                        @include cleared-btn;
+                        border-radius: 2px;
+                        color: hsla(0, 0%, 100%, .9);
+                        cursor: default;
+                        text-decoration: none;
+                        color: #fff;
+                        height: 40px;
+                        width: 100%;
+                        text-align: left;
+
+
+                        &:hover {
+                            background-color: hsla(0, 0%, 100%, .1);
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

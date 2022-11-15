@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { BsFillPlayCircleFill } from 'react-icons/bs'
-
 import { setPlaylist } from '../store/music-player/music-player.reducer'
 import { useAppDispatch } from '../store/store.hooks'
 import { Playlist } from '../interfaces/playlist'
@@ -15,7 +14,6 @@ export const PlayListPreview = ({ playlist }: Props) => {
     const dispatch = useAppDispatch()
     // const { playlist } = props
     const onSetPlaylist = () => {
-        console.log('setting')
         dispatch(setPlaylist(playlist))
     }
     return (

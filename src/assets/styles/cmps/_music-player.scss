@@ -18,13 +18,19 @@
         .song-image {
             width: 56px;
             height: 56px;
-            object-fit: contain;
+            object-fit: none;
         }
 
         .names-container {
             .song-name {
                 color: white;
+                margin: 0 0 6px 10px;
+            }
 
+            .artist-name {
+                color: var(--text-subdued);
+                font-size: 12px;
+                margin: 0 0 0 10px;
             }
 
         }
@@ -51,33 +57,7 @@
             }
 
             .play-pause-btn {
-                width: 32px;
-                height: 32px;
-                @include play-btn;
-                color: black;
-                background: white;
-                position: relative;
-
-                &.play {
-
-                    font-size: 32px;
-
-                    svg {
-                        position: absolute;
-                        left: 2px;
-                        top: 0px;
-                    }
-                }
-
-                &.pause {
-                    font-size: 20px;
-
-                    svg {
-                        position: absolute;
-                        top: 6px;
-                        left: 6px;
-                    }
-                }
+                @include play-pause;
             }
         }
 
@@ -137,7 +117,26 @@
 
     }
 
-    // volume input opacity 0.38 is better for background
+    .css-eg0mwd-MuiSlider-thumb::after {
+        width: 22px;
+        height: 22px;
+    }
+
+    .css-ok908x-MuiSlider-root .MuiSlider-thumb {
+        width: 12px;
+        height: 12px;
+
+        &.Mui-active {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    .css-ok908x-MuiSlider-root .MuiSlider-thumb:hover,
+    .css-ok908x-MuiSlider-root .MuiSlider-thumb.Mui-focusVisible {
+        box-shadow: 0px 0px 0px 0px rgb(255 255 255 / 16%);
+    }
+
     span.css-ok908x-MuiSlider-root {
         .css-1rblxne-MuiSlider-root .css-14pt78w-MuiSlider-rail {
             opacity: 0.38;
