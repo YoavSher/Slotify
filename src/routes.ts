@@ -1,6 +1,7 @@
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import { PlaylistDetails } from "./pages/playlist-details";
+import { Queue } from "./pages/queue";
 import { SearchResults } from "./pages/search-results";
 import { Signup } from "./pages/signup";
 
@@ -33,6 +34,10 @@ const routes = [
     {
         path: 'playlist/:playlistId',
         component:  PlaylistDetails
+    },
+    {
+        path: 'queue',
+        component:  Queue
     },
 
 ]

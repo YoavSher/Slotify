@@ -11,13 +11,14 @@ export const UserHeaderDisplay = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
+    const toggleModal = () => {
+        setIsModalOpen(prev => !prev)
+    }
+
     const onLogOut = () => {
         dispatch(setUser(null))
     }
 
-    const toggleModal = () => {
-        setIsModalOpen(prev => !prev)
-    }
 
     return (
         <div className="header-user flex align-center">

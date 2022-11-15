@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Song } from '../../interfaces/song'
 interface MusicPlayerState {
     currPlaylist: PseudoPlaylist | Playlist, //should be of type playlist we need to make that interface and make a dummy playlist the defaultand when putting a song alone allso get the dummy playlist
-    currPlayingIdx: number
+    currPlayingIdx: number,
+    isSongPlaying: boolean
 }
 
 interface PseudoPlaylist {
@@ -24,16 +25,23 @@ interface Playlist {
 
 const initialState: MusicPlayerState = {
     currPlaylist: { songs: [] },
-    currPlayingIdx: 0
+    currPlayingIdx: 0,
+    isSongPlaying: false
 }
 
 const musicPlayerSlice = createSlice({
     name: 'musicPlayer',
     initialState,
     reducers: {
+        setIsSongPlaying: (state, action: PayloadAction<boolean>) => {
+            state.isSongPlaying = action.payload
+        },
         addToPlaylist: ((state, action: PayloadAction<Song>) => {
             state.currPlaylist.songs.push(action.payload)
         }),
+        setPlayingIdx: (state, action: PayloadAction<number>) => {
+            state.currPlayingIdx = action.payload
+        },
         incrementPlayingIdx: (state) => {
             state.currPlayingIdx++
             if (state.currPlayingIdx >= state.currPlaylist.songs.length) {
@@ -49,7 +57,7 @@ const musicPlayerSlice = createSlice({
         },
     }
 })
-export const { setPlaylist, incrementPlayingIdx, decrementPlayingIdx, addToPlaylist } = musicPlayerSlice.actions
+export const { setPlaylist, incrementPlayingIdx, decrementPlayingIdx, addToPlaylist, setIsSongPlaying, setPlayingIdx } = musicPlayerSlice.actions
 
 
 export default musicPlayerSlice.reducer

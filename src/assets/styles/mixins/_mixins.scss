@@ -17,6 +17,36 @@
     }
 }
 
+@mixin play-pause{
+    width: 32px;
+    height: 32px;
+    @include play-btn;
+    color: black;
+    background: white;
+    position: relative;
+
+    &.play {
+
+        font-size: 32px;
+
+        svg {
+            position: absolute;
+            left: 2px;
+            top: 0px;
+        }
+    }
+
+    &.pause {
+        font-size: 20px;
+
+        svg {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+        }
+    }
+}
+
 @mixin green-pill-btn {
     background-color: #1ed760;
     color: #000000;
@@ -53,7 +83,8 @@
         color: #1ed760;
         border-radius: 55%;
         box-shadow: 0px 3px 5px 0px #000000;
-        &:hover{
+
+        &:hover {
             font-size: 3.1rem;
         }
     }

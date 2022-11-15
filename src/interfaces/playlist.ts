@@ -9,14 +9,6 @@ export interface Playlist {
     createdBy: MiniUser,
     likedByUsers: MiniUser[],
     songs: Song[]
-    msg: Msg[]
-}
-
-
-interface Msg {
-    id: string,
-    from: MiniUser,
-    txt: string
 }
 
 
