@@ -23,7 +23,9 @@ export const PlaylistDetails = () => {
         if (playlistId) {
             try {
                 const playlist = await playlistService.getPlaylistById(playlistId)
+
                 setPlaylist(playlist)
+
             } catch (err) {
                 console.log('err:', err)
             }
@@ -42,7 +44,7 @@ export const PlaylistDetails = () => {
                 <div className="playlist-description flex column">
                     <h3>PLAYLIST</h3>
                     <h1>{playlist.name}</h1>
-                    <h5>{playlist.createdBy.fullName} • {playlist.songs.length} songs</h5>
+                    <h5>{playlist?.createdBy?.fullName} • {playlist?.songs?.length} songs</h5>
                 </div>
             </header>
             <div className="playlist-details-main">
@@ -60,7 +62,7 @@ export const PlaylistDetails = () => {
                         </div>
                     </div>
                     <div className="songs-container">
-                        {playlist.songs.map((s, idx) => {
+                        {playlist?.songs?.map((s, idx) => {
                             return <div key={s.id}>
                                 {s.title}
                             </div>

@@ -1,9 +1,11 @@
+import { Playlist } from "../interfaces/playlist";
 import { storageService } from "./async-storage.service";
 import { getPlaylists } from "./playlist.data";
 
 export const playlistService = {
     query,
     getPlaylistById,
+    createPlaylist
 }
 
 const STORAGE_KEY = 'playlists'
@@ -34,4 +36,22 @@ async function getPlaylistById(playlistId: string) {
     } catch (err) {
         console.log('err:', err)
     }
+}
+
+async function createPlaylist() {
+    const newPlaylist = {
+        name: 'New Playlist',
+        imgUrl: 'https://thumbs.dreamstime.com/b/music-background-panorama-13786355.jpg',
+        tags: [],
+        createdBy: {
+            _id: "u101",
+            fullName: "Puki Ben David",
+            imgUrl: "http://some-photo/"
+        },
+        likedByUsers: [],
+        songs: []
+    } as Playlist
+    await storageService.post(STORAGE_KEY, newPlaylist)
+    return newPlaylist
+
 }

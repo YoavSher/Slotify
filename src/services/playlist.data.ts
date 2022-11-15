@@ -44,7 +44,7 @@ var playlist1 = {
 var playlist2 = {
     "_id": "5cksxjas89xjsa8xjsa8jxs10",
     "name": "My Playlist",
-    "imgUrl": 'https://img.freepik.com/free-vector/musical-pentagram-sound-waves-notes-blue-neon-style_1017-36831.jpg?w=1380&t=st=1668328027~exp=1668328627~hmac=5ccc6d490bb5a1f81a797bbc74db21af80d48a6525a0af8b491ef6ddcfd90f4f',
+    "imgUrl": 'https://thumbs.dreamstime.com/b/music-background-panorama-13786355.jpg',
     "tags": [
         "Funk",
         "Happy"

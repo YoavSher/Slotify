@@ -5,7 +5,8 @@ export const storageService = {
     post,
     put,
     remove,
-    postMany
+    postMany,
+    makeId
 }
 
 function query(entityType: string): Promise<any> {
@@ -25,7 +26,7 @@ async function get(entityType: string, entityId: string) {
 }
 
 async function post(entityType: string, newEntity: any) {
-    if (!newEntity._id) newEntity._id = _makeId()
+    if (!newEntity._id) newEntity._id = makeId()
     const entities = await query(entityType)
     entities.push(newEntity)
     _save(entityType, entities)
@@ -56,14 +57,14 @@ function _save(entityType: string, entities: any) {
 function postMany(entityType: string, newEntities: any) {
     return query(entityType)
         .then(entities => {
-            newEntities = newEntities.map((entity: any) => ({ ...entity, _id: _makeId() }))
+            newEntities = newEntities.map((entity: any) => ({ ...entity, _id: makeId() }))
             entities.push(...newEntities)
             _save(entityType, entities)
             return entities
         })
 }
 
-function _makeId(length = 8) {
+function makeId(length = 8) {
     let text = ''
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     for (let i = 0; i < length; i++) {
