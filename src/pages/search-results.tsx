@@ -63,7 +63,8 @@ export const SearchResults = () => {
                         </div>
                         <div className="top-songs-results-container">
                             {topSongs?.map(song => {
-                                return <SongPreview song={song} />
+                                return <SongPreview song={song} 
+                                type={'search-results'}/>
                             })}
                         </div>
                     </div>

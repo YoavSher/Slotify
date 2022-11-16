@@ -34,6 +34,10 @@ const musicPlayerSlice = createSlice({
         addToPlaylist: ((state, action: PayloadAction<Song>) => {
             state.currPlaylist.songs.push(action.payload)
         }),
+        replacePlaylist: ((state, action: PayloadAction<Song>) => {
+            state.currPlaylist.songs = [action.payload]
+            state.currPlayingIdx = 0
+        }),
         setPlayingIdx: (state, action: PayloadAction<number>) => {
             state.currPlayingIdx = action.payload
         },
@@ -52,7 +56,7 @@ const musicPlayerSlice = createSlice({
         },
     }
 })
-export const { setPlaylist, incrementPlayingIdx, decrementPlayingIdx, addToPlaylist, setIsSongPlaying, setPlayingIdx, reorderSongsList, removeSong } = musicPlayerSlice.actions
+export const { setPlaylist, incrementPlayingIdx, decrementPlayingIdx, addToPlaylist, replacePlaylist, setIsSongPlaying, setPlayingIdx, reorderSongsList, removeSong } = musicPlayerSlice.actions
 
 
 export default musicPlayerSlice.reducer
