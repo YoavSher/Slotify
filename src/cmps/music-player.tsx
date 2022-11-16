@@ -25,13 +25,13 @@ export const MusicPlayer = () => {
     useEffect(() => {
         if (isSongPlaying) {
             playerRef.current?.playVideo()
+            window.clearInterval(durationIntervalId.current)
             durationInterval()
         } else {
             playerRef.current?.pauseVideo()
             window.clearInterval(durationIntervalId.current)
         }
     }, [isSongPlaying])
-    // const [isSongPlaying, setIsSongPlaying] = useState(false)
     const [songTimer, setSongTimer] = useState(0)
     const prevVolume = useRef(50)
     const [volume, setVolume] = useState(50)
@@ -40,12 +40,13 @@ export const MusicPlayer = () => {
         playerRef.current = ev.target
         setVolume(playerRef.current.playerInfo.volume)
         setSongTimer(0)
-        window.clearInterval(durationIntervalId.current)
         startVideo()
     }
 
     const durationInterval = () => {
         durationIntervalId.current = window.setInterval(() => {
+            console.log('working')
+
             if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
                 dispatch(incrementPlayingIdx())
                 setSongTimer(0)
@@ -65,11 +66,13 @@ export const MusicPlayer = () => {
 
     const startVideo = () => {
         playerRef.current.playVideo()
+        window.clearInterval(durationIntervalId.current)
         durationInterval()
         dispatch(setIsSongPlaying(true))
     }
 
     const pauseVideo = () => {
+        console.log(durationIntervalId.current)
         playerRef.current.pauseVideo()
         window.clearInterval(durationIntervalId.current)
         dispatch(setIsSongPlaying(false))
@@ -109,14 +112,19 @@ export const MusicPlayer = () => {
         const later = () => {
             window.clearTimeout(timeBarDebounceId.current)
             seekTo(time)
-            startVideo()
+            playerRef.current.playVideo()
+            durationInterval()
         }
 
+        console.log(songTimer)
         setSongTimer(time * 1000)
-        pauseVideo()
+        playerRef.current.pauseVideo()
+        window.clearInterval(durationIntervalId.current)
         window.clearTimeout(timeBarDebounceId.current)
         timeBarDebounceId.current = window.setTimeout(later, 1000)
     }
+
+
 
     const onIndexIncrement = () => {
         pauseVideo()
