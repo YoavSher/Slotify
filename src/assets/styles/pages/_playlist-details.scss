@@ -18,18 +18,59 @@
             margin-inline-end: 24px;
             width: 232px;
             box-shadow: 0 0 15px 4px black;
+            position: relative;
+
+            &:hover .change-photo-btn {
+                opacity: 1;
+                transition: all .4s;
+            }
 
             img {
                 object-fit: cover;
                 height: 100%;
+            }
+
+            .change-photo-btn {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                opacity: 0;
+                background-color: #0a0a0a8c;
+                
+                label {
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                    
+                    .photo-label {
+                        cursor: pointer;
+                        height: 100%;
+                        width: 100%;
+                        position: relative;
+                        top: 28%;
+
+                        span {
+                            font-size: 4rem;
+                        }
+                    }
+                }
             }
         }
 
         .playlist-description {
             gap: 15px;
 
-            h1 {
+            .playlist-title {
+                background-color: transparent;
+                border: none;
+                color: white;
                 font-size: 5rem;
+
+                &:focus-visible {
+                    outline: none;
+                }
             }
         }
     }
