@@ -8,10 +8,26 @@ import { useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
 import { SearchSongPreview } from "../cmps/search-song-preview"
 import { SongPreview } from "../cmps/song-preview"
+import { SongsModal } from "../cmps/songs-modal"
 
 
 
 export const SearchResults = () => {
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [songForModal, setSongForModal] = useState<Song | null>(null)
+    const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const openModal = (ev: any, song: Song) => {
+        ev.stopPropagation()
+        const { left, top } = ev.target.getBoundingClientRect()
+        setModalPos({ left, top })
+        setSongForModal(song)
+        setIsModalOpen(true)
+    }
+    const closeModal = () => {
+        setSongForModal(null)
+        setIsModalOpen(false)
+    }
 
 
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
@@ -36,8 +52,8 @@ export const SearchResults = () => {
 
 
     return (
-
-        <section className="search-results-page">
+        <>
+        <section onClick={closeModal} className="search-results-page">
             <Helmet><title>Slotify - Search</title></Helmet>
             <div className="search-results-container">
                 {searchResults && <section className="search-results flex ">
@@ -63,7 +79,7 @@ export const SearchResults = () => {
                         </div>
                         <div className="top-songs-results-container">
                             {topSongs?.map(song => {
-                                return <SongPreview song={song} 
+                                return <SongPreview openModal={openModal} song={song} 
                                 type={'search-results'}/>
                             })}
                         </div>
@@ -74,6 +90,8 @@ export const SearchResults = () => {
                 </section>}
             </div>
         </section>
+        {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+        </>
 
     )
 }
