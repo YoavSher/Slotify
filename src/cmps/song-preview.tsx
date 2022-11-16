@@ -10,15 +10,11 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 interface Props {
     song: Song,
     type?: string,
-    index?: number
+    index?: number,
+    openModal?: any
 }
-export const SongPreview = ({ song, type, index }: Props) => {
+export const SongPreview = ({ song, type, index, openModal }: Props) => {
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const toggleModal = () => {
-        setIsModalOpen(prev => !prev)
-    }
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -32,14 +28,6 @@ export const SongPreview = ({ song, type, index }: Props) => {
         }
     }
 
-    const addSongToQueue = () => {
-        dispatch(addToPlaylist(song))
-        toggleModal()
-    }
-    const removeSongFromQueue = () => {
-        if (index) dispatch(removeSong(index))
-        toggleModal()
-    }
     const onClickPlay = () => {
         switch (type) {
             case 'queue':
@@ -51,9 +39,9 @@ export const SongPreview = ({ song, type, index }: Props) => {
         // should dispatch the songid and then search the playlist to see where it is and set it as the index
         // but in the queue it should be like that maybe in other variation we want to just add it so maybe check if it's there if it is 
     }
-
     return (<>
-        <div className={`top-songs-results flex align-center justify-between ${(isModalOpen) ? 'modal-open' : ''}`}>
+        {/* ${(isModalOpen) ? 'modal-open' : ''} turn it to a prop from the father,the prop of which song if they are equal then it is open, */}
+        <div className={`top-songs-results flex align-center justify-between `}>
             <div className="top-song flex align-center">
                 {type === 'queue' && index !== undefined && <div className="index-display">
                     <p>{index + 1}</p>
@@ -72,13 +60,11 @@ export const SongPreview = ({ song, type, index }: Props) => {
             </div>
             <div className="song-actions flex align-center">
                 <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>
-                <button onClick={toggleModal} className="actions-btn">
+                <button onClick={(event) => { openModal(event, song) }} className="actions-btn">
+
                     <span><HiOutlineDotsHorizontal /></span>
                 </button>
-                {isModalOpen && <section className="options-modal">
-                    <button onClick={addSongToQueue}>Add to queue</button>
-                    <button onClick={removeSongFromQueue}>Remove from queue</button>
-                </section>}
+
             </div>
         </div>
     </>)
