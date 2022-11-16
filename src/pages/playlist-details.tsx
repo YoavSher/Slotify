@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react"
+import { ChangeEvent, FocusEvent, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Helmet } from 'react-helmet'
 
 import { BsFillPlayCircleFill } from 'react-icons/bs'
+import { FiEdit2 } from 'react-icons/fi'
 import { CiClock2 } from 'react-icons/ci'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 
 import { Playlist } from "../interfaces/playlist"
 import { playlistService } from "../services/playlist.service"
+import { uploadService } from "../services/upload.service"
 
 export const PlaylistDetails = () => {
 
@@ -31,6 +33,27 @@ export const PlaylistDetails = () => {
             }
         }
     }
+
+    const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
+        const { value } = ev.target
+        if (playlist) {
+            playlist.name = value
+            await playlistService.updatePlaylist(playlist)
+            loadPlaylist()
+        }
+    }
+
+    const onChangePhoto = async (ev: ChangeEvent<HTMLInputElement>) => {
+        if (playlist) {
+            const newPhoto = await uploadService.uploadImg(ev)
+            if (newPhoto) {
+                playlist.imgUrl = newPhoto.url
+                await playlistService.updatePlaylist(playlist)
+                loadPlaylist()
+            }
+        }
+    }
+
     if (!playlist) return <h1 style={{ color: 'white' }}>Loading...</h1>
     return (
         <section className="playlist-details">
@@ -40,10 +63,21 @@ export const PlaylistDetails = () => {
             <header className="playlist-details-header flex">
                 <div className="img-container">
                     <img src={playlist.imgUrl} alt="" />
+                    <div className="change-photo-btn">
+                        <label htmlFor="changePhoto">
+                            <div className="photo-label flex column align-center">
+                                <span><FiEdit2 /></span>
+                                <h3>Choose photo</h3>
+                            </div>
+                        </label>
+                        <input type="file" id="changePhoto" onChange={onChangePhoto} hidden />
+                    </div>
                 </div>
                 <div className="playlist-description flex column">
                     <h3>PLAYLIST</h3>
-                    <h1>{playlist.name}</h1>
+                    {/* <h1>{playlist.name}</h1> */}
+                    <input className="playlist-title"
+                        onBlur={onChangeTitle} defaultValue={playlist.name}></input>
                     <h5>{playlist?.createdBy?.fullName} • {playlist?.songs?.length} songs</h5>
                 </div>
             </header>

@@ -5,7 +5,8 @@ import { getPlaylists } from "./playlist.data";
 export const playlistService = {
     query,
     getPlaylistById,
-    createPlaylist
+    createPlaylist,
+    updatePlaylist
 }
 
 const STORAGE_KEY = 'playlists'
@@ -53,5 +54,11 @@ async function createPlaylist() {
     } as Playlist
     await storageService.post(STORAGE_KEY, newPlaylist)
     return newPlaylist
-
+}
+async function updatePlaylist(playlist: Playlist) {
+    try {
+        const updatedPlaylist = await storageService.put(STORAGE_KEY, playlist)
+    } catch (err) {
+        console.log('err:', err)
+    }
 }
