@@ -2,6 +2,7 @@ import { useState } from "react"
 import { BiPlay } from "react-icons/bi"
 import { GiPauseButton } from "react-icons/gi"
 import { HiOutlineDotsHorizontal } from "react-icons/hi"
+import { BsFillPlayFill } from "react-icons/bs"
 import { Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
 import { addToPlaylist, setIsSongPlaying, setPlayingIdx } from "../store/music-player/music-player.reducer"
@@ -54,6 +55,9 @@ export const SongPreview = ({ song, type, index }: Props) => {
             </div>}
             <div className="img-container">
                 <img src={song.image} alt="" />
+                <div className="photo-play">
+                    <span><BsFillPlayFill /></span>
+                </div>
             </div>
             <div className="song-description">
                 <div className="song-title">
