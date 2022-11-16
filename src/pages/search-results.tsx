@@ -4,9 +4,10 @@ import { BsFillPlayCircleFill } from 'react-icons/bs'
 
 import { Song } from "../interfaces/song"
 
-import { SongPreview } from "../cmps/song-preview"
 import { useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
+import { SearchSongPreview } from "../cmps/search-song-preview"
+import { SongPreview } from "../cmps/song-preview"
 
 
 
