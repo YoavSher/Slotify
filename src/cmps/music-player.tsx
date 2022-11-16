@@ -57,8 +57,6 @@ export const MusicPlayer = () => {
         }, 100)
     }
 
-
-
     const onClickPlay = () => {
         if (isSongPlaying) pauseVideo()
         else startVideo()

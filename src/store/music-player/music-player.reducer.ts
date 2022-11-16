@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Playlist } from '../../interfaces/playlist'
 import { Song } from '../../interfaces/song'
 interface MusicPlayerState {
     currPlaylist: PseudoPlaylist | Playlist, //should be of type playlist we need to make that interface and make a dummy playlist the defaultand when putting a song alone allso get the dummy playlist
@@ -9,19 +10,7 @@ interface MusicPlayerState {
 interface PseudoPlaylist {
     songs: Song[]
 }
-interface Playlist {
-    _id: string,
-    name: string,
-    imgUrl: string,
-    tags: string[],
-    createdBy: {
-        _id: string,
-        fullname: string,
-        imgUrl: string,
-    },
-    likedByUsers: [],
-    songs: Song[]
-}
+
 
 const initialState: MusicPlayerState = {
     currPlaylist: { songs: [] },
@@ -33,6 +22,12 @@ const musicPlayerSlice = createSlice({
     name: 'musicPlayer',
     initialState,
     reducers: {
+        removeSong: (state, action: PayloadAction<number>) => {
+            state.currPlaylist.songs = state.currPlaylist.songs.filter((song, index) => index !== action.payload)
+        },
+        reorderSongsList: (state, action: PayloadAction<Song[]>) => {
+            state.currPlaylist.songs = action.payload
+        },
         setIsSongPlaying: (state, action: PayloadAction<boolean>) => {
             state.isSongPlaying = action.payload
         },
@@ -51,13 +46,13 @@ const musicPlayerSlice = createSlice({
         decrementPlayingIdx: (state) => {
             if (state.currPlayingIdx > 0) state.currPlayingIdx--
         },
-        setPlaylist: (state, action: PayloadAction<any>) => { // should turn to a playlist
+        setPlaylist: (state, action: PayloadAction<Playlist>) => { // should turn to a playlist
             state.currPlayingIdx = 0
             state.currPlaylist = action.payload
         },
     }
 })
-export const { setPlaylist, incrementPlayingIdx, decrementPlayingIdx, addToPlaylist, setIsSongPlaying, setPlayingIdx } = musicPlayerSlice.actions
+export const { setPlaylist, incrementPlayingIdx, decrementPlayingIdx, addToPlaylist, setIsSongPlaying, setPlayingIdx, reorderSongsList, removeSong } = musicPlayerSlice.actions
 
 
 export default musicPlayerSlice.reducer
