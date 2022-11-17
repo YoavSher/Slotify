@@ -89,7 +89,7 @@
                             opacity: 1;
                         }
 
-                        &:hover .top-song .img-container .photo-play{
+                        &:hover .top-song .img-container .photo-play {
                             opacity: 1;
                         }
 
@@ -120,6 +120,7 @@
                                     width: 100%;
                                     background-color: #000000a1;
                                     opacity: 0;
+
                                     span {
                                         font-size: 1.2rem;
                                         color: #fff;
@@ -146,6 +147,7 @@
                                         white-space: nowrap;
                                         overflow-x: hidden;
                                         text-overflow: ellipsis;
+                                        
                                     }
                                 }
 

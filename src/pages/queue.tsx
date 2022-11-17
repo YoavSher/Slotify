@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { MouseEvent, MouseEventHandler, useState } from "react"
+import { Helmet } from "react-helmet"
 import { SearchSongPreview } from "../cmps/search-song-preview"
 import { SongPreview } from "../cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
@@ -11,7 +12,9 @@ export const Queue = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
-    const openModal = (ev: any, song: Song) => {
+
+    // const openModal = (ev:  MouseEvent<HTMLButtonElement>, song: Song) => {
+    const openModal = (ev:  any, song: Song) => {
         ev.stopPropagation()
         const { left, top } = ev.target.getBoundingClientRect()
         setModalPos({ left, top })
@@ -31,6 +34,7 @@ export const Queue = () => {
 
     return (
         <>
+        <Helmet><title>Slotify - Play Queue </title></Helmet>
             <section className="queue-page" onClick={closeModal}>
                 <h3 className="title">Queue</h3>
                 {songs[songIdx] && <><h4 className="mini-title">Now playing</h4>

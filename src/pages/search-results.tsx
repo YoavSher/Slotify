@@ -21,6 +21,8 @@ export const SearchResults = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+
+
     const openModal = (ev: any, song: Song) => {
         ev.stopPropagation()
         const { left, top } = ev.target.getBoundingClientRect()
@@ -28,6 +30,7 @@ export const SearchResults = () => {
         setSongForModal(song)
         setIsModalOpen(true)
     }
+    
     const closeModal = () => {
         setSongForModal(null)
         setIsModalOpen(false)

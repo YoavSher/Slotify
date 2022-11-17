@@ -6,7 +6,8 @@ export const playlistService = {
     query,
     getPlaylistById,
     createPlaylist,
-    updatePlaylist
+    updatePlaylist,
+    removePlaylist
 }
 
 const STORAGE_KEY = 'playlists'
@@ -55,9 +56,18 @@ async function createPlaylist() {
     await storageService.post(STORAGE_KEY, newPlaylist)
     return newPlaylist
 }
+
 async function updatePlaylist(playlist: Playlist) {
     try {
         const updatedPlaylist = await storageService.put(STORAGE_KEY, playlist)
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+async function removePlaylist(playlistId: string) {
+    try {
+        const updatedPlaylist = await storageService.remove(STORAGE_KEY, playlistId)
     } catch (err) {
         console.log('err:', err)
     }

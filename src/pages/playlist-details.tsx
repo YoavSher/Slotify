@@ -1,5 +1,5 @@
-import { ChangeEvent, FocusEvent, useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { ChangeEvent, FocusEvent, MouseEvent, MouseEventHandler, useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import { Helmet } from 'react-helmet'
 
 import { BsFillPlayCircleFill } from 'react-icons/bs'
@@ -10,15 +10,26 @@ import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { Playlist } from "../interfaces/playlist"
 import { playlistService } from "../services/playlist.service"
 import { uploadService } from "../services/upload.service"
+import { SongPreview } from "../cmps/song-preview"
+import { useAppDispatch, useAppSelector } from "../store/store.hooks"
+import { setPlaylist } from "../store/music-player/music-player.reducer"
 
 export const PlaylistDetails = () => {
 
     const params = useParams()
     const { playlistId } = params
-    const [playlist, setPlaylist] = useState<Playlist>()
+    const navigate = useNavigate()
+
+    const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+
+    const dispatch = useAppDispatch()
+    const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
+
     useEffect(() => {
         loadPlaylist()
-        console.log('playlist:', playlist?.createdBy.fullName)
+        console.log('playlist:', currPlaylist?.createdBy.fullName)
     }, [])
 
     const loadPlaylist = async () => {
@@ -26,7 +37,7 @@ export const PlaylistDetails = () => {
             try {
                 const playlist = await playlistService.getPlaylistById(playlistId)
 
-                setPlaylist(playlist)
+                setCurrPlaylist(playlist)
 
             } catch (err) {
                 console.log('err:', err)
@@ -36,33 +47,61 @@ export const PlaylistDetails = () => {
 
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
         const { value } = ev.target
-        if (playlist) {
-            playlist.name = value
-            await playlistService.updatePlaylist(playlist)
+        if (currPlaylist) {
+            currPlaylist.name = value
+            await playlistService.updatePlaylist(currPlaylist)
             loadPlaylist()
         }
     }
 
     const onChangePhoto = async (ev: ChangeEvent<HTMLInputElement>) => {
-        if (playlist) {
+        if (currPlaylist) {
             const newPhoto = await uploadService.uploadImg(ev)
             if (newPhoto) {
-                playlist.imgUrl = newPhoto.url
-                await playlistService.updatePlaylist(playlist)
+                currPlaylist.imgUrl = newPhoto.url
+                await playlistService.updatePlaylist(currPlaylist)
                 loadPlaylist()
             }
         }
     }
 
-    if (!playlist) return <h1 style={{ color: 'white' }}>Loading...</h1>
+    const onSetPlaylist = () => {
+        console.log('playlist:', currPlaylist)
+        if (currPlaylist) dispatch(setPlaylist(currPlaylist))
+    }
+
+    const calcModalPos = () => {
+        return {
+            left: `${modalPos.left + 73}px`,
+            top: `${modalPos.top - 10}px`
+        } /// needs to add consideration for the height but the left is fixed,
+    }
+
+    const onOpenModal = (ev: MouseEvent<HTMLButtonElement>) => {
+        ev.stopPropagation()
+        setIsModalOpen(!isModalOpen)
+    }
+
+    const onRemovePlaylist = async () => {
+        if (playlistId) {
+            try {
+                await playlistService.removePlaylist(playlistId)
+                navigate('/')
+            } catch (err) {
+                console.log('err:', err)
+            }
+        }
+    }
+
+    if (!currPlaylist) return <h1 style={{ color: 'white' }}>Loading...</h1>
     return (
-        <section className="playlist-details">
+        <section className="playlist-details" onClick={() => setIsModalOpen(false)}>
             <Helmet>
-                <title>Slotify - {playlist.name}</title>
+                <title>Slotify - {currPlaylist.name}</title>
             </Helmet>
             <header className="playlist-details-header flex">
                 <div className="img-container">
-                    <img src={playlist.imgUrl} alt="" />
+                    <img src={currPlaylist.imgUrl} alt="" />
                     <div className="change-photo-btn">
                         <label htmlFor="changePhoto">
                             <div className="photo-label flex column align-center">
@@ -77,14 +116,17 @@ export const PlaylistDetails = () => {
                     <h3>PLAYLIST</h3>
                     {/* <h1>{playlist.name}</h1> */}
                     <input className="playlist-title"
-                        onBlur={onChangeTitle} defaultValue={playlist.name}></input>
-                    <h5>{playlist?.createdBy?.fullName} • {playlist?.songs?.length} songs</h5>
+                        onBlur={onChangeTitle} defaultValue={currPlaylist.name}></input>
+                    <h5>{currPlaylist?.createdBy?.fullName} • {currPlaylist?.songs?.length} songs</h5>
                 </div>
             </header>
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
-                    <button className="play-btn"><span><BsFillPlayCircleFill /></span></button>
-                    <button className="menu-btn"><span>• • •</span></button>
+                    <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
+                    <button className="menu-btn" onClick={onOpenModal}><span>• • •</span></button>
+                    {isModalOpen && <section style={calcModalPos()} className="options-modal">
+                        <button onClick={onRemovePlaylist}>Delete</button>
+                    </section>}
                 </div>
                 <div className="playlist-details-main-content">
                     <div className="songs-titles-container">
@@ -96,10 +138,8 @@ export const PlaylistDetails = () => {
                         </div>
                     </div>
                     <div className="songs-container">
-                        {playlist?.songs?.map((s, idx) => {
-                            return <div key={s.id}>
-                                {s.title}
-                            </div>
+                        {currPlaylist?.songs?.map((s, idx) => {
+                            return <SongPreview key={s.id} song={s} index={idx} type={'playlist-details'} />
                         })}
                     </div>
                 </div>

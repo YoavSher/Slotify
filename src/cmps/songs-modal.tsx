@@ -1,6 +1,11 @@
+import { useState, useEffect } from "react"
+
+import { AiFillCaretRight } from 'react-icons/ai'
+
 import { Song } from "../interfaces/song"
 import { addToPlaylist, removeSong } from "../store/music-player/music-player.reducer"
 import { useAppDispatch } from "../store/store.hooks"
+import { AddToPlaylistModal } from "./add-to-playlist-modal"
 
 interface Props {
     song: Song | null,
@@ -10,6 +15,8 @@ interface Props {
 
 export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
 
+
+    const [addModal, setAddModal] = useState(false)
     const dispatch = useAppDispatch()
     const addSongToQueue = () => {
         if (song) dispatch(addToPlaylist(song))
@@ -25,10 +32,23 @@ export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
         } /// needs to add consideration for the height but the left is fixed,
     }
 
+    const onOpenAddModal = (isOpen: boolean) => {
+        setAddModal(isOpen)
+    }
+
     return (
-        <section style={calcModalPos()} className="options-modal">
-            <button onClick={addSongToQueue}>Add to queue</button>
-            <button onClick={removeSongFromQueue}>Remove from queue</button>
-        </section>
+        <>
+            <section style={calcModalPos()} className="options-modal" onMouseLeave={() => onOpenAddModal(false)}>
+                <button onClick={addSongToQueue}>Add to queue</button>
+                <button onClick={removeSongFromQueue}>Remove from queue</button>
+                <button onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
+                    Add to playlist <span><AiFillCaretRight /></span></button>
+            </section>
+            {addModal &&
+                <AddToPlaylistModal
+                    modalPos={modalPos}
+                    onOpenAddModal={onOpenAddModal}
+                    song={song} />}
+        </>
     )
 }
