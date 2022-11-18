@@ -30,7 +30,7 @@ export const SearchResults = () => {
         setSongForModal(song)
         setIsModalOpen(true)
     }
-    
+
     const closeModal = () => {
         setSongForModal(null)
         setIsModalOpen(false)
@@ -106,8 +106,9 @@ export const SearchResults = () => {
                             <div className="top-songs-results-container">
                                 {topSongs?.map(song => {
                                     return <SongPreview openModal={openModal} song={song}
-                                        type={'search-results'} />
+                                    type={'search-results'} />
                                 })}
+                                {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
                             </div>
                         </div>
                     </section>}
@@ -116,7 +117,6 @@ export const SearchResults = () => {
                     </section>}
                 </div>
             </section>
-            {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
         </>
 
     )

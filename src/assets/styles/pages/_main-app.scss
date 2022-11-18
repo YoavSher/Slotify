@@ -11,12 +11,34 @@
     position: relative;
     width: 100%;
     flex: 1;
+    background-color: var(--background-dark);
 
-    .content {
-        grid-area: main-view;
-        margin-top: 60px;
+    .content-container {
         background-color: #121212;
+        grid-area: main-view;
         padding-left: 20px;
-        padding-right: 20px;
+        // padding-left: 20px;
+        // padding-right: 20px;
+        min-height: 0;
+        overflow: hidden;
+        position: relative;
+        
+        .main-content {
+            padding-top: 60px;
+            bottom: 0;
+            direction: inherit;
+            height: auto;
+            left: 0;
+            margin: 0;
+            overflow: visible;
+            // padding: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+            z-index: 0;
+            overflow: hidden;
+
+        }
     }
 }

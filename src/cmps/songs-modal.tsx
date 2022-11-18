@@ -27,7 +27,7 @@ export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
 
     const calcModalPos = () => {
         return {
-            left: `${modalPos.left - 175}px`,
+            left: `${modalPos.left - 365}px`,
             top: `${modalPos.top - 10}px`
         } /// needs to add consideration for the height but the left is fixed,
     }

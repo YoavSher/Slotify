@@ -1,6 +1,17 @@
 .playlist-details {
     color: #fff;
-    position: relative;
+    overflow-y: scroll;
+    padding-left: 20xp;
+    position: absolute;
+    resize: none;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    outline: none;
+    overflow-x: inherit;
+    // padding: 0;
 
     .playlist-details-header {
         height: 30vh;
@@ -17,7 +28,7 @@
             align-self: flex-end;
             height: 232px;
             margin-inline-end: 24px;
-            width: 232px;
+            min-width: 232px;
             box-shadow: 0 0 15px 4px black;
             position: relative;
 
