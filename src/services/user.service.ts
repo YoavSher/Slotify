@@ -1,17 +1,21 @@
+import { Song } from "../interfaces/song"
 import { storageService } from "./async-storage.service"
 
 export const userService = {
     login,
     signup,
     logout,
-    getLoggedInUser
+    getLoggedInUser,
+    saveUser
 }
 export interface User {
     username: string,
     fullName: string,
     password: string,
     email: string,
-    _id: string
+    _id: string,
+    likedSongs: Song[],
+    likedSongsIds: string[]
 }
 interface Credentials {
     username: string,
@@ -30,6 +34,8 @@ async function login(userCred: Credentials) {
 }
 
 async function signup(newUser: User) {
+    newUser.likedSongs = []
+    newUser.likedSongsIds = []
     const user = await storageService.post(STORAGE_KEY, newUser)
     try {
         // const user = await httpService.post('auth/signup', userCred)
@@ -42,6 +48,13 @@ async function signup(newUser: User) {
 async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
     // return await storageService.post('auth/logout')
+}
+
+async function saveUser(user: User) {
+    await storageService.put(STORAGE_KEY, user)
+    saveLocalUser(user)
+    // not the best written
+
 }
 
 
