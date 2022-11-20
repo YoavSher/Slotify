@@ -20,9 +20,11 @@ export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
     const dispatch = useAppDispatch()
     const addSongToQueue = () => {
         if (song) dispatch(addToPlaylist(song))
+        closeModal()
     }
     const removeSongFromQueue = () => {
-        // if (index) dispatch(removeSong(index)) // we should work with specific ids.
+        if (song) dispatch(removeSong(song.id))
+        closeModal()
     }
 
     const calcModalPos = () => {

@@ -112,7 +112,12 @@
                         margin: 0 0 8px 0;
                         font-size: 16px;
                         font-weight: 100;
-                        &.playing{
+                        white-space: nowrap;
+                        overflow-x: hidden;
+                        text-overflow: ellipsis;
+                        width: 390px;
+
+                        &.playing {
                             color: var(--green-color1)
                         }
                     }

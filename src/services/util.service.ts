@@ -2,9 +2,20 @@ import axios from "axios"
 
 export const utilService = {
     millisToMinutesAndSeconds,
-    debounce, 
-    getPhotos
+    debounce,
+    getPhotos,
+    makeId
 }
+
+function makeId(length = 8) {
+    let text = ''
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    return text
+}
+
 function millisToMinutesAndSeconds(millis: number): string {
     const minute = Math.floor(millis / 60000) || 0
     const second = Math.floor((millis % 60000) / 1000) || 0

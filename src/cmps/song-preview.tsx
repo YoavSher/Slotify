@@ -12,9 +12,9 @@ interface Props {
     song: Song,
     type?: string,
     index?: number,
-    openModal?: any
+    toggleModal?: any
 }
-export const SongPreview = ({ song, type, index, openModal }: Props) => {
+export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -91,7 +91,7 @@ export const SongPreview = ({ song, type, index, openModal }: Props) => {
             </div>
             <div className="song-actions flex align-center">
                 <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>
-                <button onClick={(event) => { openModal(event, song) }} className="actions-btn">
+                <button onClick={(event) => { toggleModal(event, song) }} className="actions-btn">
 
                     <span><HiOutlineDotsHorizontal /></span>
                 </button>

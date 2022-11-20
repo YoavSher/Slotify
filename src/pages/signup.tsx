@@ -1,14 +1,16 @@
 import { MouseEvent, ChangeEvent, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Helmet } from "react-helmet"
+import { BsSpotify } from "react-icons/bs"
+import { Link, useNavigate } from "react-router-dom"
 import { User, userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
 export const Signup = () => {
-    const [userCred, setUserCred] = useState({ username: 'a', fullName: 'b', password: '', email: '', })
+    const [userCred, setUserCred] = useState({ username: '', fullName: '', password: '', email: '', })
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const onCloseModal = () => {
-        navigate(-1)
+        navigate('/')
     }
 
     const onStopPropagation = (ev: MouseEvent) => {
@@ -43,8 +45,11 @@ export const Signup = () => {
 
     return (
         <section className="login-screen-cover" onClick={onCloseModal}>
+            <Helmet><title>Slotify - Signup </title></Helmet>
             <section className="login-modal" onClick={onStopPropagation}>
-                <h2 className="login-page-heading">Sign up for a free Slotify account</h2>
+                <h2><span><BsSpotify /></span> Slotify</h2>
+                <h2 className="login-page-heading">Sign up for a free</h2>
+                <h2 className="login-page-heading">Slotify account</h2>
                 <form onSubmit={onSignUp}>
                     {inputs.map(input => (
                         <input type={input.type} name={input.name}
@@ -53,7 +58,8 @@ export const Signup = () => {
                     ))}
                     <button disabled={!isCredValid()} className="sign-up-btn">SIGN UP</button>
                 </form>
-
+                <Link className="back" to="/" >Back</Link>
+                <Link to="/login" >Already a Slotify? <span>LOGIN</span> </Link>
             </section>
         </section>
     )

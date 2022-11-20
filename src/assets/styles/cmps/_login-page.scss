@@ -16,21 +16,54 @@
         border-radius: 3px;
         height: 100%;
         width: 496px;
-        background-color: var(--background-darker);
+        display: flex;
+        flex-direction: column;
+        background: #080808;
+
+        a {
+            &.back:hover {
+                color: white;
+                font-size: 17px;
+            }
+
+            margin-top:10px;
+            align-self: center;
+            color: var(--text-subdued);
+            font-weight: bolder;
+
+            span {
+                color: white;
+                text-decoration: underline;
+            }
+        }
+
 
         .login-page-heading {
+            margin: 0;
+        }
+
+        h2 {
             color: white;
             font-size: 34px;
+            margin-bottom: 10px;
+            text-align: center;
+
+            span {
+                position: relative;
+                top: 4px;
+            }
+
         }
 
         form {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-top: 10px;
 
             input {
-                height: 32px;
-                background-color: #535353;
+                height: 38px;
+                background-color: #454545;
                 color: white;
                 padding: 0px 12px;
                 border: none;
@@ -38,7 +71,7 @@
 
                 &:focus {
                     outline: none;
-                    background-color: lighten(#535353, 5%)
+                    background-color: lighten(#454545, 5%)
                 }
             }
 
