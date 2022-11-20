@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { setPlaylist } from "../store/music-player/music-player.reducer"
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
 export const PlaylistDetails = () => {
 
@@ -46,7 +47,15 @@ export const PlaylistDetails = () => {
         setSongForModal(null)
         setIsModalOpen(false)
     }
-
+    const handleOnDragEnd = async (result: any) => {
+        if (currPlaylist) {
+            const playlist = structuredClone(currPlaylist)
+            const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
+            playlist.songs.splice(result.destination.index, 0, reorderedItem)
+            setCurrPlaylist(playlist)
+            await playlistService.updatePlaylist(playlist)
+        }
+    }
 
     const dispatch = useAppDispatch()
 
@@ -121,7 +130,7 @@ export const PlaylistDetails = () => {
 
     if (!currPlaylist) return <h1 style={{ color: 'white' }}>Loading...</h1>
     return (
-        <section className="playlist-details" onClick={() => {closeModal();setIsPlaylistModalOpen(false)}}>
+        <section className="playlist-details" onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
             <Helmet>
                 <title>Slotify - {currPlaylist.name}</title>
             </Helmet>
@@ -163,11 +172,22 @@ export const PlaylistDetails = () => {
                             <div><CiClock2 /></div>
                         </div>
                     </div>
-                    <div className="songs-container">
-                        {currPlaylist?.songs?.map((s, idx) => {
-                            return <SongPreview key={s.id} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
-                        })}
-                    </div>
+                    <DragDropContext onDragEnd={handleOnDragEnd}>
+                        <Droppable droppableId="playlist-songs">
+
+                            {(provided) => (<div {...provided.droppableProps} ref={provided.innerRef} className="songs-container">
+                                {currPlaylist?.songs?.map((s, idx) => {
+                                    return <Draggable key={s.id} draggableId={s.id} index={idx}>
+                                        {(provided) => (
+                                            <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
+                                                <SongPreview song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
+                                            </article>)}
+                                    </Draggable>
+                                })}
+                                {provided.placeholder}
+                            </div>)}
+                        </Droppable>
+                    </DragDropContext>
                 </div>
             </div>
             {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
