@@ -21,12 +21,14 @@ export const Home = () => {
     }
     if (!playlists) return <h1>Loading...</h1>
     return (
-        <section className="home-page">
-            <Helmet><title>Slotify</title></Helmet>
-            <h1>home</h1>
-            <PlaylistList playlists={playlists} />
+        <>
+            <section className="home-page">
+                <Helmet><title>Slotify</title></Helmet>
+                <h1>home</h1>
+                <PlaylistList playlists={playlists} />
+            </section>
             <Outlet></Outlet>
-        </section>
+        </>
 
     )
 }

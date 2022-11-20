@@ -1,5 +1,7 @@
 import { ChangeEvent, MouseEvent, MouseEventHandler, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Helmet } from "react-helmet"
+import { BsSpotify } from "react-icons/bs"
+import { Link, useNavigate } from "react-router-dom"
 import { userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
@@ -9,7 +11,7 @@ export const Login = () => {
     const dispatch = useAppDispatch()
     const [userCred, setUserCred] = useState({ username: 'a', password: '' })
     const onCloseModal = () => {
-        navigate(-1)
+        navigate('/')
     }
 
     const onStopPropagation = (ev: MouseEvent) => {
@@ -40,7 +42,9 @@ export const Login = () => {
 
     return (
         <section className="login-screen-cover" onClick={onCloseModal}>
+            <Helmet><title>Slotify - Login </title></Helmet>
             <section className="login-modal" onClick={onStopPropagation}>
+                <h2><span><BsSpotify /></span> Slotify</h2>
                 <h2 className="login-page-heading">Login</h2>
                 <form onSubmit={onLogin}>
                     {inputs.map(input => (
@@ -50,6 +54,8 @@ export const Login = () => {
                     ))}
                     <button disabled={!isCredValid()} className="sign-up-btn">LOG IN</button>
                 </form>
+                <Link className="back" to="/" >Back</Link>
+                <Link to="/signup" >Dont have an account? <span>SIGNUP</span> </Link>
             </section>
         </section>
     )

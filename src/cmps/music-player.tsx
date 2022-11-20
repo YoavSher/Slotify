@@ -164,7 +164,7 @@ export const MusicPlayer = () => {
             <footer className="music-player">
                 <section className="left-section">
                     {currSong && <>
-                        <YouTube className="iframe-container" videoId={currSong.id} opts={opts} onReady={onPlayerReady} />
+                        <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
                         <img className="song-image" src={currSong.image} alt="" />
                         <div className="names-container">
                             <p className="song-name">{currSong.title}</p>
@@ -176,11 +176,11 @@ export const MusicPlayer = () => {
 
                 <div className="main-player">
                     <section className="buttons-container">
-                        <button onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
-                        <button onClick={onIndexDecrement} ><MdSkipPrevious /></button>
-                        <button className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
-                        <button onClick={onIndexIncrement} ><MdSkipNext /></button>
-                        <button onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>
+                        <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
+                        <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
+                        <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
+                        <button title="Next" onClick={onIndexIncrement} ><MdSkipNext /></button>
+                        <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>
 
                     </section>
                     <section className="time-container">

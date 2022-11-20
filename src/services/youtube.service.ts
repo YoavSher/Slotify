@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Song } from '../interfaces/song'
+import { utilService } from './util.service'
 
 
 export const youtubeService = {
@@ -30,8 +31,10 @@ async function getDataFromYoutube(term: string) {
 
             const str = res.data.items.map((item: { id: { videoId: string } }) => '' + `${item.id.videoId}%2C`).join('').slice(0, -3)
             const durationData = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`)
+            res.data.items.forEach((item: any) => console.log(item.snippet.channelTitle))
             const durations = durationData.data.items.map((item: any) => _translateDuration(item.contentDetails.duration) || 0)
             let songs = res.data.items.map((s: Song, idx: number) => {
+
                 const song = _makeSong(s)
                 song.duration = durations[idx]
                 return song
@@ -53,7 +56,8 @@ async function getDataFromYoutube(term: string) {
 function _makeSong(video: any) {
     return {
         title: video.snippet.title.replaceAll(combinedCleaner, '').trim(),
-        id: video.id.videoId,
+        id: utilService.makeId(),
+        videoId: video.id.videoId,
         image: video.snippet.thumbnails.default.url,
         duration: 0,
         artist: video.snippet.channelTitle.replaceAll(combinedCleaner, '').trim() //maybe take only specific channels

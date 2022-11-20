@@ -13,6 +13,8 @@ import { uploadService } from "../services/upload.service"
 import { SongPreview } from "../cmps/song-preview"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { setPlaylist } from "../store/music-player/music-player.reducer"
+import { SongsModal } from "../cmps/songs-modal"
+import { Song } from "../interfaces/song"
 
 export const PlaylistDetails = () => {
 
@@ -21,8 +23,30 @@ export const PlaylistDetails = () => {
     const navigate = useNavigate()
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
+    const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
+
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+
+    const toggleModal = (ev: any, song: Song) => {
+        ev.stopPropagation()
+        const { left, top } = ev.target.getBoundingClientRect()
+        setModalPos({ left, top })
+        if (songForModal?.id === song.id) closeModal()
+        else openModal(song)
+    }
+
+    const openModal = (song: Song) => {
+        setSongForModal(song)
+        setIsModalOpen(true)
+    }
+
+    const closeModal = () => {
+        setSongForModal(null)
+        setIsModalOpen(false)
+    }
+
 
     const dispatch = useAppDispatch()
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -70,16 +94,11 @@ export const PlaylistDetails = () => {
         if (currPlaylist) dispatch(setPlaylist(currPlaylist))
     }
 
-    const calcModalPos = () => {
-        return {
-            left: `${modalPos.left + 73}px`,
-            top: `${modalPos.top - 10}px`
-        } /// needs to add consideration for the height but the left is fixed,
-    }
+
 
     const onOpenModal = (ev: MouseEvent<HTMLButtonElement>) => {
         ev.stopPropagation()
-        setIsModalOpen(!isModalOpen)
+        setIsPlaylistModalOpen(!isPlaylistModalOpen)
     }
 
     const onRemovePlaylist = async () => {
@@ -95,7 +114,7 @@ export const PlaylistDetails = () => {
 
     if (!currPlaylist) return <h1 style={{ color: 'white' }}>Loading...</h1>
     return (
-        <section className="playlist-details" onClick={() => setIsModalOpen(false)}>
+        <section className="playlist-details" onClick={() => {closeModal();setIsPlaylistModalOpen(false)}}>
             <Helmet>
                 <title>Slotify - {currPlaylist.name}</title>
             </Helmet>
@@ -124,7 +143,7 @@ export const PlaylistDetails = () => {
                 <div className="playlist-details-main action-btns flex align-center">
                     <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
                     <button className="menu-btn" onClick={onOpenModal}><span>• • •</span></button>
-                    {isModalOpen && <section style={calcModalPos()} className="options-modal">
+                    {isPlaylistModalOpen && <section style={{ left: '73px', top: '-10px' }} className="options-modal">
                         <button onClick={onRemovePlaylist}>Delete</button>
                     </section>}
                 </div>
@@ -139,11 +158,12 @@ export const PlaylistDetails = () => {
                     </div>
                     <div className="songs-container">
                         {currPlaylist?.songs?.map((s, idx) => {
-                            return <SongPreview key={s.id} song={s} index={idx} type={'playlist-details'} />
+                            return <SongPreview key={s.id} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
                         })}
                     </div>
                 </div>
             </div>
+            {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
         </section>
     )
 }

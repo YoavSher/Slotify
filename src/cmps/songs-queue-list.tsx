@@ -7,10 +7,10 @@ import { reorderSongsList } from "../store/music-player/music-player.reducer"
 interface Props {
     songs: Song[]
     songIdx: number,
-    openModal: any
+    toggleModal: any
 }
 
-export const SongsQueueList = ({ openModal, songs, songIdx }: Props) => {
+export const SongsQueueList = ({ toggleModal, songs, songIdx }: Props) => {
     const dispatch = useAppDispatch()
     const handleOnDragEnd = (result: any) => {
         songs = [...songs]
@@ -29,7 +29,7 @@ export const SongsQueueList = ({ openModal, songs, songIdx }: Props) => {
                             else return <Draggable key={song.id} draggableId={`${song.id}${index}`} index={index ? index : 0}>
                                 {(provided) => (
                                     <article  {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
-                                        <SongPreview openModal={openModal} index={index} type={'queue'} song={song} />
+                                        <SongPreview toggleModal={toggleModal} index={index} type={'queue'} song={song} />
                                     </article>
                                 )}</Draggable>
                         })}
