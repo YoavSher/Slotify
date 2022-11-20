@@ -21,16 +21,15 @@ export const PlaylistDetails = () => {
     const navigate = useNavigate()
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
 
     const dispatch = useAppDispatch()
-    const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
 
     useEffect(() => {
         loadPlaylist()
-        console.log('playlist:', currPlaylist?.createdBy.fullName)
-    }, [])
+        console.log('playlist:', currPlaylist?.name)
+    }, [playlistId])
 
     const loadPlaylist = async () => {
         if (playlistId) {
@@ -48,9 +47,17 @@ export const PlaylistDetails = () => {
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
         const { value } = ev.target
         if (currPlaylist) {
-            currPlaylist.name = value
+            setCurrPlaylist((prevState) => {
+                if (prevState !== undefined) {
+                    return { ...prevState, name: value }
+                }
+            })
+        }
+    }
+
+    const onSaveChanges = async () => {
+        if (currPlaylist) {
             await playlistService.updatePlaylist(currPlaylist)
-            loadPlaylist()
         }
     }
 
@@ -114,9 +121,9 @@ export const PlaylistDetails = () => {
                 </div>
                 <div className="playlist-description flex column">
                     <h3>PLAYLIST</h3>
-                    {/* <h1>{playlist.name}</h1> */}
-                    <input className="playlist-title"
-                        onBlur={onChangeTitle} defaultValue={currPlaylist.name}></input>
+                    {/* <h1>{currPlaylist.name}</h1> */}
+                    <input type="text" className="playlist-title"
+                        onChange={onChangeTitle} onBlur={onSaveChanges} value={currPlaylist.name} />
                     <h5>{currPlaylist?.createdBy?.fullName} • {currPlaylist?.songs?.length} songs</h5>
                 </div>
             </header>

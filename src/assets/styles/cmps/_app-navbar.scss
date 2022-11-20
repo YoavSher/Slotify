@@ -4,10 +4,93 @@
     min-width: 200px;
     background-color: rgb(57, 55, 55);
     color: #fff;
+    padding: 20px 0 0 20px;
 
-    .nav-links {
+    .main-logo {
+        padding-inline-start: 8px;
+
+        span {
+            display: inline-flex;
+            font-size: 2rem;
+        }
+    }
+
+    .nav-links-main {
+        padding: 10px;
+
+        li {
+            padding-bottom: 10px;
+
+            a {
+                gap: 10px;
+
+                span {
+                    font-size: 1.6rem;
+
+                    p {
+                        padding: 0 0 0 3px;
+                    }
+                }
+            }
+        }
+
         * {
             color: #fff;
+        }
+    }
+
+    .nav-links-second {
+        * {
+            color: white;
+        }
+
+        .bottom-border {
+            position: relative;
+
+            hr {
+                background-color: #282828;
+                border: none;
+                height: 1px;
+                margin: 8px 24px 0 24px;
+                min-height: 1px;
+            }
+
+            .separator {
+                // background: linear-gradient(180deg, rgba(0, 0, 0, .7), transparent);
+                bottom: -16px;
+                height: 16px;
+                left: 0;
+                pointer-events: none;
+                position: absolute;
+                right: 0;
+                z-index: 1;
+            }
+
+            .playlists-links {
+                height: 100%;
+                position: relative;
+
+                .playlists-links-container {
+                    height: 100%;
+                    overflow: hidden;
+                    bottom: 0;
+                    direction: inherit;
+                    height: auto;
+                    left: 0;
+                    margin: 0;
+                    overflow: visible;
+                    padding: 0;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: auto;
+                    z-index: 0;
+
+                    .scroll-container {
+                        overflow-y: scroll;
+                    }
+                }
+            }
         }
     }
 }

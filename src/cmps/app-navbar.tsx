@@ -1,16 +1,18 @@
 import { useEffect } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { BsSpotify, BsPlusSquare } from 'react-icons/bs'
-import { RiHome2Line } from 'react-icons/ri'
+import { RiHome2Line, RiHeartFill } from 'react-icons/ri'
 import { FiSearch } from 'react-icons/fi'
 import { VscLibrary } from 'react-icons/vsc'
 import { playlistService } from "../services/playlist.service"
+import { useAppSelector } from "../store/store.hooks"
 
 
 export const AppNavbar = () => {
 
     const navigate = useNavigate()
     const location = useLocation()
+    const playlists = useAppSelector(state => state.playlist.playlists)
 
 
     useEffect(() => {
@@ -21,18 +23,39 @@ export const AppNavbar = () => {
         const newPlaylist = await playlistService.createPlaylist()
         navigate(`playlist/${newPlaylist._id}`)
     }
+    
 
     return (
         <nav className="app-navbar flex column">
-            <h1><span><BsSpotify /></span> Slotify</h1>
-            <ul className="nav-links">
-                <li><Link to=""><span><RiHome2Line /></span> Home</Link></li>
-                <li><Link to="search"><span><FiSearch /></span> Search</Link></li>
-                <li><Link to=""><span><VscLibrary /></span>Your Library</Link></li>
+            <h1 className="main-logo"><span><BsSpotify /></span> Slotify</h1>
+            <ul className="nav-links-main">
+                <li><Link to="" className="flex align-center"><span><RiHome2Line /></span><p>Home</p></Link></li>
+                <li><Link to="search" className="flex align-center"><span><FiSearch /></span> <p>Search</p></Link></li>
+                <li><Link to="" className="flex align-center"><span><VscLibrary /></span><p>Your Library</p></Link></li>
             </ul>
-            <div>
-                <div className="flex" onClick={onCreateNewBoard}>
-                    <span><BsPlusSquare /></span>Create Playlist
+            <div className="nav-links-second">
+                <div className="flex align-center" onClick={onCreateNewBoard}>
+                    <span><BsPlusSquare /></span><p>Create Playlist</p>
+                </div>
+                <div className="flex">
+                    <Link to='' className="flex align-center">
+                        <span><div><RiHeartFill /></div></span><p>Liked Songs</p></Link>
+                </div>
+                <div className="bottom-border">
+                    <hr />
+                    <div className="separator"></div>
+                </div>
+                <div className="playlists-links">
+                    <div className="playlists-links-container">
+                        <div className="scroll-container"></div>
+                        <ul>
+                            <div>
+                                {playlists?.map(p => {
+                                    return <li key={p._id}><Link to={`playlist/${p._id}`}>{p.name}</Link></li>
+                                })}
+                            </div>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

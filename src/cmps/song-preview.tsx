@@ -64,7 +64,7 @@ export const SongPreview = ({ song, type, index, openModal }: Props) => {
             <div className="top-song flex align-center">
                 {(type === 'queue' || type === 'playlist-details') && index !== undefined && <div className="index-display">
                     {!isThisSongPlaying() && <p>{index + 1}</p>}
-                    {isThisSongPlaying() && !isHover && <div className="volume-gif">
+                    {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id&&<div className="volume-gif">
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
                         />
                     </div>}
