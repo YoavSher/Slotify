@@ -99,6 +99,7 @@
 
                         .top-song {
                             height: 100%;
+                            flex: 1;
 
                             .img-container {
                                 height: 40px;
@@ -136,9 +137,9 @@
                                     'channel';
                                 grid-template-columns: 250px;
                                 grid-template-rows: 14px 10px;
-                                gap: 4px;
+                                gap: 8px;
                                 position: relative;
-                                bottom: 17px;
+                                bottom: -9px;
 
                                 .song-title {
                                     grid-area: title;
@@ -147,7 +148,7 @@
                                         white-space: nowrap;
                                         overflow-x: hidden;
                                         text-overflow: ellipsis;
-                                        
+
                                     }
                                 }
 

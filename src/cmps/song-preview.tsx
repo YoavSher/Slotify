@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import userEvent from "@testing-library/user-event"
 import { setUser } from "../store/user/user.reducer"
 import { userService } from "../services/user.service"
+import { LikeButton } from "./like-button"
 
 interface Props {
     song: Song,
@@ -69,7 +70,8 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
                 user.likedSongs = user.likedSongs.filter(currSong => currSong.videoId !== song.videoId)
                 user.likedSongsIds = user.likedSongsIds.filter(id => id !== song.videoId)
             } else {
-                user.likedSongs = [...user.likedSongs, song]
+                const currSong = { ...song, addedAt: Date.now() }
+                user.likedSongs = [...user.likedSongs, currSong]
                 user.likedSongsIds = [...user.likedSongsIds, song.videoId]
             }
             dispatch(setUser(user))
@@ -79,7 +81,6 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
     const isSongLiked = () => {
         return loggedInUser?.likedSongsIds.includes(song.videoId)
     }
-    console.log(loggedInUser)
     return (<>
         {/* ${(isModalOpen) ? 'modal-open' : ''} turn it to a prop from the father,the prop of which song if they are equal then it is open, */}
         <div className={`top-songs-results flex align-center justify-between `} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
@@ -112,8 +113,10 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
                 </div>
             </div>
             <div className="like-song">
-                <button onClick={toggleSongLike}>Like/unlike</button>
-                <p>{(isSongLiked()) ? 'liked' : 'unliked'}</p>
+                <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
+                    <LikeButton />
+                </button>
+
             </div>
             <div className="song-actions flex align-center">
                 <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>

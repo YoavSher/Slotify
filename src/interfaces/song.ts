@@ -7,6 +7,7 @@ export interface Song {
     artist: string,
     image: string,
     duration: number,
+    addedAt?: number
     // allso we should seperate the song,name and band to diffrents keys so we could afterwards navigate to a band page for example
 }
 
