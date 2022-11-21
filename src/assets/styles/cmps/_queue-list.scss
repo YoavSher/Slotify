@@ -45,6 +45,8 @@
             }
 
             .top-song {
+
+
                 .index-display {
                     p {
                         display: none;
@@ -65,6 +67,8 @@
         }
 
         .top-song {
+            flex: 1;
+
             .index-display {
                 margin-right: 16px;
 
@@ -136,6 +140,7 @@
         }
 
         .song-actions {
+            min-width: 76px;
             gap: 12px;
             position: relative;
 

@@ -7,6 +7,10 @@ import { Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
 import { addToPlaylist, removeSong, replacePlaylist, setIsSongPlaying, setPlayingIdx } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
+import userEvent from "@testing-library/user-event"
+import { setUser } from "../store/user/user.reducer"
+import { userService } from "../services/user.service"
+import { LikeButton } from "./like-button"
 
 interface Props {
     song: Song,
@@ -18,6 +22,7 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
@@ -58,13 +63,31 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
         // but in the queue it should be like that maybe in other variation we want to just add it so maybe check if it's there if it is 
     }
 
+    const toggleSongLike = async () => {
+        if (loggedInUser) {
+            const user = { ...loggedInUser }
+            if (isSongLiked()) {
+                user.likedSongs = user.likedSongs.filter(currSong => currSong.videoId !== song.videoId)
+                user.likedSongsIds = user.likedSongsIds.filter(id => id !== song.videoId)
+            } else {
+                const currSong = { ...song, addedAt: Date.now() }
+                user.likedSongs = [...user.likedSongs, currSong]
+                user.likedSongsIds = [...user.likedSongsIds, song.videoId]
+            }
+            dispatch(setUser(user))
+            await userService.saveUser(user)
+        }
+    }
+    const isSongLiked = () => {
+        return loggedInUser?.likedSongsIds.includes(song.videoId)
+    }
     return (<>
         {/* ${(isModalOpen) ? 'modal-open' : ''} turn it to a prop from the father,the prop of which song if they are equal then it is open, */}
         <div className={`top-songs-results flex align-center justify-between `} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
             <div className="top-song flex align-center">
                 {(type === 'queue' || type === 'playlist-details') && index !== undefined && <div className="index-display">
                     {!isThisSongPlaying() && <p>{index + 1}</p>}
-                    {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id&&<div className="volume-gif">
+                    {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id && <div className="volume-gif">
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
                         />
                     </div>}
@@ -88,6 +111,12 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
                     </div>
                     <h6>{song.artist}</h6>
                 </div>
+            </div>
+            <div className="like-song">
+                <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
+                    <LikeButton />
+                </button>
+
             </div>
             <div className="song-actions flex align-center">
                 <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>

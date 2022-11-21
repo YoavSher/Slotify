@@ -26,7 +26,7 @@ export const SongsQueueList = ({ toggleModal, songs, songIdx }: Props) => {
                     {(provided) => (<section {...provided.droppableProps} ref={provided.innerRef} className="queue-song-list">
                         {songs.map((song, index) => {
                             if (index <= songIdx) return
-                            else return <Draggable key={song.id} draggableId={`${song.id}${index}`} index={index ? index : 0}>
+                            else return <Draggable key={song.id} draggableId={song.id} index={index ? index : 0}>
                                 {(provided) => (
                                     <article  {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
                                         <SongPreview toggleModal={toggleModal} index={index} type={'queue'} song={song} />

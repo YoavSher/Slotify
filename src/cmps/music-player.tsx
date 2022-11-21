@@ -158,7 +158,6 @@ export const MusicPlayer = () => {
         return playerRef.current.playerInfo.duration * 1000 || 0
     }
 
-
     return (
         <>
             <footer className="music-player">

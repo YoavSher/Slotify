@@ -38,7 +38,7 @@ const musicPlayerSlice = createSlice({
             state.currPlaylist.songs.push(song)
         }),
         replacePlaylist: ((state, action: PayloadAction<Song>) => {
-            state.currPlaylist.songs = [action.payload]
+            state.currPlaylist = { songs: [action.payload] }
             state.currPlayingIdx = 0
         }),
         setPlayingIdx: (state, action: PayloadAction<number>) => {

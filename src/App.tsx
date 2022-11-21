@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import routes from './routes';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import { MusicPlayer } from './cmps/music-player';
 import './assets/styles/main.scss'
 import { AppNavbar } from './cmps/app-navbar';
@@ -11,7 +11,6 @@ import { setPlaylists } from './store/playlist/playlist.reducer';
 import { playlistService } from './services/playlist.service';
 
 function App() {
-  const location = useLocation()
 
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -24,7 +23,6 @@ function App() {
   }
 
   
-  console.log(location)
   return (
     <div className='root-app' >
       <div className="main-app">
