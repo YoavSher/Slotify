@@ -3,14 +3,18 @@
     grid-area: nav-bar;
     min-width: 200px;
     background-color: rgb(57, 55, 55);
-    color: #fff;
+    // color: #fff;
     padding: 20px 0 0 20px;
+
+    * {
+        color: #fff;
+    }
 
     .main-logo {
         padding-inline-start: 8px;
+        gap: 7px;
 
         span {
-            display: inline-flex;
             font-size: 2rem;
         }
     }
@@ -22,27 +26,64 @@
             padding-bottom: 10px;
 
             a {
-                gap: 10px;
+                @include nav-link;
+            }
+        }
+
+        // * {
+        // color: #fff;
+        // }
+    }
+
+    .nav-links-second {
+        padding: 10px;
+
+
+        .create-playlist {
+            cursor: pointer;
+            @include nav-link;
+            margin-bottom: 15px;
+
+            div {
+                height: 24px;
+                width: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 3px;
+                background-color: #fff;
 
                 span {
-                    font-size: 1.6rem;
+                    color: black
+                }
+            }
 
-                    p {
-                        padding: 0 0 0 3px;
+        }
+
+        .liked-songs {
+            a {
+                @include nav-link;
+
+                div {
+                    height: 24px;
+                    width: 24px;
+                    padding: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: linear-gradient(135deg, #450af5, #c4efd9);
+                    border-radius: 3px;
+
+                    span {
+                        font-size: 0.75rem;
+                        position: relative;
+                        top: 3px;
+                        left: 1px
                     }
                 }
             }
         }
 
-        * {
-            color: #fff;
-        }
-    }
-
-    .nav-links-second {
-        * {
-            color: white;
-        }
 
         .bottom-border {
             position: relative;
@@ -65,32 +106,46 @@
                 right: 0;
                 z-index: 1;
             }
+        }
 
-            .playlists-links {
+        .playlists-links {
+            height: 100%;
+            position: relative;
+
+            .playlists-links-container {
                 height: 100%;
-                position: relative;
+                overflow: hidden;
+                bottom: 0;
+                direction: inherit;
+                height: auto;
+                left: 0;
+                margin: 0;
+                overflow: visible;
+                padding: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: auto;
+                z-index: 0;
 
-                .playlists-links-container {
-                    height: 100%;
-                    overflow: hidden;
-                    bottom: 0;
-                    direction: inherit;
-                    height: auto;
-                    left: 0;
-                    margin: 0;
-                    overflow: visible;
-                    padding: 0;
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    width: auto;
-                    z-index: 0;
+                .scroll-container {
+                    overflow-y: scroll;
 
-                    .scroll-container {
-                        overflow-y: scroll;
+                    ul {
+                        padding: 0;
+
+                        li {
+                            a {
+                                @include nav-link;
+                            }
+
+                            margin-bottom: 10px;
+                        }
                     }
                 }
+
             }
         }
+
     }
 }

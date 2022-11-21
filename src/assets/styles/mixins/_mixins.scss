@@ -90,3 +90,25 @@
         }
     }
 }
+
+
+@mixin nav-link{
+   display: flex;
+    gap: 10px;
+    opacity: .7;
+    transition: all .3s;
+    &:hover{
+        opacity: 1;
+        transition: all .3s;
+    }
+    span {
+        font-size: 1.5rem;
+
+        p {
+            padding: 0 0 0 3px;
+        }
+    }
+    &.active{
+        opacity: 1;
+    }
+}
