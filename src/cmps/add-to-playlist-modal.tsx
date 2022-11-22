@@ -20,16 +20,15 @@ export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal }: Props) =>
         return {
             left: `${modalPos.left - 548}px`,
             top: `${modalPos.top - 75}px`
-        } /// needs to add consideration for the height but the left is fixed,
+        }
     }
 
     const onAddToPlaylist = async (playlistId: string | undefined) => {
-        // console.log('playlistId:', playlistId)
         try {
             let playlist
             if (playlistId) {
                 playlist = await playlistService.getPlaylistById(playlistId)
-                // console.log('playlist:', playlist)
+                const s = { ...song, addedAt: Date.now() }
                 playlist.songs.push(song)
                 await playlistService.updatePlaylist(playlist)
                 onOpenAddModal(false)

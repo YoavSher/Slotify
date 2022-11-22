@@ -53,7 +53,7 @@ export const AppNavbar = () => {
                     <div><span>+</span></div><p>Create Playlist</p>
                 </div>
                 <div className="liked-songs flex">
-                    <NavLink to='' className="flex align-center">
+                    <NavLink to='/liked-songs' className="flex align-center">
                         <div><span><RiHeartFill /></span></div><p>Liked Songs</p></NavLink>
                 </div>
                 <div className="bottom-border">

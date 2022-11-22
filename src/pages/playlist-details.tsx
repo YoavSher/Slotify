@@ -12,7 +12,7 @@ import { playlistService } from "../services/playlist.service"
 import { uploadService } from "../services/upload.service"
 import { SongPreview } from "../cmps/song-preview"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { setPlaylist } from "../store/music-player/music-player.reducer"
+import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
@@ -110,7 +110,12 @@ export const PlaylistDetails = () => {
         if (currPlaylist) dispatch(setPlaylist(currPlaylist))
     }
 
-
+    const playSongFromPlaylist = (index: number) => {
+        if (currPlaylist) {
+            dispatch(setPlaylist(currPlaylist))
+            dispatch(setPlayingIdx(index))
+        }
+    }
 
     const onOpenModal = (ev: MouseEvent<HTMLButtonElement>) => {
         ev.stopPropagation()
@@ -180,7 +185,7 @@ export const PlaylistDetails = () => {
                                     return <Draggable key={s.id} draggableId={s.id} index={idx}>
                                         {(provided) => (
                                             <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
-                                                <SongPreview song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
+                                                <SongPreview playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
                                             </article>)}
                                     </Draggable>
                                 })}

@@ -1,4 +1,5 @@
 import { Home } from "./pages/home";
+import { LikedSongs } from "./pages/liked-songs";
 import { Login } from "./pages/login";
 import { PlaylistDetails } from "./pages/playlist-details";
 import { Queue } from "./pages/queue";
@@ -25,7 +26,7 @@ const routes = [
     },
     {
         path: 'search',
-        component:  SearchResults
+        component: SearchResults
     },
     // {
     //     path: 'search/:searchTerm',
@@ -33,11 +34,15 @@ const routes = [
     // }, to use the search form the params
     {
         path: 'playlist/:playlistId',
-        component:  PlaylistDetails
+        component: PlaylistDetails
     },
     {
         path: 'queue',
-        component:  Queue
+        component: Queue
+    },
+    {
+        path: 'liked-songs',
+        component: LikedSongs
     },
 
 ]

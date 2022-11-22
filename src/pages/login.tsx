@@ -17,10 +17,6 @@ export const Login = () => {
     const onStopPropagation = (ev: MouseEvent) => {
         ev.stopPropagation()
     }
-    const inputs = [
-        { name: 'username', type: 'text', placeholder: 'User name', value: userCred.username },
-        { name: 'password', type: 'password', placeholder: 'password', value: userCred.password },
-    ]
     const isCredValid = () => {
         return Object.values(userCred).every(field => field)
     }
@@ -34,11 +30,16 @@ export const Login = () => {
         try {
             const user = await userService.login(userCred)
             if (user) dispatch(setUser(user))
-
+            onCloseModal()
         } catch (err) {
             console.log(err)
         }
     }
+    
+    const inputs = [
+        { name: 'username', type: 'text', placeholder: 'User name', value: userCred.username },
+        { name: 'password', type: 'password', placeholder: 'password', value: userCred.password },
+    ]
 
     return (
         <section className="login-screen-cover" onClick={onCloseModal}>

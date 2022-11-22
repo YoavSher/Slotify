@@ -14,11 +14,12 @@ import { LikeButton } from "./like-button"
 
 interface Props {
     song: Song,
-    type?: string,
+    type: string,
     index?: number,
-    toggleModal?: any
+    toggleModal: any,
+    playSongFromPlaylist?: any
 }
-export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
+export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist }: Props) => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -32,7 +33,6 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
         switch
         (type) {
             case 'queue':
-                return isSongPlaying && currPlayingIdx === index
             case 'playlist-details':
                 return isSongPlaying && currPlayingIdx === index
             case 'search-results':
@@ -53,14 +53,13 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
                 else dispatch(replacePlaylist(song))
                 break
             case 'playlist-details':
-                if (isThisSongPlaying()) dispatch(setIsSongPlaying(false)) // if the song thats playing is this ,stop it 
-                else if (currPlayingIdx === index && !isSongPlaying) dispatch(setIsSongPlaying(true)) //else if the song is not playing and is this play it 
-                else if (index !== undefined) dispatch(setPlayingIdx(index))                                                         // else if this song is not the song and not playing dispatch it
+                if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
+                else if (!isThisSongPlaying()) playSongFromPlaylist(index)
+                else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
                 break
 
         }
-        // should dispatch the songId and then search the playlist to see where it is and set it as the index
-        // but in the queue it should be like that maybe in other variation we want to just add it so maybe check if it's there if it is 
+
     }
 
     const toggleSongLike = async () => {
@@ -71,8 +70,8 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
                 user.likedSongsIds = user.likedSongsIds.filter(id => id !== song.videoId)
             } else {
                 const currSong = { ...song, addedAt: Date.now() }
-                user.likedSongs = [...user.likedSongs, currSong]
-                user.likedSongsIds = [...user.likedSongsIds, song.videoId]
+                user.likedSongs = [currSong, ...user.likedSongs]
+                user.likedSongsIds = [song.videoId, ...user.likedSongsIds]
             }
             dispatch(setUser(user))
             await userService.saveUser(user)
@@ -82,7 +81,6 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
         return loggedInUser?.likedSongsIds.includes(song.videoId)
     }
     return (<>
-        {/* ${(isModalOpen) ? 'modal-open' : ''} turn it to a prop from the father,the prop of which song if they are equal then it is open, */}
         <div className={`top-songs-results flex align-center justify-between `} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
             <div className="top-song flex align-center">
                 {(type === 'queue' || type === 'playlist-details') && index !== undefined && <div className="index-display">
@@ -111,6 +109,10 @@ export const SongPreview = ({ song, type, index, toggleModal }: Props) => {
                     </div>
                     <h6>{song.artist}</h6>
                 </div>
+            </div>
+
+            <div className="added-at">
+                {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
             </div>
             <div className="like-song">
                 <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>

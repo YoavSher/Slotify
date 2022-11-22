@@ -3,10 +3,10 @@ import React, { ChangeEvent, useRef, useState, useEffect } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { Song } from '../interfaces/song';
 import { utilService } from '../services/util.service';
-import { decrementPlayingIdx, incrementPlayingIdx, setIsSongPlaying, } from '../store/music-player/music-player.reducer';
+import { decrementPlayingIdx, incrementPlayingIdx, reorderSongsList, setIsSongPlaying, } from '../store/music-player/music-player.reducer';
 import { useAppDispatch, useAppSelector } from '../store/store.hooks';
 import { timeSliderOptions, volumeSliderOptions } from '../helpers/slider-component-config';
-import { BiPlay, BiVolumeLow, BiVolumeFull, BiVolume } from 'react-icons/bi'
+import { BiPlay, BiVolumeLow, BiVolumeFull, BiVolume, BiShuffle } from 'react-icons/bi'
 import { GiPauseButton } from 'react-icons/gi'
 import { TiThListOutline } from 'react-icons/ti'
 import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
@@ -122,7 +122,12 @@ export const MusicPlayer = () => {
         timeBarDebounceId.current = window.setTimeout(later, 1000)
     }
 
+    // const onSongsShuffle = () => {
+    //     const currSong = playlist.songs[songIdx]
+    //     const songs = utilService.shuffle(playlist.songs.slice(songIdx + 1))
 
+    //     dispatch(reorderSongsList([]))
+    // }
 
     const onIndexIncrement = () => {
         pauseVideo()
@@ -175,6 +180,7 @@ export const MusicPlayer = () => {
 
                 <div className="main-player">
                     <section className="buttons-container">
+                        <button title="Shuffle" className='shuffle-btn' ><BiShuffle /></button>
                         <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
                         <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
                         <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>

@@ -53,7 +53,7 @@ const musicPlayerSlice = createSlice({
         decrementPlayingIdx: (state) => {
             if (state.currPlayingIdx > 0) state.currPlayingIdx--
         },
-        setPlaylist: (state, action: PayloadAction<Playlist>) => { // should turn to a playlist
+        setPlaylist: (state, action: PayloadAction<Playlist | PseudoPlaylist>) => {
             state.currPlayingIdx = 0
             state.currPlaylist = action.payload
         },

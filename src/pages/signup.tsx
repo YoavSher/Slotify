@@ -21,7 +21,7 @@ export const Signup = () => {
         try {
             const user = await userService.signup(userCred as User)
             if (user) dispatch(setUser(user))
-
+            onCloseModal()
         } catch (err) {
             console.log(err)
         }
