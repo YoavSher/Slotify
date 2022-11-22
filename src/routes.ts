@@ -1,5 +1,6 @@
 import { Home } from "./pages/home";
 import { LikedSongs } from "./pages/liked-songs";
+import { Library } from "./pages/library";
 import { Login } from "./pages/login";
 import { PlaylistDetails } from "./pages/playlist-details";
 import { Queue } from "./pages/queue";
@@ -28,10 +29,10 @@ const routes = [
         path: 'search',
         component: SearchResults
     },
-    // {
-    //     path: 'search/:searchTerm',
-    //     component:  SearchResults
-    // }, to use the search form the params
+    {
+        path: 'search/:searchTerm',
+        component:  SearchResults
+    }, //to use the search form the params
     {
         path: 'playlist/:playlistId',
         component: PlaylistDetails
@@ -43,6 +44,10 @@ const routes = [
     {
         path: 'liked-songs',
         component: LikedSongs
+    },
+    {
+        path: 'collection',
+        component:  Library
     },
 
 ]

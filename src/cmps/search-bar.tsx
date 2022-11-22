@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 
 import { FiSearch } from 'react-icons/fi'
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
 
 import { utilService } from "../services/util.service"
 import { youtubeService } from "../services/youtube.service"
@@ -14,22 +14,25 @@ export const SearchBar = () => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
     const params = useParams()
+    const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
+    console.log('searchTerm:', searchTerm)
+    // const { searchTerm } = params
     // const [searchTerm, setSearchTerm] = useState('')
+    useEffect(() => {
+        getResultsFromParams()
+    }, [location])
 
+    const getResultsFromParams = async () => {
+        console.log('im results from params')
+        const resData = await youtubeService.getDataFromYoutube(searchTerm)
+        dispatch(setSearchResults(resData))
+    }
 
-    const onSearch = async (ev: ChangeEvent<HTMLInputElement>) => {
+    const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {
         const { value } = ev.target
-        // setSearchTerm(value) if we want 2 way data binding for the params
-        try {
-            const resData = await youtubeService.getDataFromYoutube(value)
-
-            console.log('resData:', resData)
-            // navigate(`search/${value}`) to go to search page with search term in params
-            dispatch(setSearchResults(resData))
-        } catch (err) {
-            console.log('err:', err)
-        }
+        value ? navigate(`search/${value}`) : navigate(`search`)
     }
 
     return (
@@ -37,9 +40,9 @@ export const SearchBar = () => {
             <div className="search-form-container">
                 <form>
                     <input type="text"
-                        onChange={utilService.debounce(onSearch, 1000)}
+                        onChange={utilService.debounce(onSearch, 1200)}
                         placeholder="What do you want to listen to?"
-                        // value={searchTerm}
+                        defaultValue={searchTerm}
                     />
                 </form>
                 <div className="search-icon-container"><span><FiSearch /></span></div>

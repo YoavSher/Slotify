@@ -21,6 +21,20 @@ export const SearchResults = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const searchResults = useAppSelector(state => state.searchSong.searchResults)
+    const [topSongs, setTopSongs] = useState<Song[] | undefined>()
+    const params = useParams()
+    
+    useEffect(() => {
+        console.log('searchResults:', searchResults)
+        if (searchResults) {
+
+            const songs = [...searchResults]
+            setTopSongs(songs.splice(1))
+            console.log('songs:', songs)
+        }
+
+    }, [searchResults])
 
 
     const toggleModal = (ev: any, song: Song) => {
@@ -40,27 +54,6 @@ export const SearchResults = () => {
         setSongForModal(null)
         setIsModalOpen(false)
     }
-
-
-    const searchResults = useAppSelector(state => state.searchSong.searchResults)
-    const [topSongs, setTopSongs] = useState<Song[] | undefined>()
-    const params = useParams()
-
-
-
-
-
-
-    useEffect(() => {
-        console.log('searchResults:', searchResults)
-        if (searchResults) {
-
-            const songs = [...searchResults]
-            setTopSongs(songs.splice(1))
-            console.log('songs:', songs)
-        }
-
-    }, [searchResults])
 
     const isThisSongPlaying = () => {
 
