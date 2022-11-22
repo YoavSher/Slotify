@@ -37,7 +37,7 @@
 
     .nav-links-second {
         padding: 10px;
-
+        height: 55%;
 
         .create-playlist {
             cursor: pointer;
@@ -92,7 +92,8 @@
                 background-color: #282828;
                 border: none;
                 height: 1px;
-                margin: 8px 24px 0 24px;
+                width: 100%;
+                // margin: 8px 24px 0 24px;
                 min-height: 1px;
             }
 
@@ -113,22 +114,22 @@
             position: relative;
 
             .playlists-links-container {
-                height: 100%;
-                overflow: hidden;
-                bottom: 0;
-                direction: inherit;
-                height: auto;
-                left: 0;
-                margin: 0;
-                overflow: visible;
-                padding: 0;
-                position: absolute;
-                right: 0;
-                top: 0;
-                width: auto;
-                z-index: 0;
-
+                
                 .scroll-container {
+                    height: 100%;
+                    overflow: hidden;
+                    bottom: 0;
+                    direction: inherit;
+                    height: auto;
+                    left: 0;
+                    margin: 0;
+                    overflow: visible;
+                    padding: 0;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    width: auto;
+                    z-index: 0;
                     overflow-y: scroll;
 
                     ul {
