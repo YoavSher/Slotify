@@ -82,7 +82,7 @@ function _getMonthName(date: Date) {
     return monthNames[date.getMonth()]
 }
 
-function shuffle(array: any[]) {
+function shuffle<T>(array: T[]): T[] {
     let currentIndex = array.length, randomIndex
 
     while (currentIndex != 0) {

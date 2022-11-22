@@ -22,6 +22,7 @@ export const MusicPlayer = () => {
 
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
+
     useEffect(() => {
         if (isSongPlaying) {
             playerRef.current?.playVideo()
@@ -32,9 +33,12 @@ export const MusicPlayer = () => {
             window.clearInterval(durationIntervalId.current)
         }
     }, [isSongPlaying])
+
     const [songTimer, setSongTimer] = useState(0)
     const prevVolume = useRef(50)
     const [volume, setVolume] = useState(50)
+    const [isShuffled, setIsShuffled] = useState(false)
+    const unShuffledSongs = useRef<Song[] | null>(null)
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         playerRef.current = ev.target
@@ -122,12 +126,24 @@ export const MusicPlayer = () => {
         timeBarDebounceId.current = window.setTimeout(later, 1000)
     }
 
-    // const onSongsShuffle = () => {
-    //     const currSong = playlist.songs[songIdx]
-    //     const songs = utilService.shuffle(playlist.songs.slice(songIdx + 1))
+    const toggleSongsShuffle = () => {
+        if (isShuffled) unShuffleSongs()
+        else shuffleSongs()
+    }
 
-    //     dispatch(reorderSongsList([]))
-    // }
+
+    const shuffleSongs = () => {
+        unShuffledSongs.current = playlist.songs
+        const beforePlayingIdx = playlist.songs.slice(0, songIdx + 1)
+        const afterPlayingIdx = utilService.shuffle(playlist.songs.slice(songIdx + 1))
+        setIsShuffled(true)
+        dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
+    }
+
+    const unShuffleSongs = () => {
+        setIsShuffled(false)
+        if (unShuffledSongs.current) dispatch(reorderSongsList(unShuffledSongs.current))
+    }
 
     const onIndexIncrement = () => {
         pauseVideo()
@@ -180,7 +196,7 @@ export const MusicPlayer = () => {
 
                 <div className="main-player">
                     <section className="buttons-container">
-                        <button title="Shuffle" className='shuffle-btn' ><BiShuffle /></button>
+                        <button title="Shuffle" onClick={toggleSongsShuffle} className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`} ><BiShuffle /></button>
                         <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
                         <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
                         <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
