@@ -1,10 +1,20 @@
+.left-section {
+    .like-song {
+        .like-btn {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+}
+
 .like-song {
     width: 34px;
+
 
     .like-btn {
         border: none;
         background: transparent;
-        transform: translateX(-25px);
+        transform: translateX(-20px);
         position: relative;
         display: grid;
         place-content: center;

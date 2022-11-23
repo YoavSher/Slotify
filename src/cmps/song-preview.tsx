@@ -8,8 +8,6 @@ import { utilService } from "../services/util.service"
 import { addToPlaylist, removeSong, replacePlaylist, setIsSongPlaying, setPlayingIdx } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import userEvent from "@testing-library/user-event"
-import { setUser } from "../store/user/user.reducer"
-import { userService } from "../services/user.service"
 import { LikeButton } from "./like-button"
 
 interface Props {
@@ -18,13 +16,12 @@ interface Props {
     index?: number,
     toggleModal?: any,
     playSongFromPlaylist?: any,
-    onAddToPlaylist?:any
+    onAddToPlaylist?: any
 }
-export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist,onAddToPlaylist }: Props) => {
+export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist, onAddToPlaylist }: Props) => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
-    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
@@ -70,26 +67,9 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
 
     }
 
-    const toggleSongLike = async () => {
-        if (loggedInUser) {
-            const user = { ...loggedInUser }
-            if (isSongLiked()) {
-                user.likedSongs = user.likedSongs.filter(currSong => currSong.videoId !== song.videoId)
-                user.likedSongsIds = user.likedSongsIds.filter(id => id !== song.videoId)
-            } else {
-                const currSong = { ...song, addedAt: Date.now() }
-                user.likedSongs = [currSong, ...user.likedSongs]
-                user.likedSongsIds = [song.videoId, ...user.likedSongsIds]
-            }
-            dispatch(setUser(user))
-            await userService.saveUser(user)
-        }
-    }
-    const isSongLiked = () => {
-        return loggedInUser?.likedSongsIds.includes(song.videoId)
-    }
 
-    
+
+
 
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
@@ -127,12 +107,8 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             {type === 'playlist-details' && <div className="added-at">
                 {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
             </div>}
-            {type !== 'playlist-details-search' && <div className="like-song">
-                <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
-                    <LikeButton />
-                </button>
+            {type !== 'playlist-details-search' && <LikeButton song={song} />}
 
-            </div>}
             {type !== 'playlist-details-search' && <div className="song-actions flex align-center">
                 <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>
                 <button onClick={(event) => { toggleModal(event, song) }} className="actions-btn">
