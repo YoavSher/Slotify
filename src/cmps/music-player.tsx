@@ -204,7 +204,7 @@ export const MusicPlayer = () => {
 
     return (
         <>
-            <footer className="music-player mobile">
+            {/* <footer className="music-player mobile">
                 {currSong && <>
                     <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
                     <section className="mobile-right">
@@ -231,8 +231,8 @@ export const MusicPlayer = () => {
                         sx={timeSliderOptions}
                     />
                 </section>
-            </footer>
-            {/* <footer className="music-player">
+            </footer> */}
+            <footer className="music-player">
                 <section className="left-section">
                     {currSong && <>
                         <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
@@ -280,7 +280,7 @@ export const MusicPlayer = () => {
                         sx={volumeSliderOptions}
                     />
                 </section>
-            </footer> */}
+            </footer>
         </>
     )
 }
