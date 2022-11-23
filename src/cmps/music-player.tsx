@@ -12,6 +12,7 @@ import { TiThListOutline } from 'react-icons/ti'
 import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
 import { cachingService } from '../services/music-player-caching.service';
+import { LikeButton } from './like-button';
 
 export const MusicPlayer = () => {
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -203,7 +204,35 @@ export const MusicPlayer = () => {
 
     return (
         <>
-            <footer className="music-player">
+            <footer className="music-player mobile">
+                {currSong && <>
+                    <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
+                    <section className="mobile-right">
+                        <img className="song-image" src={currSong.image} alt="" />
+                        <div className="names-container">
+                            <p className="song-name">{currSong.title}</p>
+                            <p className="artist-name">{currSong.artist}</p>
+                        </div>
+                    </section>
+                    <section className="mobile-left">
+                        <LikeButton song={currSong} />
+                        <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
+                    </section>
+                </>}
+                <section className="time-container">
+                    <Slider
+                        aria-label="time-indicator"
+                        size="small"
+                        value={songTimer / 1000 | 0}
+                        min={0}
+                        step={1}
+                        disabled={currSong ? false : true}
+                        max={(currSong) ? currSong.duration / 1000 : 100}
+                        sx={timeSliderOptions}
+                    />
+                </section>
+            </footer>
+            {/* <footer className="music-player">
                 <section className="left-section">
                     {currSong && <>
                         <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
@@ -212,7 +241,7 @@ export const MusicPlayer = () => {
                             <p className="song-name">{currSong.title}</p>
                             <p className="artist-name">{currSong.artist}</p>
                         </div>
-
+                        <LikeButton song={currSong} />
                     </>}
                 </section>
 
@@ -251,7 +280,7 @@ export const MusicPlayer = () => {
                         sx={volumeSliderOptions}
                     />
                 </section>
-            </footer>
+            </footer> */}
         </>
     )
 }

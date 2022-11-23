@@ -1,0 +1,67 @@
+.music-player.mobile {
+    padding: 6px;
+    position: relative;
+    align-items: center;
+    height: 50px;
+    border-radius: 4px;
+    width: calc(100% - 8px);
+    background-color: rgb(57, 55, 55);
+    margin: auto;
+
+    .css-1rblxne-MuiSlider-root .MuiSlider-thumb {
+        display: none;
+    }
+
+    .time-container {
+        .css-1rblxne-MuiSlider-root {
+            position: absolute;
+            width: calc(100% - 8px);
+            height: 2px;
+            bottom: -12px;
+            left: 4px;
+        }
+    }
+
+    .mobile-right {
+        display: flex;
+        justify-content: flex-start;
+
+        .song-image {
+            width: 37px;
+            height: 37px;
+            object-fit: cover;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+
+        .names-container {
+            font-size: 14px;
+            color: white;
+
+            .artist-name {
+                opacity: 0.7;
+            }
+        }
+    }
+
+    .mobile-left {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1;
+        align-items: center;
+
+        .play-pause-btn {
+            @include play-pause;
+            @include cleared-btn;
+            color: white;
+        }
+
+        .like-song {
+            .like-btn {
+                left: 14px;
+            }
+        }
+    }
+
+
+}
