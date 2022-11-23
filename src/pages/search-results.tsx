@@ -10,6 +10,7 @@ import { SearchSongPreview } from "../cmps/search-song-preview"
 import { SongPreview } from "../cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { replacePlaylist, setIsSongPlaying } from "../store/music-player/music-player.reducer"
+import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 
 
 
@@ -26,7 +27,7 @@ export const SearchResults = () => {
     const params = useParams()
 
     useEffect(() => {
-        console.log('searchResults:', searchResults)
+        console.log('params:', params)
         if (searchResults) {
 
             const songs = [...searchResults]
@@ -72,7 +73,7 @@ export const SearchResults = () => {
 
 
 
-
+    if (!searchResults && params.searchTerm) return <div className="loading-anim"><img src={loading} alt="" /></div>
     return (
         <>
             <section onClick={closeModal} className="search-results-page">

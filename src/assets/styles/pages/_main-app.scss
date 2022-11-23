@@ -48,6 +48,14 @@
             width: auto;
             overflow: hidden;
 
+            .loading-anim {
+                height: 100%;
+
+                img {
+                    height: 100%;
+                }
+            }
+
         }
     }
 }

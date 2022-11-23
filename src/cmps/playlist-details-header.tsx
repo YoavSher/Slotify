@@ -34,7 +34,8 @@ export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, 
                 {/* <h1>{playlist.name}</h1> */}
                 <input type="text" className="playlist-title"
                     onChange={onChangeTitle} onBlur={onSaveChanges} value={playlist.name} />
-                <h5>{playlist?.createdBy?.fullName} • {playlist?.songs?.length} songs</h5>
+                <h5>{playlist?.createdBy?.fullName}
+                {playlist?.songs?.length > 0 &&  <span> • {playlist?.songs?.length} songs</span>}</h5>
             </div>
         </header>
     )
