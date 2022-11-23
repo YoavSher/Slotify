@@ -18,6 +18,7 @@ import { Song } from "../interfaces/song"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { PlaylistDetailsSearch } from "../cmps/playlist-details-search"
 import { PlaylistDetailsHeader } from "../cmps/playlist-details-header"
+import loading  from '../assets/img/Spotify-Loading-Animation-4.gif'
 
 export const PlaylistDetails = () => {
 
@@ -147,7 +148,7 @@ export const PlaylistDetails = () => {
         }
     }
 
-    if (!currPlaylist) return <h1 style={{ color: 'white' }}>Loading...</h1>
+    if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div> 
     return (
         <section className="playlist-details" onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
             <Helmet>

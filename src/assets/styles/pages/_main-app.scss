@@ -22,7 +22,7 @@
         min-height: 0;
         overflow: hidden;
         position: relative;
-        
+
         .main-content {
             padding-top: 60px;
             bottom: 0;
@@ -37,6 +37,14 @@
             top: 0;
             width: auto;
             overflow: hidden;
+
+            .loading-anim {
+                height: 100%;
+
+                img {
+                    height: 100%;
+                }
+            }
 
         }
     }
