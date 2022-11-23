@@ -58,6 +58,20 @@
 
             button.shuffle-btn {
                 font-size: 25px;
+                position: relative;
+
+                &.shuffled {
+                    color: #1db954;
+
+
+                    &::after {
+                        content: '.';
+                        font-size: 51px;
+                        position: absolute;
+                        top: -22px;
+                        left: 13px;
+                    }
+                }
 
                 svg {
                     position: relative;
