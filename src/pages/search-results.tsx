@@ -24,7 +24,7 @@ export const SearchResults = () => {
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const params = useParams()
-    
+
     useEffect(() => {
         console.log('searchResults:', searchResults)
         if (searchResults) {
@@ -69,8 +69,7 @@ export const SearchResults = () => {
         }
 
     }
-    // should dispatch the songid and then search the playlist to see where it is and set it as the index
-    // but in the queue it should be like that maybe in other variation we want to just add it so maybe check if it's there if it is 
+
 
 
 
@@ -103,7 +102,7 @@ export const SearchResults = () => {
                             </div>
                             <div className="top-songs-results-container">
                                 {topSongs?.map(song => {
-                                    return <SongPreview toggleModal={toggleModal} song={song}
+                                    return <SongPreview key={song.id} toggleModal={toggleModal} song={song}
                                         type={'search-results'} />
                                 })}
                                 {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}

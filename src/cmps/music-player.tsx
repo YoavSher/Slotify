@@ -3,7 +3,7 @@ import React, { ChangeEvent, useRef, useState, useEffect } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { Song } from '../interfaces/song';
 import { utilService } from '../services/util.service';
-import { decrementPlayingIdx, incrementPlayingIdx, reorderSongsList, setIsSongPlaying, } from '../store/music-player/music-player.reducer';
+import { reorderSongsList, setIsSongPlaying, setPlayingIdx, setPlaylist, } from '../store/music-player/music-player.reducer';
 import { useAppDispatch, useAppSelector } from '../store/store.hooks';
 import { timeSliderOptions, volumeSliderOptions } from '../helpers/slider-component-config';
 import { BiPlay, BiVolumeLow, BiVolumeFull, BiVolume, BiShuffle } from 'react-icons/bi'
@@ -11,6 +11,7 @@ import { GiPauseButton } from 'react-icons/gi'
 import { TiThListOutline } from 'react-icons/ti'
 import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom';
+import { cachingService } from '../services/music-player-caching.service';
 
 export const MusicPlayer = () => {
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -22,6 +23,20 @@ export const MusicPlayer = () => {
 
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
+
+    const playingTimeFromCache = useRef<number | null>()
+
+
+    useEffect(() => {
+        const idx = cachingService.getPlayingIdx()
+        const playlist = cachingService.getPlaylist()
+        if (typeof idx === 'number' && playlist) {
+            dispatch(setPlaylist(playlist))
+            dispatch(setPlayingIdx(idx))
+            const playingTime = cachingService.getPlayingTime()
+            playingTimeFromCache.current = playingTime
+        }
+    }, [])
 
     useEffect(() => {
         if (isSongPlaying) {
@@ -41,22 +56,31 @@ export const MusicPlayer = () => {
     const unShuffledSongs = useRef<Song[] | null>(null)
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
+        console.log(ev.target)
         playerRef.current = ev.target
         setVolume(playerRef.current.playerInfo.volume)
-        setSongTimer(0)
-        startVideo()
+        if (playingTimeFromCache.current) {
+            setSongTimer(playingTimeFromCache.current)
+            playerRef.current.seekTo(playingTimeFromCache.current / 1000)
+            playingTimeFromCache.current = null
+            pauseVideo()
+        } else {
+            setSongTimer(0)
+            startVideo()
+        }
+
     }
 
     const durationInterval = () => {
         durationIntervalId.current = window.setInterval(() => {
-            console.log('working')
-
             if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
-                dispatch(incrementPlayingIdx())
+                dispatch(setPlayingIdx(songIdx + 1))
                 setSongTimer(0)
                 window.clearInterval(durationIntervalId.current)
             } else {
-                setSongTimer(playerRef.current.getCurrentTime() * 1000)
+                const currTime = playerRef.current.getCurrentTime() * 1000
+                setSongTimer(currTime)
+                cachingService.savePlayingTime(currTime)
             }
         }, 100)
     }
@@ -74,7 +98,6 @@ export const MusicPlayer = () => {
     }
 
     const pauseVideo = () => {
-        console.log(durationIntervalId.current)
         playerRef.current.pauseVideo()
         window.clearInterval(durationIntervalId.current)
         dispatch(setIsSongPlaying(false))
@@ -114,8 +137,7 @@ export const MusicPlayer = () => {
         const later = () => {
             window.clearTimeout(timeBarDebounceId.current)
             seekTo(time)
-            playerRef.current.playVideo()
-            durationInterval()
+            startVideo()
         }
 
         console.log(songTimer)
@@ -148,12 +170,12 @@ export const MusicPlayer = () => {
     const onIndexIncrement = () => {
         pauseVideo()
         playerRef.current = null
-        dispatch(incrementPlayingIdx())
+        dispatch(setPlayingIdx(songIdx + 1))
     }
     const onIndexDecrement = () => {
         pauseVideo()
         playerRef.current = null
-        dispatch(decrementPlayingIdx())
+        dispatch(setPlayingIdx(songIdx - 1))
     }
 
     const opts = {
