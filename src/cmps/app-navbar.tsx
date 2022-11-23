@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
 import { BsSpotify, BsPlusSquare } from 'react-icons/bs'
 import { RiHome2Line, RiHeartFill, RiHome2Fill, RiSearchFill } from 'react-icons/ri'
@@ -16,11 +16,17 @@ export const AppNavbar = () => {
     const location = useLocation()
     const playlists = useAppSelector(state => state.playlist.playlists)
     const dispatch = useAppDispatch()
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
     useEffect(() => {
-        // console.log('location:', location)
+        // console.log('screenWidth:', screenWidth)
+        // if (screenWidth < 770) console.log('smaller');
         loadPlayList()
-    }, [location])
+        window.addEventListener('resize', setDimensions)
+        return () => {
+            window.removeEventListener('resize', setDimensions)
+        }
+    }, [location, screenWidth])
 
     const onCreateNewBoard = async () => {
         const newPlaylist = await playlistService.createPlaylist()
@@ -30,10 +36,13 @@ export const AppNavbar = () => {
         const playlists = await playlistService.query()
         if (playlists) dispatch(setPlaylists(playlists))
     }
+    const setDimensions = () => {
+        setScreenWidth(window.innerWidth)
+    }
 
     return (
         <nav className="app-navbar flex column">
-            <h1 className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>
+            {screenWidth > 770 && <h1 className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
             <ul className="nav-links-main">
                 <li><NavLink to="" className='flex align-center'>
                     {location.pathname !== '/' && <span><RiHome2Line /></span>}
@@ -48,7 +57,7 @@ export const AppNavbar = () => {
                     {location.pathname.includes('collection') && <span><IoLibrary /></span>}
                     <p>Your Library</p></NavLink></li>
             </ul>
-            <div className="nav-links-second">
+            {screenWidth > 770 && <div className="nav-links-second">
                 <div className="create-playlist flex align-center" onClick={onCreateNewBoard}>
                     <div><span>+</span></div><p>Create Playlist</p>
                 </div>
@@ -73,7 +82,7 @@ export const AppNavbar = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
         </nav>
     )
 }

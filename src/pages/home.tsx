@@ -26,6 +26,7 @@ export const Home = () => {
                 <Helmet><title>Slotify</title></Helmet>
                 <h1>home</h1>
                 <PlaylistList playlists={playlists} />
+                <div className="pusher"></div>
             </section>
             <Outlet></Outlet>
         </>

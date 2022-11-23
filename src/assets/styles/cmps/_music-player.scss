@@ -8,6 +8,12 @@
     grid-area: now-playing-bar;
     display: flex;
     z-index: 100;
+    position: fixed;
+    bottom: 86px;
+
+    @media(min-width:770px) {
+        position: initial;
+    }
 
     .left-section {
         width: 30%;

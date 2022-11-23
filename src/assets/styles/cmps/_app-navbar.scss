@@ -2,12 +2,23 @@
     // flex: 1;
     grid-area: nav-bar;
     min-width: 200px;
-    background-color: rgb(57, 55, 55);
+    background-color: rgba(57, 55, 55, 0.6);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
     // color: #fff;
-    padding: 20px 0 0 20px;
 
     * {
         color: #fff;
+    }
+
+    @media(min-width:770px) {
+        padding: 20px 0 0 20px;
+        background-color: rgb(57, 55, 55);
+        position: initial;
+
     }
 
     .main-logo {
@@ -20,14 +31,31 @@
     }
 
     .nav-links-main {
-        padding: 10px;
-
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        
         li {
-            padding-bottom: 10px;
-
+            @media(min-width:770px) {
+                padding-bottom: 10px;
+            }
+            
             a {
                 @include nav-link;
+                flex-direction: column;
+                gap: 0;
+                
+                @media(min-width:770px) {
+                    flex-direction: row;
+                    gap: 10px;
+                    // display: initial;
+                }
             }
+        }
+
+        @media(min-width:770px) {
+            padding: 10px;
+            display: initial;
         }
 
         // * {
@@ -114,7 +142,7 @@
             position: relative;
 
             .playlists-links-container {
-                
+
                 .scroll-container {
                     height: 100%;
                     overflow: hidden;
