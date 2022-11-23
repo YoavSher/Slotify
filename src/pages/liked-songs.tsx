@@ -79,10 +79,10 @@ export const LikedSongs = () => {
                     <div className="playlist-details-main-content">
                         <div className="songs-titles-container">
                             <div className="songs-titles">
-                                <div>#</div>
-                                <div>title</div>
-                                <div>date added</div>
-                                <div><CiClock2 /></div>
+                                <div className="hash">#</div>
+                                <div className="title">TITLE</div>
+                                <div className="date">DATE ADDED</div>
+                                <div className="clock"><CiClock2 /></div>
                             </div>
                         </div>
                         <DragDropContext onDragEnd={handleOnDragEnd}>

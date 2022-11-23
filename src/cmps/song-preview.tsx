@@ -81,7 +81,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         return loggedInUser?.likedSongsIds.includes(song.videoId)
     }
     return (<>
-        <div className={`top-songs-results flex align-center justify-between `} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+        <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
             <div className="top-song flex align-center">
                 {(type === 'queue' || type === 'playlist-details') && index !== undefined && <div className="index-display">
                     {!isThisSongPlaying() && <p>{index + 1}</p>}
@@ -111,9 +111,9 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 </div>
             </div>
 
-            <div className="added-at">
+            {type === 'playlist-details' && <div className="added-at">
                 {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
-            </div>
+            </div>}
             <div className="like-song">
                 <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
                     <LikeButton />

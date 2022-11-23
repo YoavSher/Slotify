@@ -154,7 +154,6 @@ export const PlaylistDetails = () => {
                 </div>
                 <div className="playlist-description flex column">
                     <h3>PLAYLIST</h3>
-                    {/* <h1>{currPlaylist.name}</h1> */}
                     <input type="text" className="playlist-title"
                         onChange={onChangeTitle} onBlur={onSaveChanges} value={currPlaylist.name} />
                     <h5>{currPlaylist?.createdBy?.fullName} • {currPlaylist?.songs?.length} songs</h5>
@@ -171,10 +170,10 @@ export const PlaylistDetails = () => {
                 <div className="playlist-details-main-content">
                     <div className="songs-titles-container">
                         <div className="songs-titles">
-                            <div>#</div>
-                            <div>title</div>
-                            <div>date added</div>
-                            <div><CiClock2 /></div>
+                            <div className="hash">#</div>
+                            <div className="title">TITLE</div>
+                            <div className="date">DATE ADDED</div>
+                            <div className="clock"><CiClock2 /></div>
                         </div>
                     </div>
                     <DragDropContext onDragEnd={handleOnDragEnd}>

@@ -11,6 +11,7 @@
     margin: 0;
     outline: none;
     overflow-x: inherit;
+    padding: 0 16px;
 
     .playlist-details-header {
         height: 30vh;
@@ -113,14 +114,87 @@
                 position: sticky;
                 border-bottom: 1px solid hsla(0deg, 0%, 100%, 0.1);
                 margin-bottom: 10px;
+                font-size: 14px;
 
                 .songs-titles {
-                    display: grid;
-                    margin-inline-start: 20px;
-                    grid-template-columns: 16px 6fr 3fr minmax(120px, 1fr);
+                    display: flex;
+                    padding: 0 16px;
                     color: #b3b3b3;
-                    height: 36px;
-                    grid-gap: 16px;
+                    height: 28px;
+
+                    .hash {
+                        flex-basis: 3%;
+                    }
+
+                    .title {
+                        flex: 1;
+
+                        @media (min-width:900px) {
+                            flex-basis: 57%;
+                        }
+                    }
+
+                    .date {
+
+                        display: none;
+
+
+                        @media (min-width:900px) {
+                            display: initial;
+                            flex-basis: 33%;
+                        }
+
+                        @media (min-width:1000px) {
+                            flex-basis: 31%;
+                        }
+
+                        @media (min-width:1100px) {
+                            flex-basis: 29%;
+                        }
+
+
+                        @media (min-width:1350px) {
+                            flex-basis: 28%;
+                        }
+
+                        @media (min-width:1670px) {
+                            flex-basis: 27%;
+                        }
+
+                        @media (min-width:2000px) {
+                            flex-basis: 26%;
+                        }
+
+
+                        // something like 760 should turn to mobile like display
+
+                        // give diffrent width on diffrent screen width
+                    }
+
+                    .clock {
+                        font-size: 20px;
+                        flex-basis: 13%;
+
+                        @media (min-width:900px) {
+                            flex-basis: 9%;
+                        }
+
+                        @media(min-width:1200px) {
+                            flex-basis: 8%;
+                        }
+
+                        @media (min-width:1350px) {
+                            flex-basis: 7%;
+                        }
+
+                        @media (min-width:1500px) {
+                            flex-basis: 6%;
+                        }
+
+                        @media (min-width:1840px) {
+                            flex-basis: 5%;
+                        }
+                    }
                 }
             }
 
@@ -129,14 +203,12 @@
 
 
                 .top-songs-results {
-                    // display: grid;
-                    // grid-template-columns:  16px  6fr  3fr  minmax(120px, 1fr);
-                    // gap: 16px;
                     border: 1px solid transparent;
                     border-radius: 4px;
                     height: 56px;
                     position: relative;
                     padding: 0 16px;
+
 
                     &.modal-open {
                         background-color: hsla(0, 0%, 100%, .3);
@@ -162,12 +234,14 @@
                         }
 
                         .top-song {
+
                             .index-display {
                                 p {
                                     display: none;
                                 }
 
                                 .play-pause-btn {
+                                    width: 14px;
                                     display: initial;
                                 }
 
@@ -182,7 +256,11 @@
                     }
 
                     .top-song {
-                        flex: 1;
+                        flex-grow: 1;
+
+                        @media (min-width:900px) {
+                            flex-basis: 60%;
+                        }
 
                         .index-display {
                             margin-right: 16px;
@@ -195,6 +273,7 @@
 
                             p {
                                 margin: 0;
+                                width: 14px;
                                 font-size: 20px;
                                 color: #A7A7A7;
                             }
@@ -230,6 +309,8 @@
                                     color: white;
                                     margin: 0 0 8px 0;
                                     font-size: 16px;
+                                    overflow-y: hidden;
+                                    height: 23px;
                                     font-weight: 100;
 
                                     &.playing {
@@ -248,6 +329,18 @@
                         }
 
 
+                    }
+
+                    .added-at {
+                        display: none;
+
+                        @media (min-width:900px) {
+                            display: initial;
+                            flex-basis: 25%;
+                        }
+
+                        color: #b3b3b3;
+                        font-size: 14px;
                     }
 
                     .song-actions {

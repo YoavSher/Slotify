@@ -1,4 +1,6 @@
 .queue-page {
+    padding: 0 16px;
+
     h3.title {
         color: white;
         margin-left: 2px;
@@ -116,10 +118,8 @@
                         margin: 0 0 8px 0;
                         font-size: 16px;
                         font-weight: 100;
-                        white-space: nowrap;
-                        overflow-x: hidden;
-                        text-overflow: ellipsis;
-                        width: 390px;
+                        overflow-y: hidden;
+                        height: 23px;
 
                         &.playing {
                             color: var(--green-color1)

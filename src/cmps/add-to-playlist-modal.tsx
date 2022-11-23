@@ -29,7 +29,7 @@ export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal }: Props) =>
             if (playlistId) {
                 playlist = await playlistService.getPlaylistById(playlistId)
                 const s = { ...song, addedAt: Date.now() }
-                playlist.songs.push(song)
+                playlist.songs.push(s)
                 await playlistService.updatePlaylist(playlist)
                 onOpenAddModal(false)
             }
