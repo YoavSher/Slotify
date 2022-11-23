@@ -1,0 +1,148 @@
+.playlist-details-search {
+    border-top: 1px solid hsla(0, 0%, 100%, .1);
+    margin: 25px 0 0 20px;
+    padding-top: 24px;
+
+    h1 {
+        margin-bottom: 15px;
+        font-size: 1.45rem;
+    }
+
+    form {
+        position: relative;
+        width: 365px;
+        margin-bottom: 24px;
+
+        input {
+            background-color: hsla(0, 0%, 100%, .1);
+            border: 0;
+            border-radius: 4px;
+            color: hsla(0, 0%, 100%, .7);
+            height: 40px;
+            opacity: 1;
+            padding: 8px 32px;
+            text-overflow: ellipsis;
+            transition-duration: .3s;
+            transition-timing-function: cubic-bezier(.3, 0, .4, 1);
+            width: 100%;
+            font-size: 0.875rem;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .search-icon-container {
+            align-items: center;
+            bottom: 0;
+            display: flex;
+            left: 10px;
+            opacity: 1;
+            pointer-events: none;
+            position: absolute;
+            right: 10px;
+            top: 3px;
+            transition-duration: .3s;
+        }
+    }
+
+    .top-songs-results {
+        height: 56px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        padding: 0 16px;
+        // height: 100%;
+
+        &:hover .song-actions button {
+            opacity: 1;
+        }
+
+        &:hover .top-song .img-container .photo-play {
+            opacity: 1;
+        }
+
+        &:hover {
+            background-color: hsla(0, 0%, 100%, .1);
+        }
+
+        .top-song {
+            height: 100%;
+            flex: 1;
+
+            .img-container {
+                height: 40px;
+                width: 40px;
+                margin-inline-end: 10px;
+                position: relative;
+
+                img {
+                    height: 100%;
+                }
+
+                .photo-play {
+                    @include cleared-btn;
+                    cursor: pointer;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    background-color: #000000a1;
+                    opacity: 0;
+
+                    span {
+                        font-size: 1.2rem;
+                        color: #fff;
+                    }
+                }
+            }
+
+            .song-description {
+                height: 100%;
+                display: grid;
+                grid-template-areas:
+                    'title'
+                    'channel';
+                grid-template-columns: 250px;
+                grid-template-rows: 14px 10px;
+                gap: 8px;
+                position: relative;
+                bottom: -9px;
+
+                .song-title {
+                    grid-area: title;
+
+                    h5 {
+                        white-space: nowrap;
+                        overflow-x: hidden;
+                        text-overflow: ellipsis;
+
+                    }
+                }
+
+                h6 {
+                    grid-area: channel;
+                }
+            }
+        }
+
+        .add-to-playlist-btn {
+            button {
+                @include cleared-btn;
+                cursor: pointer;
+                border: 1px solid #878787;
+                border-radius: 500px;
+                padding-inline: 15px;
+                font-size: 0.875rem;
+                font-weight: 700;
+                min-block-size: 32px;
+                transition: .3s;
+
+                &:hover {
+                    border:1px solid white;
+                    transition: .3s;
+                }
+            }
+        }
+    }
+}

@@ -13,9 +13,10 @@ html {
     }
 
     /* Track */
-    //   ::-webkit-scrollbar-track {
-    //     box-shadow: inset 0 0 5px grey;
-    //   }
+      ::-webkit-scrollbar-track {
+        // box-shadow: inset 0 0 5px grey;
+        background-color: rgba(0, 0, 0, 0.027);
+      }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {

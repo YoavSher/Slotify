@@ -16,10 +16,11 @@ interface Props {
     song: Song,
     type: string,
     index?: number,
-    toggleModal: any,
-    playSongFromPlaylist?: any
+    toggleModal?: any,
+    playSongFromPlaylist?: any,
+    onAddToPlaylist?:any
 }
-export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist }: Props) => {
+export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist,onAddToPlaylist }: Props) => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -56,6 +57,13 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
                 else if (!isThisSongPlaying()) playSongFromPlaylist(index)
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
+                else dispatch(replacePlaylist(song))
+                break
+            case 'playlist-details-search':
+                if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
+                else if (!isThisSongPlaying()) playSongFromPlaylist(index)
+                else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
+                else dispatch(replacePlaylist(song))
                 break
 
         }
@@ -80,6 +88,9 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     const isSongLiked = () => {
         return loggedInUser?.likedSongsIds.includes(song.videoId)
     }
+
+    
+
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
             <div className="top-song flex align-center">
@@ -93,7 +104,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 </div>}
                 <div className="img-container">
                     <img src={song.image} alt="" />
-                    {type === 'search-results' &&
+                    {(type === 'search-results' || type === 'playlist-details-search') &&
                         <button className="photo-play"
                             onClick={onClickPlay}>
                             <span>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</span>
@@ -101,8 +112,9 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 </div>
                 <div className="song-description">
                     <div className="song-title">
-                        {type === 'search-results' && <h5 className={`${song?.id === playlist?.songs[0]?.id ? 'playing' : ''}`}>
-                            {song.title}</h5>}
+                        {(type === 'search-results' || type === 'playlist-details-search')
+                            && <h5 className={`${song?.id === playlist?.songs[0]?.id ? 'playing' : ''}`}>
+                                {song.title}</h5>}
                         {(type === 'playlist-details' || type === 'queue') &&
                             <h5 className={`${song?.id === playlist?.songs[currPlayingIdx]?.id ? 'playing' : ''}`}>
                                 {song.title}</h5>}
@@ -110,24 +122,25 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                     <h6>{song.artist}</h6>
                 </div>
             </div>
-
+            {type === 'playlist-details-search' &&
+                <div className="add-to-playlist-btn"><button onClick={() => onAddToPlaylist(song)}>Add</button></div>}
             {type === 'playlist-details' && <div className="added-at">
                 {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
             </div>}
-            <div className="like-song">
+            {type !== 'playlist-details-search' && <div className="like-song">
                 <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
                     <LikeButton />
                 </button>
 
-            </div>
-            <div className="song-actions flex align-center">
+            </div>}
+            {type !== 'playlist-details-search' && <div className="song-actions flex align-center">
                 <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>
                 <button onClick={(event) => { toggleModal(event, song) }} className="actions-btn">
 
                     <span><HiOutlineDotsHorizontal /></span>
                 </button>
 
-            </div>
+            </div>}
         </div>
     </>)
 }

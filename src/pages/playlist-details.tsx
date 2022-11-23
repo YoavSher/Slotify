@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { Helmet } from 'react-helmet'
 
 import { BsFillPlayCircleFill } from 'react-icons/bs'
-import { FiEdit2 } from 'react-icons/fi'
+
 import { CiClock2 } from 'react-icons/ci'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 
@@ -16,6 +16,8 @@ import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.r
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+import { PlaylistDetailsSearch } from "../cmps/playlist-details-search"
+import { PlaylistDetailsHeader } from "../cmps/playlist-details-header"
 
 export const PlaylistDetails = () => {
 
@@ -133,32 +135,29 @@ export const PlaylistDetails = () => {
         }
     }
 
+    const onAddToPlaylist = (song: Song) => {
+        if (currPlaylist) {
+            if (currPlaylist?.songs.some(s => s.videoId === song.videoId)) return
+            setCurrPlaylist((prevState) => {
+                if (prevState !== undefined) {
+                    return { ...prevState, songs: [...prevState.songs, song] }
+                }
+            })
+            onSaveChanges()
+        }
+    }
+
     if (!currPlaylist) return <h1 style={{ color: 'white' }}>Loading...</h1>
     return (
         <section className="playlist-details" onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
             <Helmet>
                 <title>Slotify - {currPlaylist.name}</title>
             </Helmet>
-            <header className="playlist-details-header flex">
-                <div className="img-container">
-                    <img src={currPlaylist.imgUrl} alt="" />
-                    <div className="change-photo-btn">
-                        <label htmlFor="changePhoto">
-                            <div className="photo-label flex column align-center">
-                                <span><FiEdit2 /></span>
-                                <h3>Choose photo</h3>
-                            </div>
-                        </label>
-                        <input type="file" id="changePhoto" onChange={onChangePhoto} hidden />
-                    </div>
-                </div>
-                <div className="playlist-description flex column">
-                    <h3>PLAYLIST</h3>
-                    <input type="text" className="playlist-title"
-                        onChange={onChangeTitle} onBlur={onSaveChanges} value={currPlaylist.name} />
-                    <h5>{currPlaylist?.createdBy?.fullName} • {currPlaylist?.songs?.length} songs</h5>
-                </div>
-            </header>
+            <PlaylistDetailsHeader
+                playlist={currPlaylist}
+                onChangePhoto={onChangePhoto}
+                onChangeTitle={onChangeTitle}
+                onSaveChanges={onSaveChanges} />
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
                     <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
@@ -168,14 +167,14 @@ export const PlaylistDetails = () => {
                     </section>}
                 </div>
                 <div className="playlist-details-main-content">
-                    <div className="songs-titles-container">
+                    {currPlaylist.songs.length > 0 && <div className="songs-titles-container">
                         <div className="songs-titles">
                             <div className="hash">#</div>
                             <div className="title">TITLE</div>
                             <div className="date">DATE ADDED</div>
                             <div className="clock"><CiClock2 /></div>
                         </div>
-                    </div>
+                    </div>}
                     <DragDropContext onDragEnd={handleOnDragEnd}>
                         <Droppable droppableId="playlist-songs">
 
@@ -195,6 +194,7 @@ export const PlaylistDetails = () => {
                 </div>
             </div>
             {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+            <PlaylistDetailsSearch playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
         </section>
     )
 }
