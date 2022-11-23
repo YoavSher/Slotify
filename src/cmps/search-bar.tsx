@@ -26,8 +26,13 @@ export const SearchBar = () => {
 
     const getResultsFromParams = async () => {
         console.log('im results from params')
-        const resData = await youtubeService.getDataFromYoutube(searchTerm)
-        dispatch(setSearchResults(resData))
+        try {
+            const resData = await youtubeService.getDataFromYoutube(searchTerm)
+            dispatch(setSearchResults(resData))
+
+        } catch (err) {
+            console.log('err:', err)
+        }
     }
 
     const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {

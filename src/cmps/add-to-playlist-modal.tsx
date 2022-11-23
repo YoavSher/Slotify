@@ -25,10 +25,11 @@ export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal }: Props) =>
 
     const onAddToPlaylist = async (playlistId: string | undefined) => {
         try {
-            let playlist
+            // let playlist
             if (playlistId) {
-                playlist = await playlistService.getPlaylistById(playlistId)
+                const playlist = await playlistService.getPlaylistById(playlistId)
                 const s = { ...song, addedAt: Date.now() }
+                if (playlist.songs.some((currSong: Song) => currSong.videoId === song?.videoId)) return
                 playlist.songs.push(song)
                 await playlistService.updatePlaylist(playlist)
                 onOpenAddModal(false)
