@@ -10,10 +10,11 @@ import { AddToPlaylistModal } from "./add-to-playlist-modal"
 interface Props {
     song: Song | null,
     closeModal: any,
-    modalPos: { left: number, top: number }
+    modalPos: { left: number, top: number },
+    screenWidth?: number
 }
 
-export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
+export const SongsModal = ({ song, closeModal, modalPos, screenWidth }: Props) => {
 
 
     const [addModal, setAddModal] = useState(false)
@@ -28,6 +29,12 @@ export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
     }
 
     const calcModalPos = () => {
+        if (screenWidth !== undefined && screenWidth < 770) {
+            return {
+                left: `${modalPos.left - 200}px`,
+                top: `${modalPos.top - 10}px`
+            }
+        }
         return {
             left: `${modalPos.left - 365}px`,
             top: `${modalPos.top - 10}px`
@@ -50,7 +57,8 @@ export const SongsModal = ({ song, closeModal, modalPos }: Props) => {
                 <AddToPlaylistModal
                     modalPos={modalPos}
                     onOpenAddModal={onOpenAddModal}
-                    song={song} />}
+                    song={song} 
+                    screenWidth={screenWidth}/>}
         </>
     )
 }

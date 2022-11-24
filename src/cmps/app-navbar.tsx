@@ -4,6 +4,7 @@ import { BsSpotify, BsPlusSquare } from 'react-icons/bs'
 import { RiHome2Line, RiHeartFill, RiHome2Fill, RiSearchFill } from 'react-icons/ri'
 import { FiSearch } from 'react-icons/fi'
 import { IoLibraryOutline, IoLibrary } from 'react-icons/io5'
+import { TiThListOutline } from 'react-icons/ti'
 
 import { playlistService } from "../services/playlist.service"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
@@ -56,6 +57,8 @@ export const AppNavbar = () => {
                     {!location.pathname.includes('collection') && <span><IoLibraryOutline /></span>}
                     {location.pathname.includes('collection') && <span><IoLibrary /></span>}
                     <p>Your Library</p></NavLink></li>
+                {screenWidth < 770 && <li><NavLink to="queue" className="flex align-center">
+                    <span><TiThListOutline /></span><p>Queue</p></NavLink></li>}
             </ul>
             {screenWidth > 770 && <div className="nav-links-second">
                 <div className="create-playlist flex align-center" onClick={onCreateNewBoard}>

@@ -16,9 +16,10 @@ interface Props {
     index?: number,
     toggleModal?: any,
     playSongFromPlaylist?: any,
-    onAddToPlaylist?: any
+    onAddToPlaylist?: any,
+    screenWidth?: number
 }
-export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist, onAddToPlaylist }: Props) => {
+export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist, onAddToPlaylist, screenWidth }: Props) => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -66,22 +67,28 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         }
 
     }
-
+    const onPlayFromPhone = () => {
+        if (screenWidth === undefined || screenWidth > 770) return
+        onClickPlay()
+    }
 
 
 
 
     return (<>
-        <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+        <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} onClick={onPlayFromPhone}>
             <div className="top-song flex align-center">
-                {(type === 'queue' || type === 'playlist-details') && index !== undefined && <div className="index-display">
-                    {!isThisSongPlaying() && <p>{index + 1}</p>}
-                    {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id && <div className="volume-gif">
-                        <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
-                        />
+                {(type === 'queue' || type === 'playlist-details') && index !== undefined && screenWidth !== undefined && screenWidth > 770 &&
+                    <div className="index-display">
+                        {!isThisSongPlaying() && <p>{index + 1}</p>}
+                        {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id && <div className="volume-gif">
+                            <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
+                            />
+                        </div>}
+                        {screenWidth !== undefined && screenWidth > 770 &&
+                            <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
+                                onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
                     </div>}
-                    <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`} onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>
-                </div>}
                 <div className="img-container">
                     <img src={song.image} alt="" />
                     {(type === 'search-results' || type === 'playlist-details-search') &&
@@ -110,7 +117,8 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             {type !== 'playlist-details-search' && <LikeButton song={song} />}
 
             {type !== 'playlist-details-search' && <div className="song-actions flex align-center">
-                <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>
+                {screenWidth !== undefined && screenWidth > 770 &&
+                    <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>}
                 <button onClick={(event) => { toggleModal(event, song) }} className="actions-btn">
 
                     <span><HiOutlineDotsHorizontal /></span>

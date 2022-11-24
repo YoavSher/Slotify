@@ -8,13 +8,14 @@ interface Props {
     playlist: Playlist,
     onChangePhoto: any,
     onChangeTitle: any,
-    onSaveChanges: any
+    onSaveChanges: any,
+    screenWidth: number
 }
 
 
 
 
-export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges }: Props) => {
+export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, screenWidth }: Props) => {
     return (
         <header className="playlist-details-header flex">
             <div className="img-container">
@@ -30,12 +31,12 @@ export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, 
                 </div>
             </div>
             <div className="playlist-description flex column">
-                <h3>PLAYLIST</h3>
+                {screenWidth > 770 && <h3>PLAYLIST</h3>}
                 {/* <h1>{playlist.name}</h1> */}
                 <input type="text" className="playlist-title"
                     onChange={onChangeTitle} onBlur={onSaveChanges} value={playlist.name} />
                 <h5>{playlist?.createdBy?.fullName}
-                {playlist?.songs?.length > 0 &&  <span> • {playlist?.songs?.length} songs</span>}</h5>
+                    {playlist?.songs?.length > 0 && <span> • {playlist?.songs?.length} songs</span>}</h5>
             </div>
         </header>
     )

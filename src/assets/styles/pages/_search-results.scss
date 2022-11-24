@@ -2,6 +2,57 @@
     margin-top: 20px;
     color: #fff;
 
+    .search-bar-results {
+        flex-grow: 1;
+        min-width: 0;
+        margin-bottom: 10px;
+
+        .search-bar-container {
+            -webkit-box-align: center;
+            align-items: center;
+            display: -webkit-box;
+            display: flex;
+            gap: 16px;
+
+            .search-form-container {
+                flex: 0 1 364px;
+                position: relative;
+
+                input {
+                    font-size: 0.875rem;
+                    border: 0;
+                    border-radius: 3px;
+                    color: #000;
+                    height: 40px;
+                    padding: 6px 48px;
+                    text-overflow: ellipsis;
+                    width: 100%;
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                .search-icon-container {
+                    align-items: center;
+                    bottom: 0;
+                    display: flex;
+                    left: 12px;
+                    pointer-events: none;
+                    position: absolute;
+                    right: 12px;
+                    top: 7px;
+                    font-size: 1.7em;
+
+                    span {
+                        color: #121212;
+                        flex: 1;
+                    }
+                }
+            }
+        }
+    }
+
     .search-results-container {
         grid-gap: var(--grid-gap);
         display: grid;
@@ -33,7 +84,7 @@
 
                         background: #181818;
                         border-radius: 7px;
-                        padding: 20px;
+                        padding: 20px 20px 52px;
                         position: relative;
                         transition: background-color .3s ease;
                         width: 100%;
@@ -168,6 +219,105 @@
                                 span {
                                     font-size: 1.3rem;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //here
+            .top-songs-results-container {
+
+                .top-songs-results {
+                    height: 56px;
+                    border: 1px solid transparent;
+                    border-radius: 4px;
+                    // padding: 0 16px;
+                    // height: 100%;
+
+                    &:hover .song-actions button {
+                        opacity: 1;
+                    }
+
+                    &:hover .top-song .img-container .photo-play {
+                        opacity: 1;
+                    }
+
+                    &:hover {
+                        background-color: hsla(0, 0%, 100%, .1);
+                    }
+
+                    .top-song {
+                        height: 100%;
+                        flex: 1;
+
+                        .img-container {
+                            height: 40px;
+                            width: 40px;
+                            margin-inline-end: 10px;
+                            position: relative;
+
+                            img {
+                                height: 100%;
+                            }
+
+                            .photo-play {
+                                @include cleared-btn;
+                                cursor: pointer;
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                height: 100%;
+                                width: 100%;
+                                background-color: #000000a1;
+                                opacity: 0;
+
+                                span {
+                                    font-size: 1.2rem;
+                                    color: #fff;
+                                }
+                            }
+                        }
+
+                        .song-description {
+                            height: 100%;
+                            display: grid;
+                            grid-template-areas:
+                                'title'
+                                'channel';
+                            grid-template-columns: 250px;
+                            grid-template-rows: 14px 10px;
+                            gap: 8px;
+                            position: relative;
+                            bottom: -9px;
+
+                            .song-title {
+                                grid-area: title;
+
+                                h5 {
+                                    white-space: nowrap;
+                                    overflow-x: hidden;
+                                    text-overflow: ellipsis;
+
+                                }
+                            }
+
+                            h6 {
+                                grid-area: channel;
+                            }
+                        }
+                    }
+
+                    .song-actions {
+                        gap: 5px;
+
+                        button {
+                            @include cleared-btn;
+                            opacity: 1;
+                            transform: rotate(90deg);
+
+                            span {
+                                font-size: 1.3rem;
                             }
                         }
                     }

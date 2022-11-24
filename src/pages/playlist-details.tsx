@@ -32,6 +32,31 @@ export const PlaylistDetails = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        loadPlaylist()
+        // console.log('playlist:', currPlaylist?.name)
+        window.addEventListener('resize', setDimensions)
+        return () => {
+            window.removeEventListener('resize', setDimensions)
+        }
+    }, [playlistId])
+
+    const loadPlaylist = async () => {
+        if (playlistId) {
+            try {
+                const playlist = await playlistService.getPlaylistById(playlistId)
+
+                setCurrPlaylist(playlist)
+
+            } catch (err) {
+                console.log('err:', err)
+            }
+        }
+    }
 
     const toggleModal = (ev: any, song: Song) => {
         ev.stopPropagation()
@@ -60,25 +85,6 @@ export const PlaylistDetails = () => {
         }
     }
 
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        loadPlaylist()
-        console.log('playlist:', currPlaylist?.name)
-    }, [playlistId])
-
-    const loadPlaylist = async () => {
-        if (playlistId) {
-            try {
-                const playlist = await playlistService.getPlaylistById(playlistId)
-
-                setCurrPlaylist(playlist)
-
-            } catch (err) {
-                console.log('err:', err)
-            }
-        }
-    }
 
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
         const { value } = ev.target
@@ -147,6 +153,9 @@ export const PlaylistDetails = () => {
             onSaveChanges()
         }
     }
+    const setDimensions = () => {
+        setScreenWidth(window.innerWidth)
+    }
 
     if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>
     return (
@@ -158,7 +167,8 @@ export const PlaylistDetails = () => {
                 playlist={currPlaylist}
                 onChangePhoto={onChangePhoto}
                 onChangeTitle={onChangeTitle}
-                onSaveChanges={onSaveChanges} />
+                onSaveChanges={onSaveChanges}
+                screenWidth={screenWidth} />
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
                     <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
@@ -169,12 +179,12 @@ export const PlaylistDetails = () => {
                 </div>
                 <div className="playlist-details-main-content">
                     {currPlaylist.songs.length > 0 && <div className="songs-titles-container">
-                        <div className="songs-titles">
+                        {screenWidth > 770 && <div className="songs-titles">
                             <div className="hash">#</div>
                             <div className="title">TITLE</div>
                             <div className="date">DATE ADDED</div>
                             <div className="clock"><CiClock2 /></div>
-                        </div>
+                        </div>}
                     </div>}
                     <DragDropContext onDragEnd={handleOnDragEnd}>
                         <Droppable droppableId="playlist-songs">
@@ -184,7 +194,13 @@ export const PlaylistDetails = () => {
                                     return <Draggable key={s.id} draggableId={s.id} index={idx}>
                                         {(provided) => (
                                             <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
-                                                <SongPreview playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
+                                                <SongPreview
+                                                    playSongFromPlaylist={playSongFromPlaylist}
+                                                    song={s}
+                                                    toggleModal={toggleModal}
+                                                    index={idx}
+                                                    type={'playlist-details'}
+                                                    screenWidth={screenWidth} />
                                             </article>)}
                                     </Draggable>
                                 })}
@@ -194,7 +210,11 @@ export const PlaylistDetails = () => {
                     </DragDropContext>
                 </div>
             </div>
-            {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+            {isModalOpen && <SongsModal
+                closeModal={closeModal}
+                song={songForModal}
+                modalPos={modalPos}
+                screenWidth={screenWidth} />}
             <PlaylistDetailsSearch playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
             <div className="pusher"></div>
         </section>

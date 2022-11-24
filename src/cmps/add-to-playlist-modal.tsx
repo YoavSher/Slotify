@@ -7,16 +7,23 @@ import { ChangeEvent, MouseEvent, useState } from "react"
 interface Props {
     song: Song | null,
     modalPos: { left: number, top: number },
-    onOpenAddModal: Function
+    onOpenAddModal: Function,
+    screenWidth?: number
 }
 
-export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal }: Props) => {
+export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal, screenWidth }: Props) => {
 
 
     const playlists = useAppSelector(state => state.playlist.playlists)
     const [filteredPlaylists, setFilteredPlaylists] = useState(playlists)
 
     const calcModalPos = () => {
+        if (screenWidth !== undefined && screenWidth < 770) {
+            return {
+                left: `${modalPos.left - 200}px`,
+                top: `${modalPos.top - 10}px`
+            }
+        }
         return {
             left: `${modalPos.left - 548}px`,
             top: `${modalPos.top - 75}px`

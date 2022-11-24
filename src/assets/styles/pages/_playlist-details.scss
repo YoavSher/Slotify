@@ -11,9 +11,9 @@
     margin: 0;
     outline: none;
     overflow-x: inherit;
-    padding: 0 16px;
+    padding: 50px 16px;
 
-   
+
 
     .playlist-details-main {
         margin-left: 20px;
@@ -42,6 +42,7 @@
                 border-bottom: 1px solid hsla(0deg, 0%, 100%, 0.1);
                 margin-bottom: 10px;
                 font-size: 14px;
+
 
                 .songs-titles {
                     display: flex;
@@ -127,7 +128,12 @@
 
             .songs-container {
 
+                margin-inline-start: -20px;
 
+                @media(min-width:770px) {
+                    margin-inline-start: 0;
+
+                }
 
                 .top-songs-results {
                     border: 1px solid transparent;
@@ -164,6 +170,7 @@
 
                             .index-display {
                                 width: 14px;
+
                                 p {
                                     display: none;
                                 }
@@ -272,9 +279,13 @@
                     }
 
                     .song-actions {
-                        min-width: 76px;
                         gap: 12px;
                         position: relative;
+
+                        @media(min-width:770px) {
+                            justify-content: space-between;
+                            min-width: 76px;
+                        }
 
                         p {
                             color: #A7A7A7;
@@ -285,7 +296,13 @@
                             @include cleared-btn;
                             font-size: 21px;
                             line-height: 17px;
-                            opacity: 0;
+                            opacity: 1;
+                            transform: rotate(90deg);
+
+                            @media(min-width:770px) {
+                                opacity: 0;
+                                transform: rotate(0deg);
+                            }
                         }
 
 

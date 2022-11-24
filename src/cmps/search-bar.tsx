@@ -8,9 +8,11 @@ import { youtubeService } from "../services/youtube.service"
 import { setSearchResults } from "../store/search/search.reducer"
 import { useAppDispatch } from "../store/store.hooks"
 
+interface Props {
+    fromResults?: boolean
+}
 
-
-export const SearchBar = () => {
+export const SearchBar = ({ fromResults }: Props) => {
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -21,13 +23,14 @@ export const SearchBar = () => {
     // const { searchTerm } = params
     // const [searchTerm, setSearchTerm] = useState('')
     useEffect(() => {
-        getResultsFromParams()
+        console.log('location:', location)
+        getResultsFromParams(searchTerm)
     }, [location])
 
-    const getResultsFromParams = async () => {
+    const getResultsFromParams = async (term:string) => {
         console.log('im results from params')
         try {
-            const resData = await youtubeService.getDataFromYoutube(searchTerm)
+            const resData = await youtubeService.getDataFromYoutube(term)
             dispatch(setSearchResults(resData))
 
         } catch (err) {
@@ -37,7 +40,13 @@ export const SearchBar = () => {
 
     const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {
         const { value } = ev.target
-        value ? navigate(`search/${value}`) : navigate(`search`)
+        if (fromResults) {
+            getResultsFromParams(value)
+            value ? navigate(`${value}`) : navigate(`${''}`)
+
+        } else {
+            value ? navigate(`search/${value}`) : navigate(`search`)
+        }
     }
 
     return (

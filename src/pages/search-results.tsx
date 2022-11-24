@@ -10,6 +10,8 @@ import { SearchSongPreview } from "../cmps/search-song-preview"
 import { SongPreview } from "../cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { replacePlaylist, setIsSongPlaying } from "../store/music-player/music-player.reducer"
+import { SearchBar } from "../cmps/search-bar"
+// import loading from '../assets/img/18544-music-play.gif'
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 
 
@@ -24,6 +26,7 @@ export const SearchResults = () => {
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const params = useParams()
 
     useEffect(() => {
@@ -34,8 +37,11 @@ export const SearchResults = () => {
             setTopSongs(songs.splice(1))
             console.log('songs:', songs)
         }
-
-    }, [searchResults])
+        window.addEventListener('resize', setDimensions)
+        return () => {
+            window.removeEventListener('resize', setDimensions)
+        }
+    }, [searchResults, params])
 
 
     const toggleModal = (ev: any, song: Song) => {
@@ -71,15 +77,18 @@ export const SearchResults = () => {
 
     }
 
-
+    const setDimensions = () => {
+        setScreenWidth(window.innerWidth)
+    }
 
     if (!searchResults && params.searchTerm) return <div className="loading-anim"><img src={loading} alt="" /></div>
     return (
         <>
             <section onClick={closeModal} className="search-results-page">
                 <Helmet><title>Slotify - Search</title></Helmet>
+                {screenWidth < 770 && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
                 <div className="search-results-container">
-                    {searchResults && <section className="search-results flex ">
+                    {searchResults && screenWidth > 770 && <section className="search-results flex ">
                         <div className="top-result">
                             <div className="top-result title">
                                 <h1>Top Result</h1>
@@ -108,6 +117,19 @@ export const SearchResults = () => {
                                 })}
                                 {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
                             </div>
+                        </div>
+                    </section>}
+                    {searchResults && screenWidth < 770 && <section className="search-results flex ">
+                        <div className="top-songs-results-container">
+                            {searchResults.map(song => {
+                                return <SongPreview
+                                    key={song.id}
+                                    toggleModal={toggleModal}
+                                    song={song}
+                                    type={'search-results'}
+                                    screenWidth={screenWidth} />
+                            })}
+                            {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
                         </div>
                     </section>}
                     {!searchResults && <section className="search-resluts-default">
