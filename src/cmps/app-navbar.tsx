@@ -20,14 +20,16 @@ export const AppNavbar = () => {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
     useEffect(() => {
-        // console.log('screenWidth:', screenWidth)
-        // if (screenWidth < 770) console.log('smaller');
         loadPlayList()
+    }, [location])
+    
+    useEffect(() => {
         window.addEventListener('resize', setDimensions)
         return () => {
             window.removeEventListener('resize', setDimensions)
         }
-    }, [location, screenWidth])
+    }, [])
+
 
     const onCreateNewBoard = async () => {
         const newPlaylist = await playlistService.createPlaylist()

@@ -7,6 +7,8 @@
     width: calc(100% - 8px);
     background-color: rgb(57, 55, 55);
     margin: auto;
+    position: fixed;
+    bottom: 86px;
 
     .css-1rblxne-MuiSlider-root .MuiSlider-thumb {
         display: none;
@@ -26,12 +28,15 @@
         display: flex;
         justify-content: flex-start;
 
+
+        
         .song-image {
-            width: 37px;
-            height: 37px;
-            object-fit: cover;
             margin-right: 10px;
             border-radius: 4px;
+            width: 47px;
+            height: 47px;
+            clip-path: inset(12.5% 0 12.5%);
+            object-fit: cover;
         }
 
         .names-container {
@@ -59,9 +64,11 @@
         .like-song {
             .like-btn {
                 left: 14px;
+                opacity: 1;
             }
         }
     }
 
-
 }
+
+// }

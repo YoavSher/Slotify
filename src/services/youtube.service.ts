@@ -31,7 +31,7 @@ async function getDataFromYoutube(term: string) {
 
             const str = res.data.items.map((item: { id: { videoId: string } }) => '' + `${item.id.videoId}%2C`).join('').slice(0, -3)
             const durationData = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`)
-            res.data.items.forEach((item: any) => console.log(item.snippet.channelTitle))
+            res.data.items.forEach((item: any) => console.log(item))
             const durations = durationData.data.items.map((item: any) => _translateDuration(item.contentDetails.duration) || 0)
             let songs = res.data.items.map((s: Song, idx: number) => {
 
@@ -58,7 +58,7 @@ function _makeSong(video: any) {
         title: video.snippet.title.replaceAll(combinedCleaner, '').trim(),
         id: utilService.makeId(),
         videoId: video.id.videoId,
-        image: video.snippet.thumbnails.default.url,
+        image: video.snippet.thumbnails.high.url,
         duration: 0,
         artist: video.snippet.channelTitle.replaceAll(combinedCleaner, '').trim() //maybe take only specific channels
     } as Song
