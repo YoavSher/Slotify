@@ -8,8 +8,8 @@ interface Props {
 export const LikeButton = ({ song }: Props) => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const dispatch = useAppDispatch()
-
-    const toggleSongLike = async () => {
+    const toggleSongLike = async (ev:React.MouseEvent<HTMLElement>) => {
+        ev.stopPropagation()
         if (loggedInUser) {
             const user = { ...loggedInUser }
             if (isSongLiked()) {

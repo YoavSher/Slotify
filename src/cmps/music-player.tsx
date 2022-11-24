@@ -13,6 +13,8 @@ import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons
 import { useNavigate } from 'react-router-dom';
 import { cachingService } from '../services/music-player-caching.service';
 import { LikeButton } from './like-button';
+import { BsChevronDown } from 'react-icons/bs';
+import { FiRepeat } from 'react-icons/fi';
 
 export const MusicPlayer = () => {
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -26,9 +28,16 @@ export const MusicPlayer = () => {
     const durationIntervalId = useRef<number>()
 
     const playingTimeFromCache = useRef<number | null>()
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+    const [isOpen, setIsOpen] = useState(false)
 
+
+    const setDimensions = () => {
+        setScreenWidth(window.innerWidth)
+    }
 
     useEffect(() => {
+        //listen to volume changes with the localStorage
         const idx = cachingService.getPlayingIdx()
         const playlist = cachingService.getPlaylist()
         if (typeof idx === 'number' && playlist) {
@@ -36,6 +45,10 @@ export const MusicPlayer = () => {
             dispatch(setPlayingIdx(idx))
             const playingTime = cachingService.getPlayingTime()
             playingTimeFromCache.current = playingTime
+        }
+        window.addEventListener('resize', setDimensions)
+        return () => {
+            window.removeEventListener('resize', setDimensions)
         }
     }, [])
 
@@ -57,7 +70,6 @@ export const MusicPlayer = () => {
     const unShuffledSongs = useRef<Song[] | null>(null)
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
-        console.log(ev.target)
         playerRef.current = ev.target
         setVolume(playerRef.current.playerInfo.volume)
         if (playingTimeFromCache.current) {
@@ -86,7 +98,8 @@ export const MusicPlayer = () => {
         }, 100)
     }
 
-    const onClickPlay = () => {
+    const onClickPlay = (ev: React.MouseEvent<HTMLElement>) => {
+        ev.stopPropagation()
         if (isSongPlaying) pauseVideo()
         else startVideo()
     }
@@ -204,59 +217,23 @@ export const MusicPlayer = () => {
 
     return (
         <>
-            {/* <footer className="music-player mobile">
-                {currSong && <>
-                    <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
-                    <section className="mobile-right">
-                        <img className="song-image" src={currSong.image} alt="" />
-                        <div className="names-container">
-                            <p className="song-name">{currSong.title}</p>
-                            <p className="artist-name">{currSong.artist}</p>
-                        </div>
-                    </section>
-                    <section className="mobile-left">
-                        <LikeButton song={currSong} />
-                        <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
-                    </section>
-                </>}
-                <section className="time-container">
-                    <Slider
-                        aria-label="time-indicator"
-                        size="small"
-                        value={songTimer / 1000 | 0}
-                        min={0}
-                        step={1}
-                        disabled={currSong ? false : true}
-                        max={(currSong) ? currSong.duration / 1000 : 100}
-                        sx={timeSliderOptions}
-                    />
-                </section>
-            </footer> */}
-            <footer className="music-player">
-                <section className="left-section">
+            {(screenWidth < 770 && !isOpen) ? (
+                <footer onClick={() => { setIsOpen(true) }} className="music-player mobile">
                     {currSong && <>
                         <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
-                        <img className="song-image" src={currSong.image} alt="" />
-                        <div className="names-container">
-                            <p className="song-name">{currSong.title}</p>
-                            <p className="artist-name">{currSong.artist}</p>
-                        </div>
-                        <LikeButton song={currSong} />
+                        <section className="mobile-right">
+                            <img className="song-image" src={currSong.image} alt="" />
+                            <div className="names-container">
+                                <p className="song-name">{currSong.title}</p>
+                                <p className="artist-name">{currSong.artist}</p>
+                            </div>
+                        </section>
+                        <section className="mobile-left">
+                            <LikeButton song={currSong} />
+                            <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
+                        </section>
                     </>}
-                </section>
-
-                <div className="main-player">
-                    <section className="buttons-container">
-                        <button title="Shuffle" onClick={toggleSongsShuffle} className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`} ><BiShuffle /></button>
-                        <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>
-                        <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
-                        <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
-                        <button title="Next" onClick={onIndexIncrement} ><MdSkipNext /></button>
-                        <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>
-
-                    </section>
                     <section className="time-container">
-                        {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>}
                         <Slider
                             aria-label="time-indicator"
                             size="small"
@@ -265,22 +242,63 @@ export const MusicPlayer = () => {
                             step={1}
                             disabled={currSong ? false : true}
                             max={(currSong) ? currSong.duration / 1000 : 100}
-                            onChange={(_, value) => onChangeTime(value as number)}
                             sx={timeSliderOptions}
                         />
-                        {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(getFullDuration())}</p>}
+                    </section>
+                </footer>)
+                : (<footer className={`${(isOpen && screenWidth < 770) ? 'full' : ''} music-player`}>
+                    {isOpen && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
+                    <section className="left-section">
+                        {currSong && <>
+                            <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
+                            <img className="song-image" src={currSong.image} alt="" />
+                            <section className="below-image">
+
+                                <div className="names-container">
+                                    <p className="song-name">{currSong.title}</p>
+                                    <p className="artist-name">{currSong.artist}</p>
+                                </div>
+                                <LikeButton song={currSong} />
+                            </section>
+                        </>}
                     </section>
 
-                </div>
-                <section className="right-section">
-                    <button onClick={() => navigate('/queue')} className="queue-btn"><TiThListOutline /></button>
-                    <button className="volume-btn" onClick={toggleMute} >{getVolumeIcon()}</button>
-                    <Slider
-                        min={0} max={100} value={volume} onChange={(_, value) => onVolumeChange(value as number)}
-                        sx={volumeSliderOptions}
-                    />
-                </section>
-            </footer>
+                    <div className="main-player">
+                        <section className="buttons-container">
+                            <button title="Shuffle" onClick={toggleSongsShuffle} className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`} ><BiShuffle /></button>
+                            {/* <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button> */}
+                            <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
+                            <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
+                            <button title="Next" onClick={onIndexIncrement} ><MdSkipNext /></button>
+                            {/* <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button> */}
+                            <button><FiRepeat /></button>
+                        </section>
+                        <section className="time-container">
+                            {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>}
+                            <Slider
+                                aria-label="time-indicator"
+                                size="small"
+                                value={songTimer / 1000 | 0}
+                                min={0}
+                                step={1}
+                                disabled={currSong ? false : true}
+                                max={(currSong) ? currSong.duration / 1000 : 100}
+                                onChange={(_, value) => onChangeTime(value as number)}
+                                sx={timeSliderOptions}
+                            />
+                            {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(getFullDuration())}</p>}
+                        </section>
+
+                    </div>
+                    <section className="right-section">
+                        <button onClick={() => navigate('/queue')} className="queue-btn"><TiThListOutline /></button>
+                        <button className="volume-btn" onClick={toggleMute} >{getVolumeIcon()}</button>
+                        <Slider
+                            min={0} max={100} value={volume} onChange={(_, value) => onVolumeChange(value as number)}
+                            sx={volumeSliderOptions}
+                        />
+                    </section>
+                </footer>)}
         </>
     )
 }
