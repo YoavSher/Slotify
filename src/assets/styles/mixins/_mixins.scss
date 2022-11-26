@@ -17,7 +17,7 @@
     }
 }
 
-@mixin play-pause{
+@mixin play-pause {
     width: 32px;
     height: 32px;
     @include play-btn;
@@ -37,11 +37,11 @@
     }
 
     &.pause {
-        font-size: 20px;
+        font-size: 21px;
 
         svg {
             position: absolute;
-            top: 6px;
+            top: 5px;
             left: 6px;
         }
     }
@@ -84,7 +84,8 @@
         border-radius: 55%;
         box-shadow: 0px 3px 5px 0px #000000;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
             color: #138039;
             transition: all .3s;
         }
@@ -92,15 +93,17 @@
 }
 
 
-@mixin nav-link{
-   display: flex;
+@mixin nav-link {
+    display: flex;
     gap: 10px;
     opacity: .7;
     transition: all .3s;
-    &:hover{
+
+    &:hover {
         opacity: 1;
         transition: all .3s;
     }
+
     span {
         font-size: 1.5rem;
 
@@ -108,7 +111,8 @@
             padding: 0 0 0 3px;
         }
     }
-    &.active{
+
+    &.active {
         opacity: 1;
     }
 }

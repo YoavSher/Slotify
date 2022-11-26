@@ -26,7 +26,7 @@ export const SearchResults = () => {
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const params = useParams()
 
     useEffect(() => {
@@ -36,10 +36,6 @@ export const SearchResults = () => {
             const songs = [...searchResults]
             setTopSongs(songs.splice(1))
             console.log('songs:', songs)
-        }
-        window.addEventListener('resize', setDimensions)
-        return () => {
-            window.removeEventListener('resize', setDimensions)
         }
     }, [searchResults, params])
 
@@ -75,10 +71,6 @@ export const SearchResults = () => {
             else dispatch(replacePlaylist(searchResults[0]))
         }
 
-    }
-
-    const setDimensions = () => {
-        setScreenWidth(window.innerWidth)
     }
 
     if (!searchResults && params.searchTerm) return <div className="loading-anim"><img src={loading} alt="" /></div>

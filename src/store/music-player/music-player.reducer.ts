@@ -10,7 +10,8 @@ interface MusicPlayerState {
 }
 
 export interface PseudoPlaylist {
-    songs: Song[]
+    songs: Song[],
+    _id?: string
 }
 
 
@@ -58,6 +59,9 @@ const musicPlayerSlice = createSlice({
             cachingService.savePlayingIdx(state.currPlayingIdx)
         },
         setPlaylist: (state, action: PayloadAction<Playlist | PseudoPlaylist>) => {
+
+            // maybe should only accept pseudoPlaylist in reality,if it is a playlist then turn it into a 
+            // psuedo or think of something for the drag and drop activated playlsit,see what spotify has done
             state.currPlayingIdx = 0
             state.currPlaylist = action.payload
             cachingService.saveCurrentPlaylist(state.currPlaylist)

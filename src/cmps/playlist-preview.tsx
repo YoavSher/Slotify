@@ -12,7 +12,7 @@ interface Props {
 export const PlayListPreview = ({ playlist }: Props) => {
 
     const dispatch = useAppDispatch()
-    // const { playlist } = props
+    
     const onSetPlaylist = () => {
         dispatch(setPlaylist(playlist))
     }

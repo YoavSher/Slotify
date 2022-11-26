@@ -60,7 +60,7 @@ export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist }: Props) =>
     return (
         <section className="playlist-details-search">
             <h1>Add songs to your playlist</h1>
-            <form>
+            <form onSubmit={(ev) => { ev.preventDefault() }}>
                 <input type="text"
                     onChange={utilService.debounce(onSearch, 1200)}
                     defaultValue={searchTerm} />

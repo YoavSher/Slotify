@@ -17,18 +17,13 @@ export const AppNavbar = () => {
     const location = useLocation()
     const playlists = useAppSelector(state => state.playlist.playlists)
     const dispatch = useAppDispatch()
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
     useEffect(() => {
         loadPlayList()
     }, [location])
-    
-    useEffect(() => {
-        window.addEventListener('resize', setDimensions)
-        return () => {
-            window.removeEventListener('resize', setDimensions)
-        }
-    }, [])
+
+
 
 
     const onCreateNewBoard = async () => {
@@ -39,10 +34,7 @@ export const AppNavbar = () => {
         const playlists = await playlistService.query()
         if (playlists) dispatch(setPlaylists(playlists))
     }
-    const setDimensions = () => {
-        setScreenWidth(window.innerWidth)
-    }
-
+    
     return (
         <nav className="app-navbar flex column">
             {screenWidth > 770 && <h1 className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
