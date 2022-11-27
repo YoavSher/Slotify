@@ -1,8 +1,7 @@
 .options-modal {
-    position: absolute;
+    position: fixed;
     inset: 0px 0px auto auto;
     margin: 0px;
-    transform: translate(0px, 43px);
     background-color: #282828;
     color: #b3b3b3;
     border-radius: 4px;
@@ -12,6 +11,17 @@
     display: flex;
     flex-direction: column;
     z-index: 100;
+
+    .input-container {
+        padding: 3px;
+
+        .search-playlist-input {
+            width: 100%;
+            @include black-input;
+            border-radius: 4px;
+        }
+    }
+
 
     button {
         @include cleared-btn;
@@ -28,6 +38,78 @@
         &:hover {
             background-color: hsla(0, 0%, 100%, .1);
             text-decoration: none;
+        }
+    }
+
+    @media(max-width:770px) {
+        &.add-to-playlist-modal {
+            width: 100vw;
+            height: 100vh;
+            z-index: 200;
+            padding: 16px;
+            gap: 20px;
+
+            input {
+                width: 100%;
+            }
+
+            article.mini-playlist {
+                height: 80px;
+                display: flex;
+                gap: 20px;
+
+                img {
+                    object-fit: cover;
+                    clip-path: inset(12.5% 0 12.5%);
+                    aspect-ratio: 1/1;
+                    width: unset;
+                }
+
+                .texts {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 5px;
+
+                    :nth-child(1) {
+                        color: white;
+                        font-size: 18px;
+                    }
+                }
+
+            }
+        }
+
+        &.mobile {
+
+            width: 100vw;
+            height: 100vh;
+            z-index: 200;
+
+            .mini-song {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                img {
+                    aspect-ratio: 1/1;
+                    width: 60%;
+                    object-fit: cover;
+                    clip-path: inset(12.5% 0 12.5%);
+                }
+
+                .song-name {
+                    color: white;
+                    font-size: 18px;
+                    margin-bottom: 16px px;
+                }
+            }
+        }
+
+        button {
+            height: 60px;
+            font-size: 20px;
+
         }
     }
 }

@@ -76,7 +76,7 @@ export const SearchResults = () => {
     if (!searchResults && params.searchTerm) return <div className="loading-anim"><img src={loading} alt="" /></div>
     return (
         <>
-            <section onClick={closeModal} className="search-results-page">
+            <section onClick={closeModal} onScroll={closeModal} className="search-results-page">
                 <Helmet><title>Slotify - Search</title></Helmet>
                 {screenWidth < 770 && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
                 <div className="search-results-container">
@@ -125,7 +125,6 @@ export const SearchResults = () => {
                         </div>
                     </section>}
                     {!searchResults && <section className="search-resluts-default">
-                        <h1> this is default</h1>
                     </section>}
                 </div>
             </section>

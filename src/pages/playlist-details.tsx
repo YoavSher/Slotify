@@ -155,7 +155,7 @@ export const PlaylistDetails = () => {
 
     if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>
     return (
-        <section className="playlist-details" onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
+        <section className="playlist-details" onScroll={closeModal} onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
             <Helmet>
                 <title>Slotify - {currPlaylist.name}</title>
             </Helmet>
@@ -169,7 +169,7 @@ export const PlaylistDetails = () => {
                 <div className="playlist-details-main action-btns flex align-center">
                     <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
                     <button className="menu-btn" onClick={onOpenModal}><span>• • •</span></button>
-                    {isPlaylistModalOpen && <section style={{ left: '73px', top: '-10px' }} className="options-modal">
+                    {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
                         <button onClick={onRemovePlaylist}>Delete</button>
                     </section>}
                 </div>

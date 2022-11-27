@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, MouseEventHandler, MouseEvent } from "react"
 
 import { AiFillCaretRight } from 'react-icons/ai'
 
@@ -27,38 +27,65 @@ export const SongsModal = ({ song, closeModal, modalPos, screenWidth }: Props) =
         if (song) dispatch(removeSong(song.id))
         closeModal()
     }
-
+    // useEffect(() => {
+    //     window.addEventListener('scroll', () => console.log('scrolling'))
+    //     // return () => {
+    //     //     window.removeEventListener('onscroll', closeModal)
+    //     // }
+    // }, [])
     const calcModalPos = () => {
         if (screenWidth !== undefined && screenWidth < 770) {
             return {
-                left: `${modalPos.left - 200}px`,
-                top: `${modalPos.top - 10}px`
+                left: '0',
+                top: '0'
             }
         }
         return {
-            left: `${modalPos.left - 365}px`,
-            top: `${modalPos.top - 10}px`
-        } /// needs to add consideration for the height but the left is fixed,
+            // currently the height is 185 
+            left: `${modalPos.left - 185}px`,
+            top: `${modalPos.top + 10}px`
+        }
     }
 
     const onOpenAddModal = (isOpen: boolean) => {
+        if (isMobile()) return
         setAddModal(isOpen)
+    }
+
+    const toggleModalMobile = (ev: React.MouseEvent<HTMLButtonElement>) => {
+        ev.stopPropagation()
+        if (!isMobile()) return
+        console.log('mobile opening')
+        setAddModal(prev => !prev)
+
+    }
+    console.log(modalPos)
+    const isMobile = () => {
+        return (screenWidth !== undefined && screenWidth < 770)
     }
 
     return (
         <>
-            <section style={calcModalPos()} className="options-modal" onMouseLeave={() => onOpenAddModal(false)}>
+            <section onClick={ev => { ev.stopPropagation(); closeModal() }} style={calcModalPos()} className={`${isMobile() ? 'mobile' : ''} options-modal`} onMouseLeave={() => onOpenAddModal(false)}>
+                {isMobile() && <section className="mini-song">
+                    <img src={song?.image} alt="" />
+                    <p className="song-name">{song?.title}</p>
+                    <p className="artist-name">{song?.artist}</p>
+                </section>}
                 <button onClick={addSongToQueue}>Add to queue</button>
                 <button onClick={removeSongFromQueue}>Remove from queue</button>
-                <button onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
+
+                <button onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
                     Add to playlist <span><AiFillCaretRight /></span></button>
+                {addModal &&
+                    <AddToPlaylistModal
+                        modalPos={modalPos}
+                        onOpenAddModal={onOpenAddModal}
+                        toggleModalMobile={toggleModalMobile}
+                        song={song}
+                        screenWidth={screenWidth} />}
             </section>
-            {addModal &&
-                <AddToPlaylistModal
-                    modalPos={modalPos}
-                    onOpenAddModal={onOpenAddModal}
-                    song={song} 
-                    screenWidth={screenWidth}/>}
+
         </>
     )
 }

@@ -41,14 +41,14 @@ export const Queue = () => {
     return (
         <>
             <Helmet><title>Slotify - Play Queue </title></Helmet>
-            <section className="queue-page" onClick={closeModal}>
+            <section className="queue-page" onScroll={closeModal} onClick={closeModal}>
                 <h3 className="title">Queue</h3>
                 {songs[songIdx] && <><h4 className="mini-title">Now playing</h4>
                     <SongPreview screenWidth={screenWidth} toggleModal={toggleModal} song={songs[songIdx]} index={songIdx} type={'queue'} /></>}
                 {songs.length > 0 && <><h4 className="mini-title">Next in queue</h4>
                     <SongsQueueList screenWidth={screenWidth} toggleModal={toggleModal} songIdx={songIdx} songs={songs} /></>}
             </section>
-            {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
-        </> 
+            {isModalOpen && <SongsModal screenWidth={screenWidth} closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+        </>
     )
 }

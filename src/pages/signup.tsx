@@ -59,7 +59,7 @@ export const Signup = () => {
                     <button disabled={!isCredValid()} className="sign-up-btn">SIGN UP</button>
                 </form>
                 <Link className="back" to="/" >Back</Link>
-                <Link to="/login" >Already a Slotify? <span>LOGIN</span> </Link>
+                <Link to="/login" >Already on Slotify? <span>LOGIN</span> </Link>
             </section>
         </section>
     )

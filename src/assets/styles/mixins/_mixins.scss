@@ -116,3 +116,17 @@
         opacity: 1;
     }
 }
+
+@mixin black-input {
+    height: 38px;
+    background-color: #454545;
+    color: white;
+    padding: 0px 12px;
+    border: none;
+    font-size: 18px;
+
+    &:focus {
+        outline: none;
+        background-color: lighten(#454545, 5%)
+    }
+}
