@@ -7,12 +7,13 @@ import { reorderSongsList } from "../store/music-player/music-player.reducer"
 interface Props {
     songs: Song[]
     songIdx: number,
-    toggleModal: any
+    toggleModal: any,
+    screenWidth:number
 }
 
-export const SongsQueueList = ({ toggleModal, songs, songIdx }: Props) => {
+export const SongsQueueList = ({ screenWidth,toggleModal, songs, songIdx }: Props) => {
     const dispatch = useAppDispatch()
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    
 
     const handleOnDragEnd = (result: any) => {
         songs = [...songs]

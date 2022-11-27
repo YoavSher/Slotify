@@ -45,9 +45,9 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     const onClickPlay = () => {
         switch (type) {
             case 'queue':
-                if (isThisSongPlaying()) dispatch(setIsSongPlaying(false)) // if the song thats playing is this ,stop it 
-                else if (currPlayingIdx === index && !isSongPlaying) dispatch(setIsSongPlaying(true)) //else if the song is not playing and is this play it 
-                else if (index !== undefined) dispatch(setPlayingIdx(index))                                                         // else if this song is not the song and not playing dispatch it
+                if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
+                else if (currPlayingIdx === index && !isSongPlaying) dispatch(setIsSongPlaying(true)) 
+                else if (index !== undefined) dispatch(setPlayingIdx(index)) 
                 break
             case 'search-results':
                 if (!isSongPlaying && song.id === playlist?.songs[0]?.id) dispatch(setIsSongPlaying(true))
@@ -65,7 +65,6 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 else if (!isThisSongPlaying()) playSongFromPlaylist(index)
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
                 else dispatch(replacePlaylist(song)) // combine
-                // maybe manage the width on the state if many components needs it because it's just alot of work on the same problem
                 break
 
         }
