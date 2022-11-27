@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BsFillPlayCircleFill } from 'react-icons/bs'
 import { setPlaylist } from '../store/music-player/music-player.reducer'
@@ -16,6 +17,9 @@ export const PlayListPreview = ({ playlist }: Props) => {
     const onSetPlaylist = () => {
         dispatch(setPlaylist(playlist))
     }
+
+   
+
     return (
         <section className="playlist-preview">
             <div className="playlist-preview-container flex">
@@ -26,9 +30,9 @@ export const PlayListPreview = ({ playlist }: Props) => {
                     <div className='playlist-preview-content title'>
                         <h1><Link to={`playlist/${playlist._id}`}>{playlist.name}</Link></h1>
                     </div>
-                    <div className='playlist-preview-content icon-container'>
+                    {/* {screenWidth>770 && <div className='playlist-preview-content icon-container'>
                         <button onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
-                    </div>
+                    </div>} */}
                 </div>
             </div>
         </section>
