@@ -61,7 +61,7 @@ export const LikedSongs = () => {
 
     return (
         <>
-            <section onClick={closeModal} className="playlist-details liked-songs">
+            <section onClick={closeModal} onScroll={closeModal} className="playlist-details liked-songs">
                 <Helmet>
                     <title>Slotify - Liked songs</title>
                 </Helmet>

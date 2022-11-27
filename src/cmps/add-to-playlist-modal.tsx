@@ -8,38 +8,42 @@ interface Props {
     song: Song | null,
     modalPos: { left: number, top: number },
     onOpenAddModal: Function,
-    screenWidth?: number
+    screenWidth?: number,
+    toggleModalMobile: Function
 }
 
-export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal, screenWidth }: Props) => {
+export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, screenWidth }: Props) => {
 
 
     const playlists = useAppSelector(state => state.playlist.playlists)
     const [filteredPlaylists, setFilteredPlaylists] = useState(playlists)
 
     const calcModalPos = () => {
-        if (screenWidth !== undefined && screenWidth < 770) {
+        if (isMobile()) {
             return {
-                left: `${modalPos.left - 200}px`,
-                top: `${modalPos.top - 10}px`
+                left: '0',
+                top: '0'
             }
         }
         return {
-            left: `${modalPos.left - 548}px`,
-            top: `${modalPos.top - 75}px`
+            left: `${modalPos.left - 363}px`,
+            top: `${modalPos.top - 155}px`
         }
     }
-
+    const isMobile = () => {
+        return (screenWidth !== undefined && screenWidth < 770)
+    }
     const onAddToPlaylist = async (playlistId: string | undefined) => {
         try {
-            // let playlist
+
             if (playlistId) {
                 const playlist = await playlistService.getPlaylistById(playlistId)
                 const s = { ...song, addedAt: Date.now() }
                 if (playlist.songs.some((currSong: Song) => currSong.videoId === song?.videoId)) return
                 playlist.songs.push(s)
                 await playlistService.updatePlaylist(playlist)
-                onOpenAddModal(false)
+                if (isMobile()) toggleModalMobile()
+                else onOpenAddModal(false)
             }
         } catch (err) {
             console.log('err:', err)
@@ -65,12 +69,19 @@ export const AddToPlaylistModal = ({ modalPos, song, onOpenAddModal, screenWidth
     return (
         <section style={calcModalPos()} className="add-to-playlist-modal options-modal"
             onMouseOver={() => onOpenAddModal(true)} onMouseLeave={() => onOpenAddModal(false)}>
-            <div>
-                <input type="text" placeholder="Find a playlist"
+            <div className="input-container">
+                <input className="search-playlist-input" type="text" placeholder="Find a playlist"
                     onClick={onStopPropagation} onChange={onHandleChange} onFocus={() => onOpenAddModal(true)} />
             </div>
             <div>
-                {filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)}
+                {!isMobile() ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
+                    : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id)} className="mini-playlist">
+                        <img src={p.imgUrl} alt="" />
+                        <section className="texts">
+                            <p>{p.name}</p>
+                            <p>{p.createdBy.fullName}</p>
+                        </section>
+                    </article>)}
             </div>
         </section>
     )
