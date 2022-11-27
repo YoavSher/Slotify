@@ -1,8 +1,10 @@
 import { ChangeEvent, FocusEvent, MouseEvent, MouseEventHandler, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Helmet } from 'react-helmet'
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 
-import { BsFillPlayCircleFill } from 'react-icons/bs'
+import { BsFillPlayCircleFill, BsPauseCircleFill } from 'react-icons/bs'
+import { FaPauseCircle } from 'react-icons/fa'
 
 import { CiClock2 } from 'react-icons/ci'
 import { HiOutlineDotsHorizontal } from 'react-icons/hi'
@@ -12,10 +14,9 @@ import { playlistService } from "../services/playlist.service"
 import { uploadService } from "../services/upload.service"
 import { SongPreview } from "../cmps/song-preview"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
+import { setIsSongPlaying, setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { PlaylistDetailsSearch } from "../cmps/playlist-details-search"
 import { PlaylistDetailsHeader } from "../cmps/playlist-details-header"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
@@ -28,11 +29,12 @@ export const PlaylistDetails = () => {
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
-
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
 
+    const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
+    const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const storeCurrPlaylist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
@@ -97,9 +99,9 @@ export const PlaylistDetails = () => {
         }
     }
 
-    const onSaveChanges = async () => {
-        if (currPlaylist) {
-            await playlistService.updatePlaylist(currPlaylist)
+    const onSaveChanges = async (newPlaylist = currPlaylist) => {
+        if (newPlaylist) {
+            await playlistService.updatePlaylist(newPlaylist)
         }
     }
 
@@ -114,8 +116,21 @@ export const PlaylistDetails = () => {
         }
     }
 
+    const isPlaylistPlaying = () => {
+        if (currPlaylist) {
+            if (currPlaylist._id === playlist._id && isSongPlaying) return true
+            else if (currPlaylist._id === playlist._id && !isSongPlaying) return false
+        }
+    }
+
     const onSetPlaylist = () => {
-        if (currPlaylist) dispatch(setPlaylist(currPlaylist))
+        if (currPlaylist) {
+            if (currPlaylist._id === playlist._id && isSongPlaying) {
+                dispatch(setIsSongPlaying(false))
+            } else if (currPlaylist._id === playlist._id && !isSongPlaying) {
+                dispatch(setIsSongPlaying(true))
+            } else dispatch(setPlaylist(currPlaylist))
+        }
     }
 
     const playSongFromPlaylist = (index: number) => {
@@ -144,12 +159,13 @@ export const PlaylistDetails = () => {
     const onAddToPlaylist = (song: Song) => {
         if (currPlaylist) {
             if (currPlaylist?.songs.some(s => s.videoId === song.videoId)) return
+            const newPlaylist = { ...currPlaylist, songs: [...currPlaylist.songs, song] }
             setCurrPlaylist((prevState) => {
                 if (prevState !== undefined) {
                     return { ...prevState, songs: [...prevState.songs, { ...song, addedAt: Date.now() }] }
                 }
             })
-            onSaveChanges()
+            onSaveChanges(newPlaylist)
         }
     }
 
@@ -167,7 +183,8 @@ export const PlaylistDetails = () => {
                 screenWidth={screenWidth} />
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
-                    <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
+                    <button className="play-btn" onClick={onSetPlaylist}>
+                        <span>{isPlaylistPlaying() ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span></button>
                     <button className="menu-btn" onClick={onOpenModal}><span>• • •</span></button>
                     {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
                         <button onClick={onRemovePlaylist}>Delete</button>

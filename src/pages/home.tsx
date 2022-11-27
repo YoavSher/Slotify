@@ -25,8 +25,8 @@ export const Home = () => {
             <section className="home-page">
                 <Helmet><title>Slotify</title></Helmet>
                 <PlaylistList playlists={playlists} />
-            </section>
             <div className="pusher"></div>
+            </section>
             <Outlet></Outlet>
         </>
 

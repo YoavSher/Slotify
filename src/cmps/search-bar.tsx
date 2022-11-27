@@ -27,7 +27,7 @@ export const SearchBar = ({ fromResults }: Props) => {
         getResultsFromParams(searchTerm)
     }, [location])
 
-    const getResultsFromParams = async (term:string) => {
+    const getResultsFromParams = async (term: string) => {
         console.log('im results from params')
         try {
             const resData = await youtubeService.getDataFromYoutube(term)
@@ -39,7 +39,8 @@ export const SearchBar = ({ fromResults }: Props) => {
     }
 
     const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {
-        const { value } = ev.target
+        let { value } = ev.target
+        value = value.includes('/') ? value.replace(/\//g, '-') : value
         if (fromResults) {
             getResultsFromParams(value)
             value ? navigate(`${value}`) : navigate(`${''}`)
