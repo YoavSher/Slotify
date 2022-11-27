@@ -8,7 +8,7 @@ export const PlaylistList = (props: any) => {
         <section className="playlist-list">
             {playlists.map((p:Playlist) => <PlayListPreview
                 key={p._id} 
-                playlist={p}/>)}
+                playlistPre={p}/>)}
         </section>
     )
 }

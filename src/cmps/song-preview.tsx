@@ -34,11 +34,13 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             case 'queue':
                 return isSongPlaying && currPlayingIdx === index && song.id === playlist.songs[currPlayingIdx].id
             case 'playlist-details':
-                return isSongPlaying && song.id === playlist.songs[currPlayingIdx].id // and it's this playlist
-                // maybe make a boolean in playlist details and use it for the drag and drop aswell.
-                // and pass it down as props i can even combine it 
+                return isSongPlaying && song?.id === playlist?.songs[currPlayingIdx]?.id // and it's this playlist
+            // maybe make a boolean in playlist details and use it for the drag and drop aswell.
+            // and pass it down as props i can even combine it 
             case 'search-results':
                 return isSongPlaying && song.id === playlist.songs[0].id
+            case 'playlist-details-search':
+                return isSongPlaying && song?.id === playlist?.songs[currPlayingIdx]?.id
         }
     }
 
@@ -54,20 +56,14 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
                 else dispatch(replacePlaylist(song))
                 break
+            case 'playlist-details-search':
             case 'playlist-details':
                 if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
                 else if (!isThisSongPlaying()) playSongFromPlaylist(index)
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
                 else dispatch(replacePlaylist(song))
                 break
-            case 'playlist-details-search':
-                if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
-                else if (!isThisSongPlaying()) playSongFromPlaylist(index)
-                else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
-                else dispatch(replacePlaylist(song)) // combine
-                // maybe manage the width on the state if many components needs it because it's just alot of work on the same problem
-                break
-
+            // maybe manage the width on the state if many components needs it because it's just alot of work on the same problem
         }
 
     }
@@ -103,10 +99,10 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 </div>
                 <div className="song-description">
                     <div className="song-title">
-                        {(type === 'search-results' || type === 'playlist-details-search')
+                        {(type === 'search-results')
                             && <h5 className={`${song?.id === playlist?.songs[0]?.id ? 'playing' : ''}`}>
                                 {song.title}</h5>}
-                        {(type === 'playlist-details' || type === 'queue') &&
+                        {(type === 'playlist-details' || type === 'queue' || type === 'playlist-details-search') &&
                             <h5 className={`${song?.id === playlist?.songs[currPlayingIdx]?.id ? 'playing' : ''}`}>
                                 {song.title}</h5>}
                     </div>
