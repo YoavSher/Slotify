@@ -20,7 +20,8 @@ export const MusicPlayer = () => {
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-    let currSong = playlist?.songs[songIdx]
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const currSong = playlist?.songs[songIdx]
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -28,27 +29,19 @@ export const MusicPlayer = () => {
     const durationIntervalId = useRef<number>()
 
     const playingTimeFromCache = useRef<number | null>()
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     const [isOpen, setIsOpen] = useState(false)
 
 
-    const setDimensions = () => {
-        setScreenWidth(window.innerWidth)
-    }
-
     useEffect(() => {
-        //listen to volume changes with the localStorage
         const idx = cachingService.getPlayingIdx()
         const playlist = cachingService.getPlaylist()
+        const volume = cachingService.getCurrentVolume()
+        if (volume !== undefined && volume !== null) onVolumeChange(volume)
         if (typeof idx === 'number' && playlist) {
             dispatch(setPlaylist(playlist))
             dispatch(setPlayingIdx(idx))
             const playingTime = cachingService.getPlayingTime()
             playingTimeFromCache.current = playingTime
-        }
-        window.addEventListener('resize', setDimensions)
-        return () => {
-            window.removeEventListener('resize', setDimensions)
         }
     }, [])
 
@@ -67,17 +60,18 @@ export const MusicPlayer = () => {
     const prevVolume = useRef(50)
     const [volume, setVolume] = useState(50)
     const [isShuffled, setIsShuffled] = useState(false)
+    const [isLoopingEnabled, setIsLoopingEnabled] = useState(false)
     const unShuffledSongs = useRef<Song[] | null>(null)
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         playerRef.current = ev.target
-        setVolume(playerRef.current.playerInfo.volume)
         if (playingTimeFromCache.current) {
             setSongTimer(playingTimeFromCache.current)
             playerRef.current.seekTo(playingTimeFromCache.current / 1000)
             playingTimeFromCache.current = null
             pauseVideo()
         } else {
+            onVolumeChange(playerRef.current.playerInfo.volume)
             setSongTimer(0)
             startVideo()
         }
@@ -87,9 +81,11 @@ export const MusicPlayer = () => {
     const durationInterval = () => {
         durationIntervalId.current = window.setInterval(() => {
             if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
-                dispatch(setPlayingIdx(songIdx + 1))
                 setSongTimer(0)
-                window.clearInterval(durationIntervalId.current)
+                if (!isLoopingEnabled) {
+                    dispatch(setPlayingIdx(songIdx + 1))
+                    window.clearInterval(durationIntervalId.current)
+                } else startVideo()
             } else {
                 const currTime = playerRef.current.getCurrentTime() * 1000
                 setSongTimer(currTime)
@@ -132,11 +128,11 @@ export const MusicPlayer = () => {
         onVolumeChange(0)
     }
 
-    const onVolumeChange = (number: number) => {
+    const onVolumeChange = (newVolume: number) => {
         prevVolume.current = volume
-        if (playerRef.current) playerRef.current.setVolume(number)
-        setVolume(number)
-
+        if (playerRef.current) playerRef.current.setVolume(newVolume)
+        setVolume(newVolume)
+        cachingService.saveCurrentVolume(newVolume)
     }
 
     const seekTo = (timeInSeconds: number) => {
@@ -271,7 +267,7 @@ export const MusicPlayer = () => {
                             <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
                             <button title="Next" onClick={onIndexIncrement} ><MdSkipNext /></button>
                             {/* <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button> */}
-                            <button><FiRepeat /></button>
+                            <button onClick={() => setIsLoopingEnabled(prev => !prev)} className={`repeat-btn ${(isLoopingEnabled) ? 'repeat' : ''}`} title="Repeat"><FiRepeat /></button>
                         </section>
                         <section className="time-container">
                             {playerRef.current && <p>{utilService.millisToMinutesAndSeconds(songTimer)}</p>}

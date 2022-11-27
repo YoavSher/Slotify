@@ -32,8 +32,11 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         switch
         (type) {
             case 'queue':
+                return isSongPlaying && currPlayingIdx === index && song.id === playlist.songs[currPlayingIdx].id
             case 'playlist-details':
-                return isSongPlaying && currPlayingIdx === index
+                return isSongPlaying && song.id === playlist.songs[currPlayingIdx].id // and it's this playlist
+                // maybe make a boolean in playlist details and use it for the drag and drop aswell.
+                // and pass it down as props i can even combine it 
             case 'search-results':
                 return isSongPlaying && song.id === playlist.songs[0].id
         }
@@ -61,7 +64,8 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
                 else if (!isThisSongPlaying()) playSongFromPlaylist(index)
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
-                else dispatch(replacePlaylist(song))
+                else dispatch(replacePlaylist(song)) // combine
+                // maybe manage the width on the state if many components needs it because it's just alot of work on the same problem
                 break
 
         }
@@ -72,23 +76,23 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         onClickPlay()
     }
 
-
-
+    const isMobileWithIndex = () => {
+        return (type === 'queue' || type === 'playlist-details') && index !== undefined && screenWidth !== undefined && screenWidth > 770
+    }
 
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} onClick={onPlayFromPhone}>
             <div className="top-song flex align-center">
-                {(type === 'queue' || type === 'playlist-details') && index !== undefined && screenWidth !== undefined && screenWidth > 770 &&
-                    <div className="index-display">
-                        {!isThisSongPlaying() && <p>{index + 1}</p>}
-                        {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id && <div className="volume-gif">
-                            <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
-                            />
-                        </div>}
-                        {screenWidth !== undefined && screenWidth > 770 &&
-                            <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
-                                onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
+                {isMobileWithIndex() && <div className="index-display">
+                    {!isThisSongPlaying() && <p>{(index !== undefined) ? index + 1 : ''}</p>}
+                    {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id && <div className="volume-gif">
+                        <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
+                        />
                     </div>}
+                    {screenWidth !== undefined && screenWidth > 770 &&
+                        <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
+                            onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
+                </div>}
                 <div className="img-container">
                     <img src={song.image} alt="" />
                     {(type === 'search-results' || type === 'playlist-details-search') &&

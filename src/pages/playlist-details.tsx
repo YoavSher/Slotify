@@ -32,17 +32,13 @@ export const PlaylistDetails = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const storeCurrPlaylist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         loadPlaylist()
-        // console.log('playlist:', currPlaylist?.name)
-        window.addEventListener('resize', setDimensions)
-        return () => {
-            window.removeEventListener('resize', setDimensions)
-        }
     }, [playlistId])
 
     const loadPlaylist = async () => {
@@ -80,6 +76,10 @@ export const PlaylistDetails = () => {
             const playlist = structuredClone(currPlaylist)
             const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
             playlist.songs.splice(result.destination.index, 0, reorderedItem)
+            // if (storeCurrPlaylist?._id && currPlaylist._id === storeCurrPlaylist._id) {
+            //     console.log('hehe')
+            // }
+            // dispatch(reorderSongsList(songs)) // if this playlist is playing!
             setCurrPlaylist(playlist)
             await playlistService.updatePlaylist(playlist)
         }
@@ -152,9 +152,6 @@ export const PlaylistDetails = () => {
             })
             onSaveChanges()
         }
-    }
-    const setDimensions = () => {
-        setScreenWidth(window.innerWidth)
     }
 
     if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>

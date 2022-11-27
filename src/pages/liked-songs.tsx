@@ -16,9 +16,11 @@ export const LikedSongs = () => {
     const dispatch = useAppDispatch()
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+
 
     const toggleModal = (ev: any, song: Song) => {
         ev.stopPropagation()
@@ -44,6 +46,7 @@ export const LikedSongs = () => {
             likedSongs.splice(result.destination.index, 0, reorderedItem)
             const user = { ...loggedInUser, likedSongs }
             dispatch(setUser(user))
+            // it is allso a playlist!!!
             await userService.saveUser(user)
         }
     }
@@ -93,7 +96,7 @@ export const LikedSongs = () => {
                                         return <Draggable key={s.id} draggableId={s.id} index={idx}>
                                             {(provided) => (
                                                 <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
-                                                    <SongPreview playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
+                                                    <SongPreview screenWidth={screenWidth} playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
                                                 </article>)}
                                         </Draggable>
                                     })}

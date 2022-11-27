@@ -5,20 +5,14 @@ import { BsPerson } from 'react-icons/bs'
 
 import { SearchBar } from "./search-bar"
 import { useEffect, useState } from "react"
+import { useAppSelector } from "../store/store.hooks"
 
 export const AppHeader = () => {
 
     const location = useLocation()
     const navigate = useNavigate()
     const [locations, setLocations] = useState<Location[]>([])
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
-
-    useEffect(() => {
-        window.addEventListener('resize', setDimensions)
-        return () => {
-            window.removeEventListener('resize', setDimensions)
-        }
-    }, [])
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
     const onGoBack = () => {
         setLocations((prev: Location[]) => ([location, ...prev]))
@@ -31,9 +25,7 @@ export const AppHeader = () => {
         })
         navigate(locations[0].pathname)
     }
-    const setDimensions = () => {
-        setScreenWidth(window.innerWidth)
-    }
+
 
     return (
         <section className="app-header flex align-center justify-between">
