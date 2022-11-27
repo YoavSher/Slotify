@@ -29,7 +29,7 @@
         justify-content: flex-start;
 
 
-        
+
         .song-image {
             margin-right: 10px;
             border-radius: 4px;
@@ -54,6 +54,7 @@
         justify-content: flex-end;
         flex: 1;
         align-items: center;
+        z-index: 150;
 
         .play-pause-btn {
             @include play-pause;

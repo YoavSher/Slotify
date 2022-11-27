@@ -82,6 +82,21 @@
                     @include green-play-btn
                 }
             }
+
+            &.pause-container {
+                margin-left: 8px;
+                border-radius: 500px;
+                display: flex;
+                position: absolute;
+                right: 10px;
+                transition: all .3s ease;
+                z-index: 2;
+
+                button {
+                    @include green-play-btn
+                }
+
+            }
         }
     }
 }
