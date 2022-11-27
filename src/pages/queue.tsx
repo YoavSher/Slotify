@@ -12,6 +12,7 @@ export const Queue = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
     const toggleModal = (ev: any, song: Song) => {
         ev.stopPropagation()
@@ -43,11 +44,11 @@ export const Queue = () => {
             <section className="queue-page" onClick={closeModal}>
                 <h3 className="title">Queue</h3>
                 {songs[songIdx] && <><h4 className="mini-title">Now playing</h4>
-                    <SongPreview toggleModal={toggleModal} song={songs[songIdx]} index={songIdx} type={'queue'} /></>}
+                    <SongPreview screenWidth={screenWidth} toggleModal={toggleModal} song={songs[songIdx]} index={songIdx} type={'queue'} /></>}
                 {songs.length > 0 && <><h4 className="mini-title">Next in queue</h4>
-                    <SongsQueueList toggleModal={toggleModal} songIdx={songIdx} songs={songs} /></>}
+                    <SongsQueueList screenWidth={screenWidth} toggleModal={toggleModal} songIdx={songIdx} songs={songs} /></>}
             </section>
             {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
-        </>
+        </> 
     )
 }

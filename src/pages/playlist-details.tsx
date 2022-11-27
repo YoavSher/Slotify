@@ -115,7 +115,6 @@ export const PlaylistDetails = () => {
     }
 
     const onSetPlaylist = () => {
-        console.log('playlist:', currPlaylist)
         if (currPlaylist) dispatch(setPlaylist(currPlaylist))
     }
 
@@ -147,7 +146,7 @@ export const PlaylistDetails = () => {
             if (currPlaylist?.songs.some(s => s.videoId === song.videoId)) return
             setCurrPlaylist((prevState) => {
                 if (prevState !== undefined) {
-                    return { ...prevState, songs: [...prevState.songs, song] }
+                    return { ...prevState, songs: [...prevState.songs, { ...song, addedAt: Date.now() }] }
                 }
             })
             onSaveChanges()

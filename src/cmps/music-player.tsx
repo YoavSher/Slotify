@@ -66,6 +66,7 @@ export const MusicPlayer = () => {
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         playerRef.current = ev.target
         if (playingTimeFromCache.current) {
+            console.log('gettin here')
             setSongTimer(playingTimeFromCache.current)
             playerRef.current.seekTo(playingTimeFromCache.current / 1000)
             playingTimeFromCache.current = null
@@ -213,10 +214,10 @@ export const MusicPlayer = () => {
 
     return (
         <>
+            {currSong && <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />}
             {(screenWidth < 770 && !isOpen) ? (
                 <footer onClick={() => { setIsOpen(true) }} className="music-player mobile">
                     {currSong && <>
-                        <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
                         <section className="mobile-right">
                             <img className="song-image" src={currSong.image} alt="" />
                             <div className="names-container">
@@ -246,7 +247,6 @@ export const MusicPlayer = () => {
                     {isOpen && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
                     <section className="left-section">
                         {currSong && <>
-                            <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />
                             <img className="song-image" src={currSong.image} alt="" />
                             <section className="below-image">
 

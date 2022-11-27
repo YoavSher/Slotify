@@ -33,23 +33,23 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         (type) {
             case 'queue':
                 return isSongPlaying && currPlayingIdx === index && song.id === playlist.songs[currPlayingIdx].id
+            case 'playlist-details-search':
             case 'playlist-details':
                 return isSongPlaying && song?.id === playlist?.songs[currPlayingIdx]?.id // and it's this playlist
             // maybe make a boolean in playlist details and use it for the drag and drop aswell.
             // and pass it down as props i can even combine it 
             case 'search-results':
                 return isSongPlaying && song.id === playlist.songs[0].id
-            case 'playlist-details-search':
-                return isSongPlaying && song?.id === playlist?.songs[currPlayingIdx]?.id
+
         }
     }
 
     const onClickPlay = () => {
         switch (type) {
             case 'queue':
-                if (isThisSongPlaying()) dispatch(setIsSongPlaying(false)) // if the song thats playing is this ,stop it 
-                else if (currPlayingIdx === index && !isSongPlaying) dispatch(setIsSongPlaying(true)) //else if the song is not playing and is this play it 
-                else if (index !== undefined) dispatch(setPlayingIdx(index))                                                         // else if this song is not the song and not playing dispatch it
+                if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
+                else if (currPlayingIdx === index && !isSongPlaying) dispatch(setIsSongPlaying(true))
+                else if (index !== undefined) dispatch(setPlayingIdx(index))
                 break
             case 'search-results':
                 if (!isSongPlaying && song.id === playlist?.songs[0]?.id) dispatch(setIsSongPlaying(true))
