@@ -150,6 +150,7 @@
             min-width: 76px;
             gap: 12px;
             position: relative;
+            justify-content: end;
 
             p {
                 color: #A7A7A7;
@@ -160,7 +161,13 @@
                 @include cleared-btn;
                 font-size: 21px;
                 line-height: 17px;
-                opacity: 0;
+                opacity: 1;
+                transform: rotate(90deg);
+
+                @media(min-width:770px) {
+                    opacity: 0;
+                    transform: rotate(0deg);
+                }
             }
 
 

@@ -76,6 +76,17 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         return (type === 'queue' || type === 'playlist-details') && index !== undefined && screenWidth !== undefined && screenWidth > 770
     }
 
+    const showImgQueue = () => {
+        if (screenWidth !== undefined && index !== undefined) {
+            if (screenWidth < 770 &&
+                type === 'queue' &&
+                song?.id !== playlist?.songs[currPlayingIdx]?.id) {
+                return false
+            }
+            return true
+        }
+    }
+
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} onClick={onPlayFromPhone}>
             <div className="top-song flex align-center">
@@ -85,18 +96,19 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
                         />
                     </div>}
-                    {screenWidth !== undefined && screenWidth > 770 &&
+                    {screenWidth !== undefined && screenWidth < 770 &&
                         <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
                             onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
                 </div>}
-                <div className="img-container">
+
+                {showImgQueue() && <div className="img-container">
                     <img src={song.image} alt="" />
                     {(type === 'search-results' || type === 'playlist-details-search') &&
                         <button className="photo-play"
                             onClick={onClickPlay}>
                             <span>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</span>
                         </button>}
-                </div>
+                </div>}
                 <div className="song-description">
                     <div className="song-title">
                         {(type === 'search-results')
