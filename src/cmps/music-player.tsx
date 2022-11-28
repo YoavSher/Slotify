@@ -15,6 +15,7 @@ import { cachingService } from '../services/music-player-caching.service';
 import { LikeButton } from './like-button';
 import { BsChevronDown } from 'react-icons/bs';
 import { FiRepeat } from 'react-icons/fi';
+import { useSwipeable } from 'react-swipeable';
 
 export const MusicPlayer = () => {
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
@@ -99,7 +100,7 @@ export const MusicPlayer = () => {
         ev.stopPropagation()
         // setIsOpen(false)
     }
-    
+
     const onClickPlay = (ev: React.MouseEvent<HTMLElement>) => {
         ev.stopPropagation()
         // setIsOpen(false)
@@ -218,6 +219,11 @@ export const MusicPlayer = () => {
         return playerRef.current.playerInfo.duration * 1000 || 0
     }
 
+    const handlers = useSwipeable({
+        onSwipedRight: () => { onIndexDecrement() },
+        onSwipedLeft: () => { onIndexIncrement() },
+    });
+
     return (
         <>
             {currSong && <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />}
@@ -250,9 +256,9 @@ export const MusicPlayer = () => {
                     </section>
                 </footer>)
                 : (<footer className={`${(isOpen && screenWidth < 770) ? 'full' : ''} music-player`}>
-                    {isOpen && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
-                    <section className="left-section">
-                        {currSong && <>
+                    {isOpen && screenWidth < 770 && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
+                    {currSong && <>
+                        <section {...handlers} key={currSong.id} className="left-section">
                             <img className="song-image" src={currSong.image} alt="" />
                             <section className="below-image">
 
@@ -262,8 +268,8 @@ export const MusicPlayer = () => {
                                 </div>
                                 <LikeButton song={currSong} />
                             </section>
-                        </>}
-                    </section>
+                        </section>
+                    </>}
 
                     <div className="main-player">
                         <section className="buttons-container">

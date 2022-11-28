@@ -49,12 +49,15 @@
         }
     }
 
+
     .mobile-left {
         display: flex;
         justify-content: flex-end;
         flex: 1;
         align-items: center;
         z-index: 150;
+
+
 
         .play-pause-btn {
             @include play-pause;

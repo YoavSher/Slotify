@@ -31,6 +31,8 @@
             width: 100%;
             flex-direction: column;
             margin: auto;
+            max-height: 70%;
+
 
             .song-image {
                 aspect-ratio: 1 / 1;
@@ -38,9 +40,7 @@
                 object-fit: cover;
                 height: unset;
 
-                @media(min-width:490px) {
-                    max-height: 445px;
-                }
+                max-height: 92%;
 
                 @media(min-width:640px) {
                     object-fit: contain;
@@ -105,15 +105,6 @@
 
         .right-section {
             display: none;
-            // position: absolute;
-
-            // &>*:not(.queue-btn) {
-
-            // }
-
-            // .queue-btn {
-            //     position: absolute;
-            // }
         }
     }
 

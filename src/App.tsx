@@ -12,7 +12,6 @@ import { playlistService } from './services/playlist.service';
 import { setScreenWidth } from './store/helper/helper.reducer';
 
 function App() {
-  const screenWidth = useAppSelector(state => state.helper.screenWidth)
   const dispatch = useAppDispatch()
 
   useEffect(() => {

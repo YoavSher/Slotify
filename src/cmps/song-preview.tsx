@@ -67,6 +67,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         }
 
     }
+    
     const onPlayFromPhone = () => {
         if (screenWidth === undefined || screenWidth > 770) return
         onClickPlay()

@@ -4,8 +4,13 @@ import { SearchSongPreview } from "../cmps/search-song-preview"
 import { SongPreview } from "../cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { SongsQueueList } from "../cmps/songs-queue-list"
+import { CustomEvent } from "../interfaces/boundingRect"
 import { Song } from "../interfaces/song"
 import { useAppSelector } from "../store/store.hooks"
+
+
+
+
 
 
 export const Queue = () => {
@@ -14,7 +19,7 @@ export const Queue = () => {
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
-    const toggleModal = (ev: any, song: Song) => {
+    const toggleModal = (ev: CustomEvent, song: Song) => {
         ev.stopPropagation()
         const { left, top } = ev.target.getBoundingClientRect()
         setModalPos({ left, top })
