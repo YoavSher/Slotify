@@ -18,7 +18,6 @@ var playlist1 = {
     "likedByUsers": [],
     "songs": [
         {
-            "id": "mbj1RFaoyLk",
             "VideoId": "mbj1RFaoyLk",
             "title": "The Doors - Light My Fire",
             "image": "https://i.ytimg.com/vi/mbj1RFaoyLk/default.jpg",
@@ -26,7 +25,6 @@ var playlist1 = {
             "artist": "The Doors"
         },
         {
-            "id": "91vU3kHtnoU",
             "videoId": "91vU3kHtnoU",
             "title": "The Doors - L.A. Woman",
             "image": "https://i.ytimg.com/vi/91vU3kHtnoU/default.jpg",
@@ -34,7 +32,6 @@ var playlist1 = {
             "artist": "The Doors"
         },
         {
-            "id": "sezc05A4s2g",
             "videoId": "sezc05A4s2g",
             "title": "The Doors - «People Are Strange»",
             "image": "https://i.ytimg.com/vi/sezc05A4s2g/default.jpg",

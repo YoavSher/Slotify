@@ -117,7 +117,6 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                     </div>}
                 <div className="song-description">
                     <div className="song-title">
-
                         {(type === 'search-results')
                             && <h5 className={`${song?.videoId === playlist?.songs[0]?.videoId ? 'playing' : ''}`}>
                                 {song.title}</h5>}
