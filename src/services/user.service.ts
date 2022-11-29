@@ -1,3 +1,5 @@
+import { MiniPlaylist } from "../interfaces/mini-playlist"
+import { Playlist } from "../interfaces/playlist"
 import { Song } from "../interfaces/song"
 import { storageService } from "./async-storage.service"
 
@@ -13,9 +15,10 @@ export interface User {
     fullName: string,
     password: string,
     email: string,
-    _id: string,
+    _id: number,
     likedSongs: Song[],
-    likedSongsIds: string[]
+    likedPlaylists: MiniPlaylist[],
+    recentlyPlayedPlaylists: Playlist[]
 }
 interface Credentials {
     username: string,
@@ -35,7 +38,6 @@ async function login(userCred: Credentials) {
 
 async function signup(newUser: User) {
     newUser.likedSongs = []
-    newUser.likedSongsIds = []
     const user = await storageService.post(STORAGE_KEY, newUser)
     try {
         // const user = await httpService.post('auth/signup', userCred)

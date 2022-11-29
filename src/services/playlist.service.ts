@@ -1,5 +1,6 @@
 import { Playlist } from "../interfaces/playlist";
 import { storageService } from "./async-storage.service";
+import { httpService } from "./http.service";
 import { getPlaylists } from "./playlist.data";
 
 export const playlistService = {
@@ -53,8 +54,9 @@ async function createPlaylist() {
         likedByUsers: [],
         songs: []
     } as Playlist
-    await storageService.post(STORAGE_KEY, newPlaylist)
-    return newPlaylist
+    // await storageService.post(STORAGE_KEY, newPlaylist)
+    await httpService.post('playlist/', null)
+    // return newPlaylist
 }
 
 async function updatePlaylist(playlist: Playlist) {
