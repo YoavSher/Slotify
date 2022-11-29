@@ -35,7 +35,6 @@ export const SearchResults = () => {
 
             const songs = [...searchResults]
             setTopSongs(songs.splice(1))
-            console.log('songs:', songs)
         }
     }, [searchResults, params])
 
@@ -44,7 +43,7 @@ export const SearchResults = () => {
         ev.stopPropagation()
         const { left, top } = ev.target.getBoundingClientRect()
         setModalPos({ left, top })
-        if (songForModal?.id === song.id) closeModal()
+        if (songForModal?.videoId === song.videoId) closeModal()
         else openModal(song)
     }
 
@@ -61,12 +60,12 @@ export const SearchResults = () => {
     const isThisSongPlaying = () => {
 
         if (searchResults) {
-            return isSongPlaying && searchResults[0].id === playlist.songs[0].id
+            return isSongPlaying && searchResults[0].videoId === playlist.songs[0].videoId
         }
     }
     const onClickPlay = () => {
         if (searchResults) {
-            if (!isSongPlaying && searchResults[0].id === playlist.songs[0]?.id) dispatch(setIsSongPlaying(true))
+            if (!isSongPlaying && searchResults[0].videoId === playlist.songs[0]?.videoId) dispatch(setIsSongPlaying(true))
             else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
             else dispatch(replacePlaylist(searchResults[0]))
         }
@@ -104,7 +103,7 @@ export const SearchResults = () => {
                             </div>
                             <div className="top-songs-results-container">
                                 {topSongs?.map(song => {
-                                    return <SongPreview key={song.id} toggleModal={toggleModal} song={song}
+                                    return <SongPreview key={song.videoId} toggleModal={toggleModal} song={song}
                                         type={'search-results'} />
                                 })}
                                 {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
@@ -115,7 +114,7 @@ export const SearchResults = () => {
                         <div className="top-songs-results-container">
                             {searchResults.map(song => {
                                 return <SongPreview
-                                    key={song.id}
+                                    key={song.videoId}
                                     toggleModal={toggleModal}
                                     song={song}
                                     type={'search-results'}

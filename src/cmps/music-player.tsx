@@ -258,7 +258,7 @@ export const MusicPlayer = () => {
                 : (<footer className={`${(isOpen && screenWidth < 770) ? 'full' : ''} music-player`}>
                     {isOpen && screenWidth < 770 && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
                     {currSong && <>
-                        <section {...handlers} key={currSong.id} className="left-section">
+                        <section {...handlers} className="left-section">
                             <img className="song-image" src={currSong.image} alt="" />
                             <section className="below-image">
 

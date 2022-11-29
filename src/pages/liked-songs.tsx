@@ -26,7 +26,7 @@ export const LikedSongs = () => {
         ev.stopPropagation()
         const { left, top } = ev.target.getBoundingClientRect()
         setModalPos({ left, top })
-        if (songForModal?.id === song.id) closeModal()
+        if (songForModal?.videoId === song.videoId) closeModal()
         else openModal(song)
     }
 
@@ -93,7 +93,7 @@ export const LikedSongs = () => {
 
                                 {(provided) => (<div {...provided.droppableProps} ref={provided.innerRef} className="songs-container">
                                     {loggedInUser?.likedSongs?.map((s, idx) => {
-                                        return <Draggable key={s.id} draggableId={s.id} index={idx}>
+                                        return <Draggable key={s.videoId} draggableId={s.videoId} index={idx}>
                                             {(provided) => (
                                                 <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
                                                     <SongPreview screenWidth={screenWidth} playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />

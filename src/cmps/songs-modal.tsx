@@ -24,15 +24,10 @@ export const SongsModal = ({ song, closeModal, modalPos, screenWidth }: Props) =
         closeModal()
     }
     const removeSongFromQueue = () => {
-        if (song) dispatch(removeSong(song.id))
+        // if (song) dispatch(removeSong(song.id)) //// problem of id
         closeModal()
     }
-    // useEffect(() => {
-    //     window.addEventListener('scroll', () => console.log('scrolling'))
-    //     // return () => {
-    //     //     window.removeEventListener('onscroll', closeModal)
-    //     // }
-    // }, [])
+
     const calcModalPos = () => {
         if (screenWidth !== undefined && screenWidth < 770) {
             return {

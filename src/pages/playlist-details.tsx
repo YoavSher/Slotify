@@ -204,7 +204,7 @@ export const PlaylistDetails = () => {
 
                             {(provided) => (<div {...provided.droppableProps} ref={provided.innerRef} className="songs-container">
                                 {currPlaylist?.songs?.map((s, idx) => {
-                                    return <Draggable key={s.id} draggableId={s.id} index={idx}>
+                                    return <Draggable key={`${s.videoId}${idx}`} draggableId={`${s.videoId}${idx}`} index={idx}>
                                         {(provided) => (
                                             <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
                                                 <SongPreview
