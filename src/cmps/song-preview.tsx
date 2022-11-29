@@ -3,7 +3,7 @@ import { BiPlay } from "react-icons/bi"
 import { GiPauseButton } from "react-icons/gi"
 import { HiOutlineDotsHorizontal } from "react-icons/hi"
 import { BsFillPlayFill } from "react-icons/bs"
-import { Song } from "../interfaces/song"
+import { PlaylistSong, Song } from "../interfaces/song"
 import { utilService } from "../services/util.service"
 import { addToPlaylist, removeSong, replacePlaylist, setIsSongPlaying, setPlayingIdx } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
@@ -32,14 +32,14 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         switch
         (type) {
             case 'queue':
-                return isSongPlaying && currPlayingIdx === index && song.id === playlist.songs[currPlayingIdx].id
+                return isSongPlaying && currPlayingIdx === index && song.videoId === playlist.songs[currPlayingIdx].videoId
             case 'playlist-details-search':
             case 'playlist-details':
-                return isSongPlaying && song?.id === playlist?.songs[currPlayingIdx]?.id // and it's this playlist
+                return isSongPlaying && song?.videoId === playlist?.songs[currPlayingIdx]?.videoId // and it's this playlist
             // maybe make a boolean in playlist details and use it for the drag and drop aswell.
             // and pass it down as props i can even combine it 
             case 'search-results':
-                return isSongPlaying && song.id === playlist.songs[0].id
+                return isSongPlaying && song.videoId === playlist.songs[0].videoId
 
         }
     }
@@ -52,7 +52,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 else if (index !== undefined) dispatch(setPlayingIdx(index))
                 break
             case 'search-results':
-                if (!isSongPlaying && song.id === playlist?.songs[0]?.id) dispatch(setIsSongPlaying(true))
+                if (!isSongPlaying && song.videoId === playlist?.songs[0]?.videoId) dispatch(setIsSongPlaying(true))
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
                 else dispatch(replacePlaylist(song))
                 break
@@ -67,7 +67,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         }
 
     }
-    
+
     const onPlayFromPhone = () => {
         if (screenWidth === undefined || screenWidth > 770) return
         onClickPlay()
@@ -78,10 +78,11 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     }
 
     const showImgQueue = () => {
-        if (screenWidth !== undefined) {
+        if (screenWidth !== undefined && index !== undefined) { /// needs to test
             if (screenWidth < 770 &&
                 type === 'queue' &&
-                song?.id !== playlist?.songs[currPlayingIdx]?.id) {
+                currPlayingIdx !== index &&
+                song?.videoId !== playlist?.songs[currPlayingIdx]?.videoId) { // maybe can remove the viedo ID
                 return false
             }
             return true
@@ -93,10 +94,11 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             <div className="top-song flex align-center">
                 {isMobileWithIndex() && <div className="index-display">
                     {!isThisSongPlaying() && <p>{(index !== undefined) ? index + 1 : ''}</p>}
-                    {isThisSongPlaying() && !isHover && song?.id === playlist?.songs[currPlayingIdx]?.id && <div className="volume-gif">
+                    {isThisSongPlaying() && !isHover && <div className="volume-gif">
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
                         />
                     </div>}
+
                     {screenWidth !== undefined && screenWidth > 770 &&
                         <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
                             onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
@@ -104,20 +106,26 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
 
                 {showImgQueue() && <div className="img-container">
                     <img src={song.image} alt="" />
-                    {(type === 'search-results' || type === 'playlist-details-search') &&
+                </div>}
+                {(type === 'search-results' || type === 'playlist-details-search') &&
+                    <div className="img-container">
+                        <img src={song.image} alt="" />
                         <button className="photo-play"
                             onClick={onClickPlay}>
                             <span>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</span>
-                        </button>}
-                </div>}
+                        </button>
+                    </div>}
                 <div className="song-description">
                     <div className="song-title">
+
                         {(type === 'search-results')
-                            && <h5 className={`${song?.id === playlist?.songs[0]?.id ? 'playing' : ''}`}>
+                            && <h5 className={`${song?.videoId === playlist?.songs[0]?.videoId ? 'playing' : ''}`}>
                                 {song.title}</h5>}
-                        {(type === 'playlist-details' || type === 'queue' || type === 'playlist-details-search') &&
-                            <h5 className={`${song?.id === playlist?.songs[currPlayingIdx]?.id ? 'playing' : ''}`}>
+                        {(type === 'playlist-details' || type === 'playlist-details-search') &&
+                            <h5 className={`${song?.videoId === playlist?.songs[currPlayingIdx]?.videoId ? 'playing' : ''}`}>
                                 {song.title}</h5>}
+                        {(type === 'queue') && <h5 className={`${index === currPlayingIdx ? 'playing' : ''}`}>
+                            {song.title}</h5>}
                     </div>
                     <h6>{song.artist}</h6>
                 </div>
@@ -125,7 +133,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             {type === 'playlist-details-search' &&
                 <div className="add-to-playlist-btn"><button onClick={() => onAddToPlaylist(song)}>Add</button></div>}
             {type === 'playlist-details' && <div className="added-at">
-                {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
+                {song?.addedAt && utilService.getDetailedTime(song?.addedAt)}
             </div>}
             {type !== 'playlist-details-search' && <LikeButton song={song} />}
 

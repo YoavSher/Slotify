@@ -23,7 +23,7 @@ export const Queue = () => {
         ev.stopPropagation()
         const { left, top } = ev.target.getBoundingClientRect()
         setModalPos({ left, top })
-        if (songForModal?.id === song.id) closeModal()
+        if (songForModal?.videoId === song.videoId) closeModal()
         else openModal(song)
     }
 

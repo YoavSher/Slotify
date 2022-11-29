@@ -44,6 +44,7 @@ async function getDataFromYoutube(term: string) {
             console.log('songs:', songs)
             songsCache[term] = songs
             _saveToStorage(STORAGE_KEY, songsCache[term])
+            //send songs  to backend {post}api/songs
             return songs
         } catch (err) {
             console.log('err:', err)
@@ -56,7 +57,7 @@ async function getDataFromYoutube(term: string) {
 function _makeSong(video: any) {
     return {
         title: video.snippet.title.replaceAll(combinedCleaner, '').trim(),
-        id: utilService.makeId(),
+        // id: utilService.makeId(),
         videoId: video.id.videoId,
         image: video.snippet.thumbnails.high.url,
         duration: 0,
