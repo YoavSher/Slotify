@@ -78,7 +78,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     }
 
     const showImgQueue = () => {
-        if (screenWidth !== undefined && index !== undefined) {
+        if (screenWidth !== undefined) {
             if (screenWidth < 770 &&
                 type === 'queue' &&
                 song?.id !== playlist?.songs[currPlayingIdx]?.id) {
@@ -97,7 +97,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
                         />
                     </div>}
-                    {screenWidth !== undefined && screenWidth < 770 &&
+                    {screenWidth !== undefined && screenWidth > 770 &&
                         <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
                             onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
                 </div>}

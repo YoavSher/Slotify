@@ -8,24 +8,22 @@ interface Props {
 export const LikeButton = ({ song }: Props) => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const dispatch = useAppDispatch()
-    const toggleSongLike = async (ev:React.MouseEvent<HTMLElement>) => {
+    const toggleSongLike = async (ev: React.MouseEvent<HTMLElement>) => {
         ev.stopPropagation()
         if (loggedInUser) {
             const user = { ...loggedInUser }
             if (isSongLiked()) {
                 user.likedSongs = user.likedSongs.filter(currSong => currSong.videoId !== song.videoId)
-                user.likedSongsIds = user.likedSongsIds.filter(id => id !== song.videoId)
             } else {
                 const currSong = { ...song, addedAt: Date.now() }
                 user.likedSongs = [currSong, ...user.likedSongs]
-                user.likedSongsIds = [song.videoId, ...user.likedSongsIds]
             }
             dispatch(setUser(user))
             await userService.saveUser(user)
         }
     }
     const isSongLiked = () => {
-        return loggedInUser?.likedSongsIds.includes(song.videoId)
+        return loggedInUser?.likedSongs.some(s => s.videoId === song.videoId)
     }
     return (
         <div className="like-song">
