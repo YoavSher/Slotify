@@ -54,7 +54,8 @@ export const MusicPlayer = () => {
         } else {
             playerRef.current?.pauseVideo()
             window.clearInterval(durationIntervalId.current)
-        }
+        } 
+        // should do a useeffect on the currPlayingidx if it changes but the song is'nt changing i should restart
     }, [isSongPlaying])
 
     const [songTimer, setSongTimer] = useState(0)

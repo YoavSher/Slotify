@@ -17,7 +17,7 @@ interface Props {
     toggleModal?: any,
     playSongFromPlaylist?: any,
     onAddToPlaylist?: any,
-    screenWidth?: number
+    screenWidth: number
 }
 export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlaylist, onAddToPlaylist, screenWidth }: Props) => {
 
@@ -26,21 +26,15 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
-
+    const isCurrSong = song.videoId === playlist?.songs[currPlayingIdx].videoId
+    const isMobile = screenWidth <= 770
 
     const isThisSongPlaying = () => {
-        switch
-        (type) {
+        switch (type) {
             case 'queue':
-                return isSongPlaying && currPlayingIdx === index && song.videoId === playlist.songs[currPlayingIdx].videoId
-            case 'playlist-details-search':
-            case 'playlist-details':
-                return isSongPlaying && song?.videoId === playlist?.songs[currPlayingIdx]?.videoId // and it's this playlist
-            // maybe make a boolean in playlist details and use it for the drag and drop aswell.
-            // and pass it down as props i can even combine it 
-            case 'search-results':
-                return isSongPlaying && song.videoId === playlist.songs[0].videoId
-
+                return isSongPlaying && currPlayingIdx === index && isCurrSong
+            default:
+                return isSongPlaying && isCurrSong
         }
     }
 
@@ -52,79 +46,59 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 else if (index !== undefined) dispatch(setPlayingIdx(index))
                 break
             case 'search-results':
-                if (!isSongPlaying && song.videoId === playlist?.songs[0]?.videoId) dispatch(setIsSongPlaying(true))
+                if (!isSongPlaying && isCurrSong) dispatch(setIsSongPlaying(true))
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
                 else dispatch(replacePlaylist(song))
                 break
             case 'playlist-details-search':
             case 'playlist-details':
-                if (!isSongPlaying && currPlayingIdx === index && playlist.songs[currPlayingIdx].videoId === song.videoId) dispatch(setIsSongPlaying(true))
-                else if (!isThisSongPlaying()) playSongFromPlaylist(index)
+                if (!isSongPlaying && isCurrSong) dispatch(setIsSongPlaying(true))
                 else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
-                else dispatch(replacePlaylist(song))
+                else playSongFromPlaylist(index)
                 break
-            // maybe manage the width on the state if many components needs it because it's just alot of work on the same problem
         }
-
     }
 
     const onPlayFromPhone = () => {
-        if (screenWidth === undefined || screenWidth > 770) return
+        if (!isMobile) return
         onClickPlay()
     }
 
-    const isMobileWithIndex = () => {
-        return (type === 'queue' || type === 'playlist-details') && index !== undefined && screenWidth !== undefined && screenWidth > 770
-    }
-
-    const showImgQueue = () => {
-        if (screenWidth !== undefined && index !== undefined) { /// needs to test
-            if (screenWidth < 770 &&
-                type === 'queue' &&
-                currPlayingIdx !== index &&
-                song?.videoId !== playlist?.songs[currPlayingIdx]?.videoId) { // maybe can remove the viedo ID
-                return false
-            }
-            return true
-        }
+    const shouldShowImage = () => {
+        return !(currPlayingIdx !== index && type === 'queue' && isMobile)
     }
 
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} onClick={onPlayFromPhone}>
             <div className="top-song flex align-center">
-                {isMobileWithIndex() && <div className="index-display">
-                    {!isThisSongPlaying() && <p>{(index !== undefined) ? index + 1 : ''}</p>}
+                {!isMobile && index !== undefined && <div className="index-display">
+
+                    {isHover && (<button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
+                        onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>)}
+
+                    {!isThisSongPlaying() && !isHover && <p>{index + 1}</p>}
+
                     {isThisSongPlaying() && !isHover && <div className="volume-gif">
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt=""
                         />
                     </div>}
-
-                    {screenWidth !== undefined && screenWidth > 770 &&
-                        <button className={`play-pause-btn ${isThisSongPlaying() ? 'pause' : 'play'}`}
-                            onClick={onClickPlay}>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</button>}
                 </div>}
 
-                {showImgQueue() && <div className="img-container">
+                {shouldShowImage() && <div className="img-container">
+
                     <img src={song.image} alt="" />
-                </div>}
-                {(type === 'search-results' || type === 'playlist-details-search') &&
-                    <div className="img-container">
-                        <img src={song.image} alt="" />
-                        <button className="photo-play"
-                            onClick={onClickPlay}>
+
+                    {(type === 'search-results' || type === 'playlist-details-search') && (
+                        <button className="photo-play" onClick={onClickPlay}>
                             <span>{isThisSongPlaying() ? <GiPauseButton /> : <BiPlay />}</span>
-                        </button>
-                    </div>}
+                        </button>)}
+                </div>}
+
                 <div className="song-description">
                     <div className="song-title">
-                        {(type === 'search-results')
-                            && <h5 className={`${song?.videoId === playlist?.songs[0]?.videoId ? 'playing' : ''}`}>
-                                {song.title}</h5>}
-                        {(type === 'playlist-details' || type === 'playlist-details-search') &&
-                            <h5 className={`${song?.videoId === playlist?.songs[currPlayingIdx]?.videoId ? 'playing' : ''}`}>
-                                {song.title}</h5>}
-                        {(type === 'queue') && <h5 className={`${index === currPlayingIdx ? 'playing' : ''}`}>
-                            {song.title}</h5>}
+                        {(type === 'queue') ? (
+                            <h5 className={`${index === currPlayingIdx ? 'playing' : ''}`}>{song.title}</h5>) : (
+                            <h5 className={`${isCurrSong ? 'playing' : ''}`}>{song.title}</h5>)}
                     </div>
                     <h6>{song.artist}</h6>
                 </div>
@@ -132,18 +106,16 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             {type === 'playlist-details-search' &&
                 <div className="add-to-playlist-btn"><button onClick={() => onAddToPlaylist(song)}>Add</button></div>}
             {type === 'playlist-details' && <div className="added-at">
-                {song?.addedAt && utilService.getDetailedTime(song?.addedAt)}
+                {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
             </div>}
             {type !== 'playlist-details-search' && <LikeButton song={song} />}
 
             {type !== 'playlist-details-search' && <div className="song-actions flex align-center">
-                {screenWidth !== undefined && screenWidth > 770 &&
+                {!isMobile &&
                     <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>}
                 <button onClick={(event) => { toggleModal(event, song) }} className="actions-btn">
-
                     <span><HiOutlineDotsHorizontal /></span>
                 </button>
-
             </div>}
         </div>
     </>)

@@ -103,7 +103,7 @@ export const SearchResults = () => {
                             </div>
                             <div className="top-songs-results-container">
                                 {topSongs?.map(song => {
-                                    return <SongPreview key={song.videoId} toggleModal={toggleModal} song={song}
+                                    return <SongPreview key={song.videoId} screenWidth={screenWidth} toggleModal={toggleModal} song={song}
                                         type={'search-results'} />
                                 })}
                                 {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}

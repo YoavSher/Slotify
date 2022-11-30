@@ -9,14 +9,15 @@ import { SongPreview } from "./song-preview"
 
 interface Props {
     playlistId: string | undefined,
-    onAddToPlaylist: any
+    onAddToPlaylist: any,
+    screenWidth:number
 }
 
 interface PseudoPlaylist {
     songs: Song[]
 }
 
-export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist }: Props) => {
+export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist,screenWidth }: Props) => {
 
     const [searchResults, setSearchResults] = useState<Song[] | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
@@ -69,9 +70,10 @@ export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist }: Props) =>
             {searchResults && <div className="details-search-results">
                 {searchResults.map((s, idx) => {
                     return <SongPreview
-                        key={s.id}
+                        key={s.videoId}
                         type={'playlist-details-search'}
                         song={s}
+                        screenWidth={screenWidth}
                         index={idx}
                         onAddToPlaylist={onAddToPlaylist}
                         playSongFromPlaylist={playSongFromPlaylist}

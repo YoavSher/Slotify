@@ -2,6 +2,7 @@ import { MiniPlaylist } from "../interfaces/mini-playlist"
 import { Playlist } from "../interfaces/playlist"
 import { Song } from "../interfaces/song"
 import { storageService } from "./async-storage.service"
+import { httpService } from "./http.service"
 
 export const userService = {
     login,
@@ -16,10 +17,9 @@ export interface User {
     password: string,
     email: string,
     _id: number,
-    likedSongs: Song[],
-    likedPlaylists: MiniPlaylist[],
-    recentlyPlayedPlaylists: Playlist[]
+    likedSongs: Song[], //it is just a playlist that is specific to a user but ho is it done actually.
 }
+
 interface Credentials {
     username: string,
     password: string,
@@ -27,8 +27,10 @@ interface Credentials {
 
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 const STORAGE_KEY = 'users'
+
 async function login(userCred: Credentials) {
     const users = await storageService.query(STORAGE_KEY)
+    // const user = await httpService.
     const user = users.find((currUser: User) => currUser.username.toLowerCase() === userCred.username.toLowerCase())
     // for now it is enough to validate username becuase these things should be in the backend recieving the cred and finding out whether it is okay
     if (user) {
@@ -42,7 +44,6 @@ async function signup(newUser: User) {
     try {
         // const user = await httpService.post('auth/signup', userCred)
         // socketService.login(user._id)
-
         return saveLocalUser(user)
     } catch (err) {
     }
@@ -56,7 +57,6 @@ async function saveUser(user: User) {
     await storageService.put(STORAGE_KEY, user)
     saveLocalUser(user)
     // not the best written
-
 }
 
 

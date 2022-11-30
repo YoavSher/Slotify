@@ -228,7 +228,7 @@ export const PlaylistDetails = () => {
                 song={songForModal}
                 modalPos={modalPos}
                 screenWidth={screenWidth} />}
-            <PlaylistDetailsSearch playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
+            <PlaylistDetailsSearch screenWidth={screenWidth} playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
             <div className="pusher"></div>
         </section>
     )
