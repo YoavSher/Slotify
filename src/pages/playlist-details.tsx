@@ -35,6 +35,7 @@ export const PlaylistDetails = () => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
+    const playlists = useAppSelector(state => state.playlist.playlists)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const storeCurrPlaylist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
@@ -46,9 +47,11 @@ export const PlaylistDetails = () => {
     const loadPlaylist = async () => {
         if (playlistId) {
             try {
-                const playlist = await playlistService.getPlaylistById(playlistId)
+                // const playlist = await playlistService.getPlaylistById(playlistId)
+                // const playlist = playlists.filter(p=>p._id===playlistId)
+                // const playlistSongs = await playlistService.getSongs()
 
-                setCurrPlaylist(playlist)
+                // setCurrPlaylist(playlist)
 
             } catch (err) {
                 console.log('err:', err)

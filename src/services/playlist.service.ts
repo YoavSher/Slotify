@@ -33,27 +33,28 @@ async function query() {
 
 async function getPlaylistById(playlistId: string) {
     try {
-        const playlist = await storageService.get(STORAGE_KEY, playlistId)
+        // const playlist = await storageService.get(STORAGE_KEY, playlistId)
+        const playlist = await httpService.get(`playlist/${playlistId}`, null)
         // console.log('playlist:', playlist)
         return playlist
     } catch (err) {
         console.log('err:', err)
     }
 }
-
+//adjustments
 async function createPlaylist() {
-    const newPlaylist = {
-        name: 'New Playlist',
-        imgUrl: 'https://thumbs.dreamstime.com/b/music-background-panorama-13786355.jpg',
-        tags: [],
-        createdBy: {
-            _id: "u101",
-            fullName: "Puki Ben David",
-            imgUrl: "http://some-photo/"
-        },
-        likedByUsers: [],
-        songs: []
-    } as Playlist
+    // const newPlaylist = {
+    //     name: 'New Playlist',
+    //     imgUrl: 'https://thumbs.dreamstime.com/b/music-background-panorama-13786355.jpg',
+    //     tags: [],
+    //     createdBy: {
+    //         _id: "u101",
+    //         fullName: "Puki Ben David",
+    //         imgUrl: "http://some-photo/"
+    //     },
+    //     likedByUsers: [],
+    //     songs: []
+    // } as Playlist
     // await storageService.post(STORAGE_KEY, newPlaylist)
     await httpService.post('playlist/', null)
     // return newPlaylist

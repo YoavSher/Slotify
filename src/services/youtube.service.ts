@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Song } from '../interfaces/song'
 import { httpService } from './http.service'
+import { songService } from './songs.service'
 import { utilService } from './util.service'
 
 
@@ -46,7 +47,7 @@ async function getDataFromYoutube(term: string) {
             songsCache[term] = songs
             _saveToStorage(STORAGE_KEY, songsCache[term])
             //send songs  to backend {post}api/songs
-             httpService.post('song/', songs)
+            songService.addSongs(songs)
             return songs
         } catch (err) {
             console.log('err:', err)
