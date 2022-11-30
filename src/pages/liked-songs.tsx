@@ -40,17 +40,7 @@ export const LikedSongs = () => {
         setSongForModal(null)
         setIsModalOpen(false)
     }
-    const handleOnDragEnd = async (result: any) => {
-        // if (loggedInUser) {
-        //     const likedSongs = [...loggedInUser.likedSongs]
-        //     const [reorderedItem] = likedSongs.splice(result.source.index, 1)
-        //     likedSongs.splice(result.destination.index, 0, reorderedItem)
-        //     const user = { ...loggedInUser, likedSongs }
-        //     dispatch(setUser(user))
-        //     // it is allso a playlist!!!
-        //     await userService.saveUser(user)
-        // }
-    }
+
     const onSetPlaylist = () => {
         if (loggedInUser && likedSongs) dispatch(setPlaylist({ songs: likedSongs }))
     }
@@ -89,22 +79,12 @@ export const LikedSongs = () => {
                                 <div className="clock"><CiClock2 /></div>
                             </div>
                         </div>
-                        <DragDropContext onDragEnd={handleOnDragEnd}>
-                            <Droppable droppableId="playlist-songs">
 
-                                {(provided) => (<div {...provided.droppableProps} ref={provided.innerRef} className="songs-container">
-                                    {likedSongs?.map((s, idx) => {
-                                        return <Draggable key={s.videoId} draggableId={s.videoId} index={idx}>
-                                            {(provided) => (
-                                                <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
-                                                    <SongPreview screenWidth={screenWidth} playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
-                                                </article>)}
-                                        </Draggable>
-                                    })}
-                                    {provided.placeholder}
-                                </div>)}
-                            </Droppable>
-                        </DragDropContext>
+                        <div className="songs-container">
+                            {likedSongs?.map((s, idx) => {
+                                return <SongPreview key={s.videoId} screenWidth={screenWidth} playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
+                            })}
+                        </div>
                     </div>
                 </div>
                 {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}

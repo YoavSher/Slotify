@@ -16,10 +16,9 @@ export const LikeButton = ({ song }: Props) => { // should'nt be rendered if the
             try {
 
                 if (isSongLiked()) {
+                    await songService.removeLikedSong(song.videoId)
                     songs = likedSongs.filter(currSong => currSong.videoId !== song.videoId)
-                    //songService.deleteLikedSong(song.videoId)
                 } else {
-                    console.log('liking?')
                     await songService.addLikedSong(song.videoId)
                     const currSong = { ...song, addedAt: Date.now() }
                     songs = [currSong, ...likedSongs]

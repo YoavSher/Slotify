@@ -4,7 +4,8 @@ import { httpService } from "./http.service";
 export const songService = {
     addSongs,
     getLikedSongs,
-    addLikedSong
+    addLikedSong,
+    removeLikedSong
 }
 
 
@@ -26,11 +27,18 @@ async function getLikedSongs(userId: number) {
 
 async function addLikedSong(videoId: string) {
     try {
-        await httpService.post('song/user/', { videoId })
+        await httpService.post('song/user', { videoId })
     } catch (err) {
         console.log('err:', err)
     }
 
+}
+async function removeLikedSong(videoId: string) {
+    try {
+        await httpService.delete(`song/user/${videoId}`, null)
+    } catch (err) {
+        console.log('err:', err)
+    }
 }
 
 async function getPlaylistSongs() {

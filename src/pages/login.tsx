@@ -2,6 +2,7 @@ import { ChangeEvent, MouseEvent, MouseEventHandler, useState } from "react"
 import { Helmet } from "react-helmet"
 import { BsSpotify } from "react-icons/bs"
 import { Link, useNavigate } from "react-router-dom"
+import { PlaylistSong, Song } from "../interfaces/song"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
@@ -33,12 +34,11 @@ export const Login = () => {
             const user = await userService.login(userCred)
             if (user) {
                 dispatch(setUser(user))
-                const songs = await songService.getLikedSongs(user._id)
+                const songs = await songService.getLikedSongs(user._id) as PlaylistSong[]
+                songs.sort((a, b) => +b.addedAt - +a.addedAt)
                 dispatch(setLikedSongs(songs))
             }
 
-            //recently played playlists = await playlistServie.getRecentleyPlayed(user._id) 
-            // dispatch(setRecentlyPlayed)
             onCloseModal()
         } catch (err) { //needs to return errors to the user.
             console.log(err)
