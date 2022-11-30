@@ -57,8 +57,8 @@ async function signup(credentials: NewUser) {
     }
 }
 async function logout() {
+    await httpService.post('auth/logout', null)
     sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-    // return await storageService.post('auth/logout')
 }
 
 async function saveUser(user: User) {

@@ -36,7 +36,7 @@ export const Login = () => {
             // dispatch(setRecentlyPlayed)
             //dispatch(setLikedSongs(songs))
             onCloseModal()
-        } catch (err) {
+        } catch (err) { //needs to return errors to the user.
             console.log(err)
         }
     }
