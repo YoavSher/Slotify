@@ -54,7 +54,7 @@ export const MusicPlayer = () => {
         } else {
             playerRef.current?.pauseVideo()
             window.clearInterval(durationIntervalId.current)
-        } 
+        }
         // should do a useeffect on the currPlayingidx if it changes but the song is'nt changing i should restart
     }, [isSongPlaying])
 
@@ -258,8 +258,8 @@ export const MusicPlayer = () => {
                 </footer>)
                 : (<footer className={`${(isOpen && screenWidth < 770) ? 'full' : ''} music-player`}>
                     {isOpen && screenWidth < 770 && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
-                    {currSong && <>
-                        <section {...handlers} className="left-section">
+                    <section {...handlers} className="left-section">
+                        {currSong && <>
                             <img className="song-image" src={currSong.image} alt="" />
                             <section className="below-image">
 
@@ -269,8 +269,8 @@ export const MusicPlayer = () => {
                                 </div>
                                 {/* <LikeButton song={currSong} /> */}
                             </section>
-                        </section>
-                    </>}
+                        </>}
+                    </section>
 
                     <div className="main-player">
                         <section className="buttons-container">
