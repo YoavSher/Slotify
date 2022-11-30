@@ -26,6 +26,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
+
     const isCurrSong = song.videoId === playlist?.songs[currPlayingIdx].videoId
     const isMobile = screenWidth <= 770
 
@@ -108,7 +109,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             {type === 'playlist-details' && <div className="added-at">
                 {song?.addedAt && utilService.getDetailedTime(song.addedAt)}
             </div>}
-            {type !== 'playlist-details-search' && <LikeButton song={song} />}
+            {/* {type !== 'playlist-details-search' && <LikeButton song={song} />} */}
 
             {type !== 'playlist-details-search' && <div className="song-actions flex align-center">
                 {!isMobile &&

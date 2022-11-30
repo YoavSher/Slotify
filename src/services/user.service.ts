@@ -12,12 +12,14 @@ export const userService = {
     saveUser
 }
 export interface User {
+    fullName: string,
+    _id: number,
+}
+export interface NewUser {
     username: string,
     fullName: string,
     password: string,
     email: string,
-    _id: number,
-    likedSongs: Song[], //it is just a playlist that is specific to a user but ho is it done actually.
 }
 
 interface Credentials {
@@ -28,22 +30,28 @@ interface Credentials {
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 const STORAGE_KEY = 'users'
 
-async function login(userCred: Credentials) {
-    const users = await storageService.query(STORAGE_KEY)
-    // const user = await httpService.
-    const user = users.find((currUser: User) => currUser.username.toLowerCase() === userCred.username.toLowerCase())
-    // for now it is enough to validate username becuase these things should be in the backend recieving the cred and finding out whether it is okay
-    if (user) {
-        return saveLocalUser(user)
+async function login({ password, username }: Credentials) {
+    try {
+        const user = await httpService.post('auth/login', { password, username })
+        if (user) {
+            return saveLocalUser(user)
+        }
+    } catch (err) {
+        console.log('cant login')
+        //do something
     }
+    //     // const users = await storageService.query(STORAGE_KEY)
+    //     // if we promise.all  return [user,likedsongs,recentlyplayedPlaylists]
+    //     const user = await httpService.post(userCred)
+    //     // const user = users.find((currUser: User) => currUser.username.toLowerCase() === userCred.username.toLowerCase())
+    //     // for now it is enough to validate username becuase these things should be in the backend recieving the cred and finding out whether it is okay
+    //     
 }
 
-async function signup(newUser: User) {
-    newUser.likedSongs = []
-    const user = await storageService.post(STORAGE_KEY, newUser)
+async function signup(credentials: NewUser) {
+    // const user = await storageService.post(STORAGE_KEY, newUser)
     try {
-        // const user = await httpService.post('auth/signup', userCred)
-        // socketService.login(user._id)
+        const user = await httpService.post('auth/signup', credentials)
         return saveLocalUser(user)
     } catch (err) {
     }

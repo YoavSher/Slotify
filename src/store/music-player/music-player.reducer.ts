@@ -26,9 +26,9 @@ const musicPlayerSlice = createSlice({
     initialState,
     reducers: {
         removeSong: (state, action: PayloadAction<string>) => {
-            const idx = state.currPlaylist.songs.findIndex(song => song.id === action.payload)
-            state.currPlaylist.songs.splice(idx, 1)
-            cachingService.saveCurrentPlaylist(state.currPlaylist)
+            // const idx = state.currPlaylist.songs.findIndex(song => song.id === action.payload)
+            // state.currPlaylist.songs.splice(idx, 1)
+            // cachingService.saveCurrentPlaylist(state.currPlaylist)
         },
         reorderSongsList: (state, action: PayloadAction<Song[]>) => {
             state.currPlaylist.songs = action.payload
@@ -38,8 +38,7 @@ const musicPlayerSlice = createSlice({
             state.isSongPlaying = action.payload
         },
         addToPlaylist: ((state, action: PayloadAction<Song>) => {
-            const song = { ...action.payload, id: utilService.makeId() }
-            state.currPlaylist.songs.push(song)
+            state.currPlaylist.songs.push(action.payload)
             cachingService.saveCurrentPlaylist(state.currPlaylist)
         }),
         replacePlaylist: ((state, action: PayloadAction<Song>) => {
@@ -59,9 +58,6 @@ const musicPlayerSlice = createSlice({
             cachingService.savePlayingIdx(state.currPlayingIdx)
         },
         setPlaylist: (state, action: PayloadAction<Playlist | PseudoPlaylist>) => {
-
-            // maybe should only accept pseudoPlaylist in reality,if it is a playlist then turn it into a 
-            // psuedo or think of something for the drag and drop activated playlsit,see what spotify has done
             state.currPlayingIdx = 0
             state.currPlaylist = action.payload
             cachingService.saveCurrentPlaylist(state.currPlaylist)

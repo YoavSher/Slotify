@@ -239,7 +239,7 @@ export const MusicPlayer = () => {
                             </div>
                         </section>
                         <section className="mobile-left" >
-                            <LikeButton song={currSong} />
+                            {/* <LikeButton song={currSong} /> */}
                             <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
                         </section>
                     </>}
@@ -267,7 +267,7 @@ export const MusicPlayer = () => {
                                     <p className="song-name">{currSong.title}</p>
                                     <p className="artist-name">{currSong.artist}</p>
                                 </div>
-                                <LikeButton song={currSong} />
+                                {/* <LikeButton song={currSong} /> */}
                             </section>
                         </section>
                     </>}

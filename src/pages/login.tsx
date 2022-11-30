@@ -28,14 +28,19 @@ export const Login = () => {
     const onLogin = async (ev: React.SyntheticEvent) => {
         ev.preventDefault()
         try {
+
             const user = await userService.login(userCred)
             if (user) dispatch(setUser(user))
+            //if user const songs = await likedSongsService.getSongs(user._id)
+            //recently played playlists = await playlistServie.getRecentleyPlayed(user._id) 
+            // dispatch(setRecentlyPlayed)
+            //dispatch(setLikedSongs(songs))
             onCloseModal()
         } catch (err) {
             console.log(err)
         }
     }
-    
+
     const inputs = [
         { name: 'username', type: 'text', placeholder: 'User name', value: userCred.username },
         { name: 'password', type: 'password', placeholder: 'password', value: userCred.password },

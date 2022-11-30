@@ -18,13 +18,13 @@ const userSlice = createSlice({
             state.loggedInUser = action.payload
         },
         onSongLike: (state, action: PayloadAction<Song>) => {
-            state.loggedInUser?.likedSongs.push(action.payload)
-            // state.loggedInUser?.likedSongsIds.push(action.payload.videoId)
+            // state.loggedInUser?.likedSongs.push(action.payload)
+            // sending to the backend the userId and songId to insert to usersLikedSongs
         },
         onSongDislike: (state, action: PayloadAction<string>) => {
             if (state.loggedInUser) {
-                state.loggedInUser.likedSongs = state.loggedInUser.likedSongs.filter(song => song.videoId !== action.payload)
-                // state.loggedInUser.likedSongsIds = state.loggedInUser.likedSongsIds.filter(id => id !== action.payload)
+                // state.loggedInUser.likedSongs = state.loggedInUser.likedSongs.filter(song => song.videoId !== action.payload)
+                //sending to the backend the userId and songId to delete the song
             }
         }
     }

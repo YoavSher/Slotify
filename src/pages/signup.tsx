@@ -2,7 +2,7 @@ import { MouseEvent, ChangeEvent, useState } from "react"
 import { Helmet } from "react-helmet"
 import { BsSpotify } from "react-icons/bs"
 import { Link, useNavigate } from "react-router-dom"
-import { User, userService } from "../services/user.service"
+import { NewUser, User, userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
 export const Signup = () => {
@@ -19,7 +19,7 @@ export const Signup = () => {
     const onSignUp = async (ev: React.SyntheticEvent) => {
         ev.preventDefault()
         try {
-            const user = await userService.signup(userCred as User)
+            const user = await userService.signup(userCred as NewUser)
             if (user) dispatch(setUser(user))
             onCloseModal()
         } catch (err) {
