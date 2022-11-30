@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { BsPerson } from "react-icons/bs"
 import { useNavigate } from "react-router-dom"
+import { userService } from "../services/user.service"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
 
@@ -15,7 +16,8 @@ export const UserHeaderDisplay = () => {
         setIsModalOpen(prev => !prev)
     }
 
-    const onLogOut = () => {
+    const onLogOut = async () => {
+        await userService.logout()
         dispatch(setUser(null))
     }
 
