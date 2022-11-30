@@ -1,30 +1,38 @@
 import { Song } from "../interfaces/song"
+import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { setUser } from "../store/user/user.reducer"
+import { setLikedSongs, setUser } from "../store/user/user.reducer"
 interface Props {
     song: Song
 }
-export const LikeButton = ({ song }: Props) => {
-    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
+export const LikeButton = ({ song }: Props) => { // should'nt be rendered if there is not loggedinuser
+    const likedSongs = useAppSelector(state => state.user.likedSongs)
     const dispatch = useAppDispatch()
     const toggleSongLike = async (ev: React.MouseEvent<HTMLElement>) => {
-        //     ev.stopPropagation()
-        //     if (loggedInUser) {
-        //         const user = { ...loggedInUser }
-        //         if (isSongLiked()) {
-        //             user.likedSongs = user.likedSongs.filter(currSong => currSong.videoId !== song.videoId)
-        //         } else {
-        //             const currSong = { ...song, addedAt: Date.now() }
-        //             user.likedSongs = [currSong, ...user.likedSongs]
-        //         }
-        //         dispatch(setUser(user))
-        //         await userService.saveUser(user)
-        //     }
+        ev.stopPropagation()
+        if (likedSongs) {
+            let songs
+            try {
+
+                if (isSongLiked()) {
+                    songs = likedSongs.filter(currSong => currSong.videoId !== song.videoId)
+                    //songService.deleteLikedSong(song.videoId)
+                } else {
+                    console.log('liking?')
+                    await songService.addLikedSong(song.videoId)
+                    const currSong = { ...song, addedAt: Date.now() }
+                    songs = [currSong, ...likedSongs]
+                }
+                console.log('dispatching!')
+                dispatch(setLikedSongs(songs))
+            } catch (err) {
+                console.log(err)
+            }
+        }
     }
     const isSongLiked = () => {
-        return false
-        //     return loggedInUser?.likedSongs.some(s => s.videoId === song.videoId)
+        return likedSongs?.some(s => s.videoId === song.videoId)
     }
     return (
         <div className="like-song">

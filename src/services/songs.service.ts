@@ -2,7 +2,9 @@ import { Song } from "../interfaces/song";
 import { httpService } from "./http.service";
 
 export const songService = {
-    addSongs
+    addSongs,
+    getLikedSongs,
+    addLikedSong
 }
 
 
@@ -13,7 +15,24 @@ async function addSongs(songs: Song[]) {
         console.log('err:', err)
     }
 }
+async function getLikedSongs(userId: number) {
+    try {
+        const likedSongs = await httpService.get(`song/user/${userId}`, null)
+        return likedSongs
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
 
-async function getPlaylistSongs(){
-    
+async function addLikedSong(videoId: string) {
+    try {
+        await httpService.post('song/user/', { videoId })
+    } catch (err) {
+        console.log('err:', err)
+    }
+
+}
+
+async function getPlaylistSongs() {
+
 }
