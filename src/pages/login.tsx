@@ -33,7 +33,7 @@ export const Login = () => {
             const user = await userService.login(userCred)
             if (user) {
                 dispatch(setUser(user))
-                const songs = await songService.getLikedSongs(user._id) as PlaylistSong[]
+                const songs = await songService.getLikedSongs(user._id) as Song[]
                 songs.sort((a, b) => +b.addedAt - +a.addedAt)
                 dispatch(setLikedSongs(songs))
             }

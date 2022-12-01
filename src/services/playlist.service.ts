@@ -17,12 +17,12 @@ const gPlaylists = getPlaylists()
 
 async function query() {
     try {
-        let playlists = await storageService.query(STORAGE_KEY)
-        if (!playlists || playlists.length === 0) {
-            playlists = await storageService.postMany(STORAGE_KEY, gPlaylists)
-        }
-        // playlists = gPlaylists
-
+        // let playlists = await storageService.query(STORAGE_KEY)
+        // if (!playlists || playlists.length === 0) {
+        //     playlists = await storageService.postMany(STORAGE_KEY, gPlaylists)
+        // }
+        const playlists = await httpService.get('playlist', null)
+        console.log('playlists:', playlists)
         return playlists
 
     } catch (err) {
@@ -31,7 +31,7 @@ async function query() {
 
 }
 
-async function getPlaylistById(playlistId: string) {
+async function getPlaylistById(playlistId: number) {
     try {
         // const playlist = await storageService.get(STORAGE_KEY, playlistId)
         const playlist = await httpService.get(`playlist/${playlistId}`, null)
@@ -68,9 +68,9 @@ async function updatePlaylist(playlist: Playlist) {
     }
 }
 
-async function removePlaylist(playlistId: string) {
+async function removePlaylist(playlistId: number) {
     try {
-        const updatedPlaylist = await storageService.remove(STORAGE_KEY, playlistId)
+        // const updatedPlaylist = await storageService.remove(STORAGE_KEY, playlistId)
     } catch (err) {
         console.log('err:', err)
     }

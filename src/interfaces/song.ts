@@ -7,11 +7,18 @@ export interface Song {
     artist: string,
     image: string,
     duration: number,
-    addedAt?:number
+    addedAt: number
 }
 
-export interface PlaylistSong extends Song {
-    addedAt: number
+// export interface PlaylistSong extends Song {
+//     addedAt: number
+// }
+
+export interface PlaylistSong {
+    videoId: string,
+    playlistId: number,
+    addedAt: number,
+    idx: number
 }
 
 

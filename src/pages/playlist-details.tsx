@@ -20,14 +20,16 @@ import { Song } from "../interfaces/song"
 import { PlaylistDetailsSearch } from "../cmps/playlist-details-search"
 import { PlaylistDetailsHeader } from "../cmps/playlist-details-header"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { songService } from "../services/songs.service"
 
 export const PlaylistDetails = () => {
 
     const params = useParams()
-    const { playlistId } = params
+    let { playlistId } = params
     const navigate = useNavigate()
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
+    const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [songForModal, setSongForModal] = useState<Song | null>(null)
@@ -41,17 +43,24 @@ export const PlaylistDetails = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
+        loadSongs()
         loadPlaylist()
-    }, [playlistId])
+    }, [playlistId, playlists])
+    // console.log('playlistId :', playlistId)
 
-    const loadPlaylist = async () => {
+    const loadPlaylist = () => {
+        if (playlistId !== undefined && playlists) {
+            const playlist = playlists.find((p: Playlist) => p._id == playlistId)
+            console.log('playlist:', playlist)
+            setCurrPlaylist(playlist)
+        }
+    }
+
+    const loadSongs = async () => {
         if (playlistId) {
             try {
-                if (playlists) {
-                    const playlist = playlists.filter((p: Playlist) => p._id === playlistId)
-                    setCurrPlaylist(playlist[0])
-                }
-
+                const songs = await songService.getPlaylistSongs(+playlistId)
+                if (songs) setSongs(songs)
             } catch (err) {
                 console.log('err:', err)
             }
@@ -78,8 +87,8 @@ export const PlaylistDetails = () => {
     const handleOnDragEnd = async (result: any) => {
         if (currPlaylist) {
             const playlist = structuredClone(currPlaylist)
-            const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
-            playlist.songs.splice(result.destination.index, 0, reorderedItem)
+            // const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
+            // playlist.songs.splice(result.destination.index, 0, reorderedItem)
             // if (storeCurrPlaylist?._id && currPlaylist._id === storeCurrPlaylist._id) {
             //     console.log('hehe')
             // }
@@ -111,7 +120,7 @@ export const PlaylistDetails = () => {
         if (currPlaylist) {
             const newPhoto = await uploadService.uploadImg(ev)
             if (newPhoto) {
-                currPlaylist.imgUrl = newPhoto.url
+                currPlaylist.image = newPhoto.url
                 await playlistService.updatePlaylist(currPlaylist)
                 loadPlaylist()
             }
@@ -150,7 +159,7 @@ export const PlaylistDetails = () => {
     const onRemovePlaylist = async () => {
         if (playlistId) {
             try {
-                await playlistService.removePlaylist(playlistId)
+                // await playlistService.removePlaylist(playlistId)
                 navigate('/')
             } catch (err) {
                 console.log('err:', err)
@@ -159,15 +168,22 @@ export const PlaylistDetails = () => {
     }
 
     const onAddToPlaylist = (song: Song) => {
-        if (currPlaylist) {
-            if (currPlaylist?.songs.some(s => s.videoId === song.videoId)) return
-            const newPlaylist = { ...currPlaylist, songs: [...currPlaylist.songs, song] }
-            setCurrPlaylist((prevState) => {
-                if (prevState !== undefined) {
-                    return { ...prevState, songs: [...prevState.songs, { ...song, addedAt: Date.now() }] }
-                }
-            })
-            onSaveChanges(newPlaylist)
+        // if (currPlaylist) {
+        //     if (currPlaylist?.songs.some(s => s.videoId === song.videoId)) return
+        //     const newPlaylist = { ...currPlaylist, songs: [...currPlaylist.songs, song] }
+        //     setCurrPlaylist((prevState) => {
+        //         if (prevState !== undefined) {
+        //             return { ...prevState, songs: [...prevState.songs, { ...song, addedAt: Date.now() }] }
+        //         }
+        //     })
+        //     onSaveChanges(newPlaylist)
+        // }
+        const { videoId } = song
+        if (songs !== undefined && playlistId !== undefined) {
+            if (songs.some(s => s.videoId === videoId)) return
+            const newSong = {playlistId: +playlistId, videoId, addedAt: Date.now(), idx: songs.length }
+            setSongs([...songs, { ...song, addedAt: Date.now() }])
+            songService.addSongToPlaylist(newSong)
         }
     }
 
@@ -193,7 +209,7 @@ export const PlaylistDetails = () => {
                     </section>}
                 </div>
                 <div className="playlist-details-main-content">
-                    {currPlaylist.songs.length > 0 && <div className="songs-titles-container">
+                    {songs.length > 0 && <div className="songs-titles-container">
                         {screenWidth > 770 && <div className="songs-titles">
                             <div className="hash">#</div>
                             <div className="title">TITLE</div>
@@ -205,7 +221,7 @@ export const PlaylistDetails = () => {
                         <Droppable droppableId="playlist-songs">
 
                             {(provided) => (<div {...provided.droppableProps} ref={provided.innerRef} className="songs-container">
-                                {currPlaylist?.songs?.map((s, idx) => {
+                                {songs?.map((s, idx) => {
                                     return <Draggable key={`${s.videoId}${idx}`} draggableId={`${s.videoId}${idx}`} index={idx}>
                                         {(provided) => (
                                             <article {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>

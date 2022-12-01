@@ -2,9 +2,9 @@ import { MiniUser } from "./mini-user"
 import { Song } from "./song"
 
 export interface Playlist {
-    _id?: string,
+    _id?: number,
     name: string,
-    imgUrl:string,
+    image:string,
     tags: string[],
     createdBy: MiniUser,
     likedByUsers: MiniUser[],
