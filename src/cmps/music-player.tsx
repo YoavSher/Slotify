@@ -1,23 +1,24 @@
-import { Slider } from '@mui/material';
-import React, { ChangeEvent, useRef, useState, useEffect } from 'react';
-import YouTube, { YouTubeProps } from 'react-youtube';
-import { Song } from '../interfaces/song';
-import { utilService } from '../services/util.service';
-import { reorderSongsList, setIsSongPlaying, setPlayingIdx, setPlaylist, } from '../store/music-player/music-player.reducer';
-import { useAppDispatch, useAppSelector } from '../store/store.hooks';
-import { timeSliderOptions, volumeSliderOptions } from '../helpers/slider-component-config';
 import { BiPlay, BiVolumeLow, BiVolumeFull, BiVolume, BiShuffle } from 'react-icons/bi'
+import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
 import { GiPauseButton } from 'react-icons/gi'
 import { TiThListOutline } from 'react-icons/ti'
-import { MdSkipNext, MdSkipPrevious, MdForward10, MdReplay10 } from 'react-icons/md'
-import { useNavigate } from 'react-router-dom';
-import { cachingService } from '../services/music-player-caching.service';
-import { LikeButton } from './like-button';
 import { BsChevronDown } from 'react-icons/bs';
 import { FiRepeat } from 'react-icons/fi';
 import { useSwipeable } from 'react-swipeable';
+import { useNavigate } from 'react-router-dom';
+import React, { useRef, useState, useEffect } from 'react';
+import YouTube, { YouTubeProps } from 'react-youtube';
+import { reorderSongsList, setIsSongPlaying, setPlayingIdx, setPlaylist } from '../store/music-player/music-player.reducer';
+import { useAppDispatch, useAppSelector } from '../store/store.hooks';
+import { timeSliderOptions, volumeSliderOptions } from '../helpers/slider-component-config';
+import { utilService } from '../services/util.service';
+import { Song } from '../interfaces/song';
+import { cachingService } from '../services/music-player-caching.service';
+import { LikeButton } from './like-button';
+import { Slider } from '@mui/material';
 
 export const MusicPlayer = () => {
+
     const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
@@ -28,17 +29,15 @@ export const MusicPlayer = () => {
 
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
-
     const playingTimeFromCache = useRef<number | null>()
-    const [isOpen, setIsOpen] = useState(false)
-
+    const [isMobileFullScreen, setIsMobileFullScreen] = useState(false)
 
     useEffect(() => {
-        const idx = cachingService.getPlayingIdx()
         const playlist = cachingService.getPlaylist()
         const volume = cachingService.getCurrentVolume()
-        if (volume !== undefined && volume !== null) onVolumeChange(volume)
-        if (typeof idx === 'number' && playlist) {
+        if (volume || volume === 0) onVolumeChange(volume)
+        if (playlist) {
+            const idx = cachingService.getPlayingIdx()
             dispatch(setPlaylist(playlist))
             dispatch(setPlayingIdx(idx))
             const playingTime = cachingService.getPlayingTime()
@@ -47,19 +46,20 @@ export const MusicPlayer = () => {
     }, [])
 
     useEffect(() => {
+        window.clearInterval(durationIntervalId.current)
         if (isSongPlaying) {
             playerRef.current?.playVideo()
-            window.clearInterval(durationIntervalId.current)
             durationInterval()
         } else {
             playerRef.current?.pauseVideo()
+        }
+        return () => {
             window.clearInterval(durationIntervalId.current)
         }
-        // should do a useeffect on the currPlayingidx if it changes but the song is'nt changing i should restart
     }, [isSongPlaying])
 
     const [songTimer, setSongTimer] = useState(0)
-    const prevVolume = useRef(50)
+
     const [volume, setVolume] = useState(50)
     const [isShuffled, setIsShuffled] = useState(false)
     const [isLoopingEnabled, setIsLoopingEnabled] = useState(false)
@@ -68,15 +68,14 @@ export const MusicPlayer = () => {
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         playerRef.current = ev.target
         if (playingTimeFromCache.current) {
-            console.log('gettin here')
             setSongTimer(playingTimeFromCache.current)
             playerRef.current.seekTo(playingTimeFromCache.current / 1000)
             playingTimeFromCache.current = null
-            pauseVideo()
+            pauseSong()
         } else {
             onVolumeChange(playerRef.current.playerInfo.volume)
             setSongTimer(0)
-            startVideo()
+            playSong()
         }
 
     }
@@ -88,7 +87,8 @@ export const MusicPlayer = () => {
                 if (!isLoopingEnabled) {
                     dispatch(setPlayingIdx(songIdx + 1))
                     window.clearInterval(durationIntervalId.current)
-                } else startVideo()
+                    pauseSong()
+                } else playSong()
             } else {
                 const currTime = playerRef.current.getCurrentTime() * 1000
                 setSongTimer(currTime)
@@ -104,44 +104,34 @@ export const MusicPlayer = () => {
 
     const onClickPlay = (ev: React.MouseEvent<HTMLElement>) => {
         ev.stopPropagation()
-        // setIsOpen(false)
-        if (isSongPlaying) pauseVideo()
-        else startVideo()
+        dispatch(setIsSongPlaying(!isSongPlaying))
     }
 
-    const startVideo = () => {
-        playerRef.current.playVideo()
+    const playSong = () => {
+        dispatch(setIsSongPlaying(true))
+        playerRef.current?.playVideo()
         window.clearInterval(durationIntervalId.current)
         durationInterval()
-        dispatch(setIsSongPlaying(true))
     }
 
-    const pauseVideo = () => {
-        playerRef.current.pauseVideo()
+    const pauseSong = () => {
         window.clearInterval(durationIntervalId.current)
         dispatch(setIsSongPlaying(false))
-    }
-
-    const toggleMute = () => {
-        if (volume) mute()
-        else unMute()
-    }
-
-
-    const unMute = () => {
-        onVolumeChange(prevVolume.current)
-    }
-
-    const mute = () => {
-        prevVolume.current = volume
-        onVolumeChange(0)
+        playerRef.current?.pauseVideo()
     }
 
     const onVolumeChange = (newVolume: number) => {
-        prevVolume.current = volume
-        if (playerRef.current) playerRef.current.setVolume(newVolume)
+        playerRef.current?.setVolume(newVolume)
         setVolume(newVolume)
         cachingService.saveCurrentVolume(newVolume)
+    }
+    const prevVolume = useRef(50)
+
+    const toggleMute = () => {
+        if (volume) {
+            prevVolume.current = volume
+            onVolumeChange(0)
+        } else onVolumeChange(prevVolume.current)
     }
 
     const seekTo = (timeInSeconds: number) => {
@@ -156,12 +146,10 @@ export const MusicPlayer = () => {
         const later = () => {
             window.clearTimeout(timeBarDebounceId.current)
             seekTo(time)
-            startVideo()
-        }
+            if (isSongPlaying) playSong()
 
-        console.log(songTimer)
+        }
         setSongTimer(time * 1000)
-        playerRef.current.pauseVideo()
         window.clearInterval(durationIntervalId.current)
         window.clearTimeout(timeBarDebounceId.current)
         timeBarDebounceId.current = window.setTimeout(later, 1000)
@@ -171,7 +159,6 @@ export const MusicPlayer = () => {
         if (isShuffled) unShuffleSongs()
         else shuffleSongs()
     }
-
 
     const shuffleSongs = () => {
         unShuffledSongs.current = playlist.songs
@@ -187,14 +174,17 @@ export const MusicPlayer = () => {
     }
 
     const onIndexIncrement = () => {
-        pauseVideo()
-        playerRef.current = null
-        dispatch(setPlayingIdx(songIdx + 1))
+        onIndexChange(1)
     }
+
     const onIndexDecrement = () => {
-        pauseVideo()
+        onIndexChange(-1)
+    }
+
+    const onIndexChange = (num: number) => {
+        pauseSong()
         playerRef.current = null
-        dispatch(setPlayingIdx(songIdx - 1))
+        dispatch(setPlayingIdx(songIdx + num))
     }
 
     const opts = {
@@ -223,13 +213,15 @@ export const MusicPlayer = () => {
     const handlers = useSwipeable({
         onSwipedRight: () => { onIndexDecrement() },
         onSwipedLeft: () => { onIndexIncrement() },
-    });
+    })
+
+    const isMobile = screenWidth <= 770
 
     return (
         <>
             {currSong && <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />}
-            {(screenWidth < 770 && !isOpen) ? (
-                <footer onClick={() => { setIsOpen(true) }} className="music-player mobile">
+            {(isMobile && !isMobileFullScreen) ? (
+                <footer onClick={() => { setIsMobileFullScreen(true) }} className="music-player mobile">
                     {currSong && <>
                         <section className="mobile-right">
                             <img className="song-image" src={currSong.image} alt="" />
@@ -240,7 +232,10 @@ export const MusicPlayer = () => {
                         </section>
                         <section className="mobile-left" >
                             <LikeButton song={currSong} />
-                            <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
+                            <button title={isSongPlaying ? 'Pause' : 'Play'}
+                                className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`}
+                                onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}
+                            </button>
                         </section>
                     </>}
                     <section className="time-container">
@@ -256,8 +251,9 @@ export const MusicPlayer = () => {
                         />
                     </section>
                 </footer>)
-                : (<footer className={`${(isOpen && screenWidth < 770) ? 'full' : ''} music-player`}>
-                    {isOpen && screenWidth < 770 && <button className="close-modal-btn" onClick={() => { setIsOpen(false) }}><BsChevronDown /> </button>}
+                : (<footer className={`${(isMobileFullScreen && isMobile) ? 'full' : ''} music-player`}>
+                    {isMobileFullScreen && isMobile && <button className="close-modal-btn"
+                        onClick={() => { setIsMobileFullScreen(false) }}><BsChevronDown /> </button>}
                     <section {...handlers} className="left-section">
                         {currSong && <>
                             <img className="song-image" src={currSong.image} alt="" />
@@ -275,11 +271,11 @@ export const MusicPlayer = () => {
                     <div className="main-player">
                         <section className="buttons-container">
                             <button title="Shuffle" onClick={toggleSongsShuffle} className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`} ><BiShuffle /></button>
-                            {/* <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button> */}
+                            {!isMobile && <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>}
                             <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
                             <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
                             <button title="Next" onClick={onIndexIncrement} ><MdSkipNext /></button>
-                            {/* <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button> */}
+                            {!isMobile && <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>}
                             <button onClick={() => setIsLoopingEnabled(prev => !prev)} className={`repeat-btn ${(isLoopingEnabled) ? 'repeat' : ''}`} title="Repeat"><FiRepeat /></button>
                         </section>
                         <section className="time-container">
@@ -303,7 +299,9 @@ export const MusicPlayer = () => {
                         <button onClick={() => navigate('/queue')} className="queue-btn"><TiThListOutline /></button>
                         <button className="volume-btn" onClick={toggleMute} >{getVolumeIcon()}</button>
                         <Slider
-                            min={0} max={100} value={volume} onChange={(_, value) => onVolumeChange(value as number)}
+                            min={0}
+                            max={100}
+                            value={volume} onChange={(_, value) => onVolumeChange(value as number)}
                             sx={volumeSliderOptions}
                         />
                     </section>

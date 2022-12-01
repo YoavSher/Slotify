@@ -19,7 +19,6 @@ export const SearchBar = ({ fromResults }: Props) => {
     const location = useLocation()
     const params = useParams()
     const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
-    console.log('searchTerm:', searchTerm)
     // const { searchTerm } = params
     // const [searchTerm, setSearchTerm] = useState('')
     useEffect(() => {
