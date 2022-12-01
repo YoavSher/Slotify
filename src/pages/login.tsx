@@ -30,7 +30,6 @@ export const Login = () => {
     const onLogin = async (ev: React.SyntheticEvent) => {
         ev.preventDefault()
         try {
-
             const user = await userService.login(userCred)
             if (user) {
                 dispatch(setUser(user))

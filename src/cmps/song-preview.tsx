@@ -27,7 +27,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
 
-    const isCurrSong = song.videoId === playlist?.songs[currPlayingIdx].videoId
+    const isCurrSong = song.videoId === playlist?.songs[currPlayingIdx]?.videoId
     const isMobile = screenWidth <= 770
 
     const isThisSongPlaying = () => {
