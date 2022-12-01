@@ -47,11 +47,10 @@ export const PlaylistDetails = () => {
     const loadPlaylist = async () => {
         if (playlistId) {
             try {
-                // const playlist = await playlistService.getPlaylistById(playlistId)
-                // const playlist = playlists.filter(p=>p._id===playlistId)
-                // const playlistSongs = await playlistService.getSongs()
-
-                // setCurrPlaylist(playlist)
+                if (playlists) {
+                    const playlist = playlists.filter((p: Playlist) => p._id === playlistId)
+                    setCurrPlaylist(playlist[0])
+                }
 
             } catch (err) {
                 console.log('err:', err)
