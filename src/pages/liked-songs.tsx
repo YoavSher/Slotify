@@ -21,12 +21,15 @@ export const LikedSongs = () => {
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const isMobile = screenWidth <= 770
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
+    const LIKED_SONGS_PLAYLIST_ID = 0
 
 
 
     //maybe the screensiwdth should be a hook that returns isMobile directly and all the components can just use this
     const onSetPlaylist = () => {
-        if (loggedInUser && likedSongs) dispatch(setPlaylist({ songs: likedSongs }))
+        if (loggedInUser && likedSongs) {
+            dispatch(setPlaylist({ songs: likedSongs, playlistId: LIKED_SONGS_PLAYLIST_ID }))
+        }
     }
 
     const playSongFromPlaylist = (index: number) => {

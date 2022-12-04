@@ -18,7 +18,7 @@ import { useSongModal } from "../hooks/useSongModal"
 export const SearchResults = () => {
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-    const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
+    const queueSongs = useAppSelector(state => state.musicPlayer.songs)
     const dispatch = useAppDispatch()
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
@@ -39,12 +39,12 @@ export const SearchResults = () => {
     const isThisSongPlaying = () => {
 
         if (searchResults) {
-            return isSongPlaying && searchResults[0].videoId === playlist.songs[0].videoId
+            return isSongPlaying && searchResults[0].videoId === queueSongs[0].videoId
         }
     }
     const onClickPlay = () => {
         if (searchResults) {
-            if (!isSongPlaying && searchResults[0].videoId === playlist.songs[0]?.videoId) dispatch(setIsSongPlaying(true))
+            if (!isSongPlaying && searchResults[0].videoId === queueSongs[0]?.videoId) dispatch(setIsSongPlaying(true))
             else if (isThisSongPlaying()) dispatch(setIsSongPlaying(false))
             else dispatch(replacePlaylist(searchResults[0]))
         }

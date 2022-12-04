@@ -26,7 +26,7 @@ import { songService } from "../services/songs.service"
 export const PlaylistDetails = () => {
 
     const params = useParams()
-    let { playlistId } = params
+    let playlistId = params.playlistId ? +params.playlistId : null
     const navigate = useNavigate()
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
@@ -35,11 +35,13 @@ export const PlaylistDetails = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-    const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
+    
+    const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const playlists = useAppSelector(state => state.playlist.playlists)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const storeCurrPlaylist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
+
+    const isCurrPlaylistOnQueue = (currPlaylist) ? currPlaylist._id === queuePlaylistId : false
     const isMobile = screenWidth <= 770
 
     useEffect(() => {
@@ -50,7 +52,7 @@ export const PlaylistDetails = () => {
 
     const loadPlaylist = () => {
         if (playlistId !== undefined && playlists) {
-            const playlist = playlists.find((p: Playlist) => p._id == playlistId)
+            const playlist = playlists.find((p: Playlist) => p._id === playlistId)
             console.log('playlist:', playlist)
             setCurrPlaylist(playlist)
         }
@@ -59,7 +61,7 @@ export const PlaylistDetails = () => {
     const loadSongs = async () => {
         if (playlistId) {
             try {
-                const songs = await songService.getPlaylistSongs(+playlistId)
+                const songs = await songService.getPlaylistSongs(playlistId)
                 if (songs) setSongs(songs)
             } catch (err) {
                 console.log('err:', err)
@@ -107,25 +109,26 @@ export const PlaylistDetails = () => {
     }
 
     const isPlaylistPlaying = () => {
-        if (currPlaylist) {
-            if (currPlaylist._id === playlist._id && isSongPlaying) return true
-            else if (currPlaylist._id === playlist._id && !isSongPlaying) return false
+        if (queuePlaylistId) {
+            if (isCurrPlaylistOnQueue && isSongPlaying) return true
+            else if (isCurrPlaylistOnQueue && !isSongPlaying) return false
         }
+        return false
     }
 
     const onSetPlaylist = () => {
-        if (currPlaylist) {
-            if (currPlaylist._id === playlist._id && isSongPlaying) {
+        if (currPlaylist && queuePlaylistId && playlistId) {
+            if (isCurrPlaylistOnQueue && isSongPlaying) {
                 dispatch(setIsSongPlaying(false))
-            } else if (currPlaylist._id === playlist._id && !isSongPlaying) {
+            } else if (isCurrPlaylistOnQueue && !isSongPlaying) {
                 dispatch(setIsSongPlaying(true))
-            } else dispatch(setPlaylist(currPlaylist))
+            } else dispatch(setPlaylist({ songs, playlistId }))
         }
     }
 
     const playSongFromPlaylist = (index: number) => {
-        if (currPlaylist) {
-            dispatch(setPlaylist(currPlaylist))
+        if (currPlaylist && playlistId) {
+            dispatch(setPlaylist({ songs, playlistId }))
             dispatch(setPlayingIdx(index))
         }
     }
@@ -147,21 +150,14 @@ export const PlaylistDetails = () => {
     }
 
     const onAddToPlaylist = (song: Song) => {
-        // if (currPlaylist) {
-        //     if (currPlaylist?.songs.some(s => s.videoId === song.videoId)) return
-        //     const newPlaylist = { ...currPlaylist, songs: [...currPlaylist.songs, song] }
-        //     setCurrPlaylist((prevState) => {
-        //         if (prevState !== undefined) {
-        //             return { ...prevState, songs: [...prevState.songs, { ...song, addedAt: Date.now() }] }
-        //         }
-        //     })
-        //     onSaveChanges(newPlaylist)
-        // }
+
         const { videoId } = song
-        if (songs !== undefined && playlistId !== undefined) {
+        if (songs !== undefined && playlistId) {
             if (songs.some(s => s.videoId === videoId)) return
-            const newSong = {playlistId: +playlistId, videoId, addedAt: Date.now(), idx: songs.length }
-            setSongs([...songs, { ...song, addedAt: Date.now() }])
+            const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
+            setSongs(prevState => {
+                return [...prevState, { ...song, addedAt: Date.now() }]
+            })
             songService.addSongToPlaylist(newSong)
         }
     }

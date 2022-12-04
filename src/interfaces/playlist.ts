@@ -4,9 +4,9 @@ import { Song } from "./song"
 export interface Playlist {
     _id?: number,
     name: string,
-    image: string,
-    // createdBy: MiniUser,
-
+    image:string,
+    creatorId: number,
+    // likedByUsers: MiniUser[],
 }
 
 

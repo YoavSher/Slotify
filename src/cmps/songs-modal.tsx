@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom"
 import { useSongLikingSystem } from "../hooks/useSongLikingSystem"
 
 import { Song } from "../interfaces/song"
-import { addToPlaylist, removeSong } from "../store/music-player/music-player.reducer"
+import { addToQueue } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { AddToPlaylistModal } from "./add-to-playlist-modal"
 
@@ -30,7 +30,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
     const [addModal, setAddModal] = useState(false)
     const dispatch = useAppDispatch()
     const addSongToQueue = () => {
-        if (song) dispatch(addToPlaylist(song))
+        if (song) dispatch(addToQueue(song))
         closeModal()
     }
 

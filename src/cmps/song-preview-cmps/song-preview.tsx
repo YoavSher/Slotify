@@ -3,7 +3,7 @@ import { useState } from "react"
 import { HiOutlineDotsHorizontal } from "react-icons/hi"
 import { PlaylistSong, Song } from "../../interfaces/song"
 import { utilService } from "../../services/util.service"
-import { addToPlaylist, removeSong, replacePlaylist, setIsSongPlaying, setPlayingIdx } from "../../store/music-player/music-player.reducer"
+import { replacePlaylist, setIsSongPlaying, setPlayingIdx } from "../../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
 import { LikeButton } from "../like-button"
 import { SongPreviewIndex } from "./song-preview-index"
@@ -23,12 +23,12 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
-    const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
+    const queueSongs = useAppSelector(state => state.musicPlayer.songs)
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
 
 
-    const isCurrSong = song.videoId === playlist?.songs[currPlayingIdx]?.videoId
+    const isCurrSong = song.videoId === queueSongs[currPlayingIdx]?.videoId
     const isMobile = screenWidth <= 770
     const isThisSongPlaying = (type === 'queue') ?
         isSongPlaying && currPlayingIdx === index &&

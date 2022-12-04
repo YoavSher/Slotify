@@ -19,11 +19,11 @@ import { Slider } from '@mui/material';
 
 export const MusicPlayer = () => {
 
-    const songIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
-    const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
+    const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
+    const queueSongs = useAppSelector(state => state.musicPlayer.songs)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const currSong = playlist?.songs[songIdx]
+    const currSong = queueSongs[currPlayingIdx]
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -33,16 +33,16 @@ export const MusicPlayer = () => {
     const [isMobileFullScreen, setIsMobileFullScreen] = useState(false)
 
     useEffect(() => {
-        const playlist = cachingService.getPlaylist()
-        const volume = cachingService.getCurrentVolume()
-        if (volume || volume === 0) onVolumeChange(volume)
-        if (playlist) {
-            const idx = cachingService.getPlayingIdx()
-            dispatch(setPlaylist(playlist))
-            dispatch(setPlayingIdx(idx))
-            const playingTime = cachingService.getPlayingTime()
-            playingTimeFromCache.current = playingTime
-        }
+        // const playlist = cachingService.getPlaylist()
+        // const volume = cachingService.getCurrentVolume()
+        // if (volume || volume === 0) onVolumeChange(volume)
+        // if (playlist) {
+        //     const idx = cachingService.getPlayingIdx()
+            // dispatch(setPlaylist(playlist))
+        //     dispatch(setPlayingIdx(idx))
+        //     const playingTime = cachingService.getPlayingTime()
+        //     playingTimeFromCache.current = playingTime
+        // }
     }, [])
 
     useEffect(() => {
@@ -85,7 +85,7 @@ export const MusicPlayer = () => {
             if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
                 setSongTimer(0)
                 if (!isLoopingEnabled) {
-                    dispatch(setPlayingIdx(songIdx + 1))
+                    dispatch(setPlayingIdx(currPlayingIdx + 1))
                     window.clearInterval(durationIntervalId.current)
                     pauseSong()
                 } else playSong()
@@ -156,9 +156,9 @@ export const MusicPlayer = () => {
     }
 
     const shuffleSongs = () => {
-        unShuffledSongs.current = playlist.songs
-        const beforePlayingIdx = playlist.songs.slice(0, songIdx + 1)
-        const afterPlayingIdx = utilService.shuffle(playlist.songs.slice(songIdx + 1))
+        unShuffledSongs.current = queueSongs
+        const beforePlayingIdx = queueSongs.slice(0, currPlayingIdx + 1)
+        const afterPlayingIdx = utilService.shuffle(queueSongs.slice(currPlayingIdx + 1))
         setIsShuffled(true)
         dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
     }
@@ -179,7 +179,7 @@ export const MusicPlayer = () => {
     const onIndexChange = (num: number) => {
         pauseSong()
         playerRef.current = null
-        dispatch(setPlayingIdx(songIdx + num))
+        dispatch(setPlayingIdx(currPlayingIdx + num))
     }
 
     const opts = {

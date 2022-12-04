@@ -43,21 +43,9 @@ async function getPlaylistById(playlistId: number) {
 }
 //adjustments
 async function createPlaylist() {
-    // const newPlaylist = {
-    //     name: 'New Playlist',
-    //     imgUrl: 'https://thumbs.dreamstime.com/b/music-background-panorama-13786355.jpg',
-    //     tags: [],
-    //     createdBy: {
-    //         _id: "u101",
-    //         fullName: "Puki Ben David",
-    //         imgUrl: "http://some-photo/"
-    //     },
-    //     likedByUsers: [],
-    //     songs: []
-    // } as Playlist
-    // await storageService.post(STORAGE_KEY, newPlaylist)
-    await httpService.post('playlist/', null)
-    // return newPlaylist
+
+    const newPlaylist = await httpService.post('playlist/', null)
+    return newPlaylist
 }
 
 async function updatePlaylist(playlist: Playlist) {
