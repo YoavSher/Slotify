@@ -78,6 +78,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
                 <button onClick={addSongToQueue}>Add to queue</button>
                 <button onClick={removeSongFromQueue}>Remove from queue</button>
                 {likedSongs && <button onClick={toggleSongLike} >{(isSongLiked) ? 'Remove song from liked songs' : 'Add song to liked songs'}</button>}
+                <button>Remove from Playlist</button>
                 <button onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
                     Add to playlist <span><AiFillCaretRight /></span></button>
                 {addModal &&

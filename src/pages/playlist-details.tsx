@@ -35,7 +35,7 @@ export const PlaylistDetails = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-    
+
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const playlists = useAppSelector(state => state.playlist.playlists)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
@@ -98,13 +98,20 @@ export const PlaylistDetails = () => {
     }
 
     const onChangePhoto = async (ev: ChangeEvent<HTMLInputElement>) => {
-        if (currPlaylist) {
+        try {
             const newPhoto = await uploadService.uploadImg(ev)
-            if (newPhoto) {
-                currPlaylist.image = newPhoto.url
-                await playlistService.updatePlaylist(currPlaylist)
-                loadPlaylist()
+            if (currPlaylist) {
+                if (newPhoto) {
+                    setCurrPlaylist(prevState => {
+                        if (prevState) {
+                            return { ...prevState, image: newPhoto.url }
+                        }
+                    })
+                    onSaveChanges({ ...currPlaylist, image: newPhoto.url })
+                }
             }
+        } catch (err) {
+            console.log('err:', err)
         }
     }
 
@@ -117,7 +124,7 @@ export const PlaylistDetails = () => {
     }
 
     const onSetPlaylist = () => {
-        if (currPlaylist && queuePlaylistId && playlistId) {
+        if (currPlaylist && playlistId) {
             if (isCurrPlaylistOnQueue && isSongPlaying) {
                 dispatch(setIsSongPlaying(false))
             } else if (isCurrPlaylistOnQueue && !isSongPlaying) {
@@ -141,7 +148,7 @@ export const PlaylistDetails = () => {
     const onRemovePlaylist = async () => {
         if (playlistId) {
             try {
-                // await playlistService.removePlaylist(playlistId)
+                await playlistService.removePlaylist(playlistId)
                 navigate('/')
             } catch (err) {
                 console.log('err:', err)

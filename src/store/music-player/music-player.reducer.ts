@@ -32,7 +32,7 @@ const musicPlayerSlice = createSlice({
         removeFromQueue: (state, action: PayloadAction<string>) => {
             const idx = state.songs.findIndex(song => song.id === action.payload)
             state.songs.splice(idx, 1)
-            state.playlistId = null
+            // state.playlistId = null
             // cachingService.saveCurrentPlaylist(state.songs)
         },
         reorderSongsList: (state, action: PayloadAction<Song[]>) => {
@@ -42,11 +42,11 @@ const musicPlayerSlice = createSlice({
         },
         setIsSongPlaying: (state, action: PayloadAction<boolean>) => {
             state.isSongPlaying = action.payload
-            state.playlistId = null
+            // state.playlistId = null
         },
         addToQueue: ((state, action: PayloadAction<Song>) => {
             state.songs.push(action.payload)
-            state.playlistId = null
+            // state.playlistId = null
             // cachingService.saveCurrentPlaylist(state.currPlaylist)
         }),
         replacePlaylist: ((state, action: PayloadAction<Song>) => {
