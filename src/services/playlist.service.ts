@@ -3,12 +3,14 @@ import { storageService } from "./async-storage.service";
 import { httpService } from "./http.service";
 import { getPlaylists } from "./playlist.data";
 
+
 export const playlistService = {
     query,
     getPlaylistById,
     createPlaylist,
     updatePlaylist,
-    removePlaylist
+    removePlaylist,
+    reIndexPlaylistSongs
 }
 
 const STORAGE_KEY = 'playlists'
@@ -56,6 +58,21 @@ async function updatePlaylist(playlist: Playlist) {
 async function removePlaylist(playlistId: number) {
     try {
         const updatedPlaylist = await httpService.delete(`playlist/${playlistId}`, null)
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+interface reIndexInfo {
+    playlistId: number,
+    videoId: string,
+    sourceIdx: number,
+    destinationIdx: number
+}
+
+async function reIndexPlaylistSongs(reIndexInfo: reIndexInfo) {
+    try {
+        await httpService.put(`song/playlist/${reIndexInfo.playlistId}`,reIndexInfo)
     } catch (err) {
         console.log('err:', err)
     }

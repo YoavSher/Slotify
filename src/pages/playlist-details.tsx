@@ -70,12 +70,22 @@ export const PlaylistDetails = () => {
     }
 
     const handleOnDragEnd = async (result: any) => {
-        if (currPlaylist) {
-            const playlist = structuredClone(currPlaylist)
-            const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
-            playlist.songs.splice(result.destination.index, 0, reorderedItem)
-            setCurrPlaylist(playlist)
-            await playlistService.updatePlaylist(playlist)
+        if (playlistId) {
+            try {
+                const updatedSongs = [...songs]
+                // const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
+                const sourceIdx = result.source.index
+                const destinationIdx = result.destination.index
+                const [reorderedItem] = updatedSongs.splice(sourceIdx, 1)
+                console.log('reorderedItem:', reorderedItem)
+                const { videoId } = reorderedItem
+                // playlist.songs.splice(result.destination.index, 0, reorderedItem)
+                updatedSongs.splice(destinationIdx, 0, reorderedItem)
+                await playlistService.reIndexPlaylistSongs({playlistId, videoId, sourceIdx, destinationIdx})
+                setSongs(updatedSongs)
+            } catch (err) {
+                console.log('err:', err)
+            }
         }
     }
 
@@ -169,6 +179,16 @@ export const PlaylistDetails = () => {
         }
     }
 
+    const removeSongFromPlaylist = (song: Song) => {
+        // console.log('songId:', songId)
+        if (playlistId) {
+            setSongs(prevState => {
+                return prevState.filter(s => s.videoId !== song.videoId)
+            })
+            songService.removeFromPlaylist(song.videoId, playlistId)
+        }
+    }
+
     if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>
     return (
         <section className="playlist-details" onScroll={closeModal} onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
@@ -227,7 +247,8 @@ export const PlaylistDetails = () => {
                 closeModal={closeModal}
                 song={songForModal}
                 modalPos={modalPos}
-                isMobile={isMobile} />}
+                isMobile={isMobile}
+                removeSongFromPlaylist={removeSongFromPlaylist} />}
             <PlaylistDetailsSearch screenWidth={screenWidth} playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
             <div className="pusher"></div>
         </section>

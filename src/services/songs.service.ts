@@ -7,7 +7,8 @@ export const songService = {
     addLikedSong,
     removeLikedSong,
     getPlaylistSongs,
-    addSongToPlaylist
+    addSongToPlaylist,
+    removeFromPlaylist
 }
 
 
@@ -47,6 +48,15 @@ async function addSongToPlaylist(song: PlaylistSong) {
     console.log('song:', song)
     try {
         await httpService.post(`song/playlist/`, song)
+        // return songs as Song[]
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+async function removeFromPlaylist(songId: string, playlistId: number) {
+    try {
+        await httpService.delete(`song/playlist/${playlistId}/${songId}`, null)
         // return songs as Song[]
     } catch (err) {
         console.log('err:', err)

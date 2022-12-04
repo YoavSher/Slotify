@@ -14,11 +14,12 @@ interface Props {
     closeModal: any,
     modalPos: { left: number, top: number },
     isMobile: boolean,
+    removeSongFromPlaylist?: any
     // type:string,
     // index?:number
 }
 
-export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
+export const SongsModal = ({ song, closeModal, modalPos, isMobile, removeSongFromPlaylist }: Props) => {
     //the first song of the queue shouldnt have the option to be removed from the queue ,
     // all rhe other songs in the queue should be and only them should have the option displayed of removing the idnex
     // inside a playlist should have the option to remove from this playlist,
@@ -37,7 +38,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
     const likedSongs = useAppSelector(state => state.user.likedSongs)
 
     const removeSongFromQueue = () => {
-        if (typeof song?.index === 'number') dispatch(removeFromQueue(song.index))
+        if (typeof song?.idx === 'number') dispatch(removeFromQueue(song.idx))
         // generally if i have the index i should have no problem of removing
         // i just have to splice.
         closeModal()
@@ -75,9 +76,9 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
                     <p className="artist-name">{song?.artist}</p>
                 </section>}
                 <button onClick={addSongToQueue}>Add to queue</button>
-                {typeof song?.index === 'number' && <button onClick={removeSongFromQueue}>Remove from queue</button>}
+                {typeof song?.idx === 'number' && <button onClick={removeSongFromQueue}>Remove from queue</button>}
                 {likedSongs && <button onClick={toggleSongLike} >{(isSongLiked) ? 'Remove song from liked songs' : 'Add song to liked songs'}</button>}
-                <button>Remove from Playlist</button>
+                {<button onClick={() => removeSongFromPlaylist(song)}>Remove from Playlist</button>}
                 <button onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
                     Add to playlist <span><AiFillCaretRight /></span></button>
                 {addModal &&
