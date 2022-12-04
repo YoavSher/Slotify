@@ -12,14 +12,15 @@ import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 import { Playlist } from "../interfaces/playlist"
 import { playlistService } from "../services/playlist.service"
 import { uploadService } from "../services/upload.service"
-import { SongPreview } from "../cmps/song-preview"
+import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { setIsSongPlaying, setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
-import { PlaylistDetailsSearch } from "../cmps/playlist-details-search"
-import { PlaylistDetailsHeader } from "../cmps/playlist-details-header"
+import { PlaylistDetailsSearch } from "../cmps/playlist-details-cmps/playlist-details-search"
+import { PlaylistDetailsHeader } from "../cmps/playlist-details-cmps/playlist-details-header"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { useSongModal } from "../hooks/useSongModal"
 
 export const PlaylistDetails = () => {
 
@@ -29,9 +30,7 @@ export const PlaylistDetails = () => {
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [songForModal, setSongForModal] = useState<Song | null>(null)
-    const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
@@ -39,6 +38,7 @@ export const PlaylistDetails = () => {
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const storeCurrPlaylist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
+    const isMobile = screenWidth <= 770
 
     useEffect(() => {
         loadPlaylist()
@@ -58,32 +58,11 @@ export const PlaylistDetails = () => {
         }
     }
 
-    const toggleModal = (ev: any, song: Song) => {
-        ev.stopPropagation()
-        const { left, top } = ev.target.getBoundingClientRect()
-        setModalPos({ left, top })
-        if (songForModal?.id === song.id) closeModal()
-        else openModal(song)
-    }
-
-    const openModal = (song: Song) => {
-        setSongForModal(song)
-        setIsModalOpen(true)
-    }
-
-    const closeModal = () => {
-        setSongForModal(null)
-        setIsModalOpen(false)
-    }
     const handleOnDragEnd = async (result: any) => {
         if (currPlaylist) {
             const playlist = structuredClone(currPlaylist)
             const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
             playlist.songs.splice(result.destination.index, 0, reorderedItem)
-            // if (storeCurrPlaylist?._id && currPlaylist._id === storeCurrPlaylist._id) {
-            //     console.log('hehe')
-            // }
-            // dispatch(reorderSongsList(songs)) // if this playlist is playing!
             setCurrPlaylist(playlist)
             await playlistService.updatePlaylist(playlist)
         }
@@ -182,7 +161,7 @@ export const PlaylistDetails = () => {
                 onChangePhoto={onChangePhoto}
                 onChangeTitle={onChangeTitle}
                 onSaveChanges={onSaveChanges}
-                screenWidth={screenWidth} />
+                isMobile={isMobile} />
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
                     <button className="play-btn" onClick={onSetPlaylist}>
@@ -194,7 +173,7 @@ export const PlaylistDetails = () => {
                 </div>
                 <div className="playlist-details-main-content">
                     {currPlaylist.songs.length > 0 && <div className="songs-titles-container">
-                        {screenWidth > 770 && <div className="songs-titles">
+                        {!isMobile && <div className="songs-titles">
                             <div className="hash">#</div>
                             <div className="title">TITLE</div>
                             <div className="date">DATE ADDED</div>
@@ -225,11 +204,11 @@ export const PlaylistDetails = () => {
                     </DragDropContext>
                 </div>
             </div>
-            {isModalOpen && <SongsModal
+            {isModalOpen && songForModal && <SongsModal
                 closeModal={closeModal}
                 song={songForModal}
                 modalPos={modalPos}
-                screenWidth={screenWidth} />}
+                isMobile={isMobile} />}
             <PlaylistDetailsSearch screenWidth={screenWidth} playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
             <div className="pusher"></div>
         </section>

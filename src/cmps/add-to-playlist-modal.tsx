@@ -8,41 +8,32 @@ interface Props {
     song: Song | null,
     modalPos: { left: number, top: number },
     onOpenAddModal: Function,
-    screenWidth?: number,
+    isMobile: boolean,
     toggleModalMobile: Function
 }
 
-export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, screenWidth }: Props) => {
-
+export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile }: Props) => {
 
     const playlists = useAppSelector(state => state.playlist.playlists)
     const [filteredPlaylists, setFilteredPlaylists] = useState(playlists)
 
     const calcModalPos = () => {
-        if (isMobile()) {
-            return {
-                left: '0',
-                top: '0'
-            }
-        }
-        return {
+        if (isMobile) return { left: '0', top: '0' }
+        else return {
             left: `${modalPos.left - 363}px`,
             top: `${modalPos.top - 155}px`
         }
     }
-    const isMobile = () => {
-        return (screenWidth !== undefined && screenWidth < 770)
-    }
+
     const onAddToPlaylist = async (playlistId: string | undefined) => {
         try {
-
             if (playlistId) {
                 const playlist = await playlistService.getPlaylistById(playlistId)
-                const s = { ...song, addedAt: Date.now() }
                 if (playlist.songs.some((currSong: Song) => currSong.videoId === song?.videoId)) return
+                const s = { ...song, addedAt: Date.now() }
                 playlist.songs.push(s)
                 await playlistService.updatePlaylist(playlist)
-                if (isMobile()) toggleModalMobile()
+                if (isMobile) toggleModalMobile()
                 else onOpenAddModal(false)
             }
         } catch (err) {
@@ -53,12 +44,10 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
 
     const onStopPropagation = (ev: MouseEvent<HTMLInputElement>) => {
         ev.stopPropagation()
-
     }
 
     const onHandleChange = (ev: ChangeEvent<HTMLInputElement>) => {
         if (playlists) {
-
             const { value } = ev.target
             const regex = new RegExp(value, 'i')
             const playlistsToShow = playlists?.filter(p => regex.test(p.name))
@@ -74,7 +63,7 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
                     onClick={onStopPropagation} onChange={onHandleChange} onFocus={() => onOpenAddModal(true)} />
             </div>
             <div>
-                {!isMobile() ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
+                {!isMobile ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
                     : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id)} className="mini-playlist">
                         <img src={p.imgUrl} alt="" />
                         <section className="texts">

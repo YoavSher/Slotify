@@ -1,3 +1,4 @@
+import { useSongLikingSystem } from "../hooks/useSongLikingSystem"
 import { Song } from "../interfaces/song"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
@@ -6,36 +7,15 @@ import { setLikedSongs, setUser } from "../store/user/user.reducer"
 interface Props {
     song: Song
 }
-export const LikeButton = ({ song }: Props) => { // should'nt be rendered if there is not loggedinuser
+export const LikeButton = ({ song }: Props) => {
+    const { toggleSongLike, isSongLiked } = useSongLikingSystem(song)
     const likedSongs = useAppSelector(state => state.user.likedSongs)
-    const dispatch = useAppDispatch()
-    const toggleSongLike = async (ev: React.MouseEvent<HTMLElement>) => {
-        ev.stopPropagation()
-        if (likedSongs) {
-            let songs
-            try {
 
-                if (isSongLiked()) {
-                    await songService.removeLikedSong(song.videoId)
-                    songs = likedSongs.filter(currSong => currSong.videoId !== song.videoId)
-                } else {
-                    await songService.addLikedSong(song.videoId)
-                    const currSong = { ...song, addedAt: Date.now() }
-                    songs = [currSong, ...likedSongs]
-                }
-                console.log('dispatching!')
-                dispatch(setLikedSongs(songs))
-            } catch (err) {
-                console.log(err)
-            }
-        }
-    }
-    const isSongLiked = () => {
-        return likedSongs?.some(s => s.videoId === song.videoId)
-    }
+
+    if (!likedSongs) return <></>
     return (
         <div className="like-song">
-            <button className={`like-btn ${(isSongLiked()) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
+            <button className={`like-btn ${(isSongLiked) ? 'liked' : 'unliked'}`} onClick={toggleSongLike}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 189.2 87.507" >
                     <g id="hearts" transform="translate(-787.902 -454.998)">
                         <g id="right-hearts">
@@ -70,3 +50,4 @@ export const LikeButton = ({ song }: Props) => { // should'nt be rendered if the
         </div>
     )
 }
+

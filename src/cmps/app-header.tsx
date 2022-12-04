@@ -1,42 +1,46 @@
-import { Location, useLocation, useNavigate, useParams } from "react-router-dom"
+import { Location, useLocation, useNavigate, } from "react-router-dom"
 import { UserHeaderDisplay } from './user-header-display'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import { BsPerson } from 'react-icons/bs'
 
 import { SearchBar } from "./search-bar"
-import { useEffect, useState } from "react"
+import { useRef } from "react"
 import { useAppSelector } from "../store/store.hooks"
 
 export const AppHeader = () => {
 
     const location = useLocation()
-    const navigate = useNavigate()
-    const [locations, setLocations] = useState<Location[]>([])
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const isMobile = screenWidth <= 770
+    const { onGoBack, onGoForward, locationsLength } = useHistoryStack()
 
-    const onGoBack = () => {
-        setLocations((prev: Location[]) => ([location, ...prev]))
-        navigate(-1)
-    }
-    const onGoForward = () => {
-        setLocations(prev => {
-            prev.shift()
-            return prev
-        })
-        navigate(locations[0].pathname)
-    }
-
-
+    
     return (
         <section className="app-header flex align-center justify-between">
             <div className="header-nav-btns flex">
                 <button onClick={onGoBack} className="nav-btn-back"><span><FiChevronLeft /></span></button>
-                <button disabled={locations.length === 0} onClick={onGoForward} className="nav-btn-back"><span><FiChevronRight /></span></button>
+                <button disabled={locationsLength <= 0} onClick={onGoForward} className="nav-btn-back"><span><FiChevronRight /></span></button>
             </div>
-            {location.pathname.includes("/search") && screenWidth > 770 &&
+            {location.pathname.includes("/search") && !isMobile &&
                 <div className="search-bar-header"><SearchBar /></div>}
 
             <UserHeaderDisplay />
         </section>
     )
+}
+
+const useHistoryStack = () => {
+
+    const navigate = useNavigate()
+    const location = useLocation()
+    const locations = useRef<Location[]>([])
+    const onGoBack = () => {
+        locations.current.push(location)
+        navigate(-1)
+    }
+    const onGoForward = () => {
+        const location = locations.current.pop()
+        if (location) navigate(location.pathname)
+    }
+
+    return { onGoBack, onGoForward, locationsLength: locations.current.length }
 }

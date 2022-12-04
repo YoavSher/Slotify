@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet"
 import { BsFillPlayCircleFill } from "react-icons/bs"
 import { CiClock2 } from "react-icons/ci"
 import { RiHeartFill } from "react-icons/ri"
-import { SongPreview } from "../cmps/song-preview"
+import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { useState } from 'react'
 import { setUser } from "../store/user/user.reducer"
 import { userService } from "../services/user.service"
+import { useSongModal } from "../hooks/useSongModal"
 
 export const LikedSongs = () => {
     const dispatch = useAppDispatch()
@@ -18,29 +19,12 @@ export const LikedSongs = () => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const likedSongs = useAppSelector(state => state.user.likedSongs)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [songForModal, setSongForModal] = useState<Song | null>(null)
-    const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const isMobile = screenWidth <= 770
+    const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
 
-    const toggleModal = (ev: any, song: Song) => {
-        ev.stopPropagation()
-        const { left, top } = ev.target.getBoundingClientRect()
-        setModalPos({ left, top })
-        if (songForModal?.videoId === song.videoId) closeModal()
-        else openModal(song)
-    }
 
-    const openModal = (song: Song) => {
-        setSongForModal(song)
-        setIsModalOpen(true)
-    }
-
-    const closeModal = () => {
-        setSongForModal(null)
-        setIsModalOpen(false)
-    }
-
+    //maybe the screensiwdth should be a hook that returns isMobile directly and all the components can just use this
     const onSetPlaylist = () => {
         if (loggedInUser && likedSongs) dispatch(setPlaylist({ songs: likedSongs }))
     }
@@ -49,7 +33,7 @@ export const LikedSongs = () => {
         onSetPlaylist()
         dispatch(setPlayingIdx(index))
     }
-    console.log(likedSongs)
+
     return (
         <>
             <section onClick={closeModal} onScroll={closeModal} className="playlist-details liked-songs">
@@ -79,7 +63,7 @@ export const LikedSongs = () => {
                                 <div className="clock"><CiClock2 /></div>
                             </div>
                         </div>
-                
+
                         <div className="songs-container">
                             {likedSongs?.map((s, idx) => {
                                 return <SongPreview key={s.videoId} screenWidth={screenWidth} playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
@@ -87,10 +71,9 @@ export const LikedSongs = () => {
                         </div>
                     </div>
                 </div>
-                {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+                {isModalOpen && songForModal && <SongsModal isMobile={isMobile} closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
 
             </section>
         </>
     )
-    return <h1>SHTOK YA ZAIN</h1>
 }

@@ -9,7 +9,6 @@
     right: 0;
     z-index: 99;
     height: 80px;
-    // color: #fff;
 
     * {
         color: #fff;
@@ -17,9 +16,10 @@
 
     @media(min-width:770px) {
         padding: 20px 0 0 20px;
-        background-color: rgb(57, 55, 55);
+        background-color: #000;
         position: initial;
         height: auto;
+        width: 263px;
     }
 
     .main-logo {
@@ -36,21 +36,20 @@
         align-items: center;
         justify-content: space-around;
         padding: 0;
-        
+
         li {
             @media(min-width:770px) {
                 padding-bottom: 10px;
             }
-            
+
             a {
                 @include nav-link;
                 flex-direction: column;
                 gap: 0;
-                
+
                 @media(min-width:770px) {
                     flex-direction: row;
                     gap: 10px;
-                    // display: initial;
                 }
             }
         }

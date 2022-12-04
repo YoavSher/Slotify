@@ -97,11 +97,6 @@ export const MusicPlayer = () => {
         }, 100)
     }
 
-    const onStopPropagation = (ev: React.MouseEvent<HTMLElement>) => {
-        ev.stopPropagation()
-        // setIsOpen(false)
-    }
-
     const onClickPlay = (ev: React.MouseEvent<HTMLElement>) => {
         ev.stopPropagation()
         dispatch(setIsSongPlaying(!isSongPlaying))
@@ -271,11 +266,11 @@ export const MusicPlayer = () => {
                     <div className="main-player">
                         <section className="buttons-container">
                             <button title="Shuffle" onClick={toggleSongsShuffle} className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`} ><BiShuffle /></button>
-                            {!isMobile && <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>}
+                            {screenWidth > 900 && <button title="Return 10" onClick={() => seekTo(songTimer / 1000 - 10)} ><MdReplay10 /></button>}
                             <button title="Previous" onClick={onIndexDecrement} ><MdSkipPrevious /></button>
                             <button title={isSongPlaying ? 'Pause' : 'Play'} className={`play-pause-btn ${isSongPlaying ? 'pause' : 'play'}`} onClick={onClickPlay}>{isSongPlaying ? <GiPauseButton /> : <BiPlay />}</button>
                             <button title="Next" onClick={onIndexIncrement} ><MdSkipNext /></button>
-                            {!isMobile && <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>}
+                            {screenWidth > 900 && <button title="Skip 10" onClick={() => seekTo(songTimer / 1000 + 10)}><MdForward10 /></button>}
                             <button onClick={() => setIsLoopingEnabled(prev => !prev)} className={`repeat-btn ${(isLoopingEnabled) ? 'repeat' : ''}`} title="Repeat"><FiRepeat /></button>
                         </section>
                         <section className="time-container">

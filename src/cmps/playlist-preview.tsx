@@ -18,6 +18,7 @@ export const PlayListPreview = ({ playlistPre }: Props) => {
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
+    const isMobile = screenWidth <= 770
 
     const onSetPlaylist = () => {
         if (playlistPre._id === playlist._id && isSongPlaying) {
@@ -27,6 +28,7 @@ export const PlayListPreview = ({ playlistPre }: Props) => {
         } else dispatch(setPlaylist(playlistPre))
     }
 
+    // change the booleans same style with the song preview 
     const isThisPlaylist = () => {
         if (playlistPre._id === playlist._id && !isSongPlaying) return true
         return false
@@ -39,6 +41,7 @@ export const PlayListPreview = ({ playlistPre }: Props) => {
         }
         return false
     }
+    
 
     return (
         <section className="playlist-preview">
@@ -50,16 +53,16 @@ export const PlayListPreview = ({ playlistPre }: Props) => {
                     <div className='playlist-preview-content title'>
                         <h1><Link to={`playlist/${playlistPre._id}`}>{playlistPre.name}</Link></h1>
                     </div>
-                    {screenWidth > 770 && !isPlaylistPlaying() && <div className='playlist-preview-content icon-container'>
+                    {!isMobile && !isPlaylistPlaying() && <div className='playlist-preview-content icon-container'>
                         <button onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
                     </div>}
-                    {screenWidth > 770 && isPlaylistPlaying() && <div className='playlist-preview-content pause-container'>
+                    {!isMobile && isPlaylistPlaying() && <div className='playlist-preview-content pause-container'>
                         <button onClick={onSetPlaylist}><span><FaPauseCircle /></span></button>
                     </div>}
-                    {screenWidth < 770 && isPlaylistPlaying() && <div>
+                    {isMobile && isPlaylistPlaying() && <div>
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt="" />
                     </div>}
-                    {screenWidth < 770 && isThisPlaylist() && <div>
+                    {isMobile && isThisPlaylist() && <div>
                         <h1 style={{ color: 'green', fontSize: '1.5rem' }}>...</h1>
                     </div>}
                 </div>

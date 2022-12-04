@@ -1,11 +1,11 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { FiSearch } from 'react-icons/fi'
-import { Song } from "../interfaces/song"
-import { utilService } from "../services/util.service"
-import { youtubeService } from "../services/youtube.service"
-import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
-import { useAppDispatch } from "../store/store.hooks"
-import { SongPreview } from "./song-preview"
+import { Song } from "../../interfaces/song"
+import { utilService } from "../../services/util.service"
+import { youtubeService } from "../../services/youtube.service"
+import { setPlayingIdx, setPlaylist } from "../../store/music-player/music-player.reducer"
+import { useAppDispatch } from "../../store/store.hooks"
+import { SongPreview } from "../song-preview-cmps/song-preview"
 
 interface Props {
     playlistId: string | undefined,

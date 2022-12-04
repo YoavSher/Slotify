@@ -1,5 +1,5 @@
 import { Song } from "../interfaces/song"
-import { SongPreview } from "./song-preview"
+import { SongPreview } from "./song-preview-cmps/song-preview"
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { reorderSongsList } from "../store/music-player/music-player.reducer"
@@ -8,12 +8,12 @@ interface Props {
     songs: Song[]
     songIdx: number,
     toggleModal: any,
-    screenWidth:number
+    screenWidth: number
 }
 
-export const SongsQueueList = ({ screenWidth,toggleModal, songs, songIdx }: Props) => {
+export const SongsQueueList = ({ screenWidth, toggleModal, songs, songIdx }: Props) => {
     const dispatch = useAppDispatch()
-    
+
 
     const handleOnDragEnd = (result: any) => {
         songs = [...songs]
@@ -32,8 +32,12 @@ export const SongsQueueList = ({ screenWidth,toggleModal, songs, songIdx }: Prop
                             else return <Draggable key={`${song.videoId}${index}`} draggableId={`${song.videoId}${index}`} index={index ? index : 0}>
                                 {(provided) => (
                                     <article  {...provided.draggableProps}{...provided.dragHandleProps} ref={provided.innerRef}>
-                                        <SongPreview screenWidth={screenWidth} toggleModal={toggleModal} index={index} type={'queue'} song={song} />
+
+                                        <SongPreview screenWidth={screenWidth} toggleModal={toggleModal}
+                                            index={index} type={'queue'} song={song} />
+
                                     </article>
+
                                 )}</Draggable>
                         })}
                         {provided.placeholder}

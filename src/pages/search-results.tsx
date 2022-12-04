@@ -6,13 +6,12 @@ import { Song } from "../interfaces/song"
 
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
-import { SearchSongPreview } from "../cmps/search-song-preview"
-import { SongPreview } from "../cmps/song-preview"
+import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { replacePlaylist, setIsSongPlaying } from "../store/music-player/music-player.reducer"
 import { SearchBar } from "../cmps/search-bar"
-// import loading from '../assets/img/18544-music-play.gif'
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { useSongModal } from "../hooks/useSongModal"
 
 
 
@@ -21,12 +20,11 @@ export const SearchResults = () => {
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const playlist = useAppSelector(state => state.musicPlayer.currPlaylist)
     const dispatch = useAppDispatch()
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [songForModal, setSongForModal] = useState<Song | null>(null)
-    const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
+    const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const searchResults = useAppSelector(state => state.searchSong.searchResults)
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const isMobile = screenWidth <= 770
     const params = useParams()
 
     useEffect(() => {
@@ -37,25 +35,6 @@ export const SearchResults = () => {
             setTopSongs(songs.splice(1))
         }
     }, [searchResults, params])
-
-
-    const toggleModal = (ev: any, song: Song) => {
-        ev.stopPropagation()
-        const { left, top } = ev.target.getBoundingClientRect()
-        setModalPos({ left, top })
-        if (songForModal?.videoId === song.videoId) closeModal()
-        else openModal(song)
-    }
-
-    const openModal = (song: Song) => {
-        setSongForModal(song)
-        setIsModalOpen(true)
-    }
-
-    const closeModal = () => {
-        setSongForModal(null)
-        setIsModalOpen(false)
-    }
 
     const isThisSongPlaying = () => {
 
@@ -77,9 +56,9 @@ export const SearchResults = () => {
         <>
             <section onClick={closeModal} onScroll={closeModal} className="search-results-page">
                 <Helmet><title>Slotify - Search</title></Helmet>
-                {screenWidth < 770 && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
+                {isMobile && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
                 <div className="search-results-container">
-                    {searchResults && screenWidth > 770 && <section className="search-results flex ">
+                    {searchResults && !isMobile && <section className="search-results flex ">
                         <div className="top-result">
                             <div className="top-result title">
                                 <h1>Top Result</h1>
@@ -106,11 +85,11 @@ export const SearchResults = () => {
                                     return <SongPreview key={song.videoId} screenWidth={screenWidth} toggleModal={toggleModal} song={song}
                                         type={'search-results'} />
                                 })}
-                                {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+                                {isModalOpen && songForModal && < SongsModal isMobile={isMobile} closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
                             </div>
                         </div>
                     </section>}
-                    {searchResults && screenWidth < 770 && <section className="search-results flex ">
+                    {searchResults && !isMobile && <section className="search-results flex ">
                         <div className="top-songs-results-container">
                             {searchResults.map(song => {
                                 return <SongPreview
@@ -120,7 +99,7 @@ export const SearchResults = () => {
                                     type={'search-results'}
                                     screenWidth={screenWidth} />
                             })}
-                            {isModalOpen && <SongsModal closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+                            {isModalOpen && songForModal && < SongsModal closeModal={closeModal} isMobile={isMobile} song={songForModal} modalPos={modalPos} />}
                         </div>
                     </section>}
                     {!searchResults && <section className="search-resluts-default">

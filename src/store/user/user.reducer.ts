@@ -9,7 +9,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    loggedInUser: userService.getLoggedInUser(),
+    loggedInUser: userService.getLoggedInUser(), // if we decide to keep the user loggedin it should be via the backend,sending a request and getting a response if the cookie persist,then login and allso make it a function so it loads the songs and all the important things onInit
     likedSongs: null
 }
 
@@ -19,19 +19,19 @@ const userSlice = createSlice({
     reducers: {
 
         setUser: (state, action: PayloadAction<User | null>) => {
+            if (!action.payload) {
+                state.likedSongs = null
+            }
             state.loggedInUser = action.payload
-            if (!action.payload) state.likedSongs = null
         },
         onSongLike: (state, action: PayloadAction<Song>) => {
-            if (state.loggedInUser) {
-                // state.likedSongs.push(action.payload)
-                // sending to the backend the userId and songId to insert to usersLikedSongs
+            if (state.likedSongs) {
+                state.likedSongs.unshift(action.payload)
             }
         },
         onSongDislike: (state, action: PayloadAction<string>) => {
-            if (state.loggedInUser) {
-                // state.likedSongs = state.loggedInUser.likedSongs.filter(song => song.videoId !== action.payload)
-                //sending to the backend the userId and songId to delete the song
+            if (state.likedSongs) {
+                state.likedSongs = state.likedSongs.filter(song => song.videoId !== action.payload)
             }
         },
         setLikedSongs: (state, action: PayloadAction<Song[] | []>) => {

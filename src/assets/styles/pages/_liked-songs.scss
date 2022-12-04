@@ -8,12 +8,9 @@
     .img-container {
 
         .liked-songs-img {
-            height: 100%;
-            width: 100%;
-            padding: 4px;
+            width: 228px;
+            height: 228px;
             display: flex;
-            align-items: center;
-            justify-content: center;
             background: linear-gradient(135deg, #450af5, #c4efd9);
             border-radius: 3px;
             font-size: 90px;
@@ -21,7 +18,10 @@
 
             span {
                 position: absolute;
-                top: 80px;
+                top: 66px;
+                left: 72px;
+
+                //check out how is it suppost to act in mobile compared to playlist details
             }
         }
     }

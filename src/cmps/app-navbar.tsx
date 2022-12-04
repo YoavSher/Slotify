@@ -18,7 +18,7 @@ export const AppNavbar = () => {
     const playlists = useAppSelector(state => state.playlist.playlists)
     const dispatch = useAppDispatch()
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
-
+    const isMobile = screenWidth <= 770
     useEffect(() => {
         loadPlayList()
     }, [location])
@@ -26,7 +26,7 @@ export const AppNavbar = () => {
 
 
 
-    const onCreateNewBoard = async () => {
+    const onCreateNewPlaylist = async () => {
         const newPlaylist = await playlistService.createPlaylist()
         // navigate(`playlist/${newPlaylist._id}`)
     }
@@ -34,28 +34,41 @@ export const AppNavbar = () => {
         const playlists = await playlistService.query()
         if (playlists) dispatch(setPlaylists(playlists))
     }
-    
+    // make the location.pathname.includes() a function with a nicer name(?), have inside cmps like pathways,and playlist list. isMobile 
+    // maybe we can render the paths as a map only need to figure the thing with location.pathName for the exact thingy
     return (
         <nav className="app-navbar flex column">
-            {screenWidth > 770 && <h1 className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
+            {!isMobile && <h1 className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
             <ul className="nav-links-main">
-                <li><NavLink to="" className='flex align-center'>
-                    {location.pathname !== '/' && <span><RiHome2Line /></span>}
-                    {location.pathname === '/' && <span><RiHome2Fill /></span>}
-                    <p>Home</p></NavLink></li>
-                <li><NavLink to="search" className='flex align-center'>
-                    {!location.pathname.includes('search') && <span><FiSearch /></span>}
-                    {location.pathname.includes('search') && <span><RiSearchFill /></span>}
-                    <p>Search</p></NavLink></li>
+                <li> 
+                    <NavLink to="" className='flex align-center'>
+                        {location.pathname === '/' ? <span><RiHome2Fill /></span> :
+                            <span><RiHome2Line /></span>}
+                        <p>Home</p>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to="search" className='flex align-center'>
+                        {location.pathname.includes('search') ? <span><RiSearchFill /></span> :
+                            <span><FiSearch /></span>}
+                        <p>Search</p>
+                    </NavLink>
+                </li>
                 <li><NavLink to="collection" className=" flex align-center">
-                    {!location.pathname.includes('collection') && <span><IoLibraryOutline /></span>}
-                    {location.pathname.includes('collection') && <span><IoLibrary /></span>}
-                    <p>Your Library</p></NavLink></li>
-                {screenWidth < 770 && <li><NavLink to="queue" className="flex align-center">
-                    <span><TiThListOutline /></span><p>Queue</p></NavLink></li>}
+                    {location.pathname.includes('collection') ? <span><IoLibrary /></span> :
+                        <span><IoLibraryOutline /></span>}
+                    <p>Your Library</p>
+                </NavLink>
+                </li>
+                {isMobile && (
+                    <li><NavLink to="queue" className="flex align-center">
+                        <span><TiThListOutline /></span><p>Queue</p>
+                    </NavLink>
+                    </li>
+                )}
             </ul>
-            {screenWidth > 770 && <div className="nav-links-second">
-                <div className="create-playlist flex align-center" onClick={onCreateNewBoard}>
+            {!isMobile && <div className="nav-links-second">
+                <div className="create-playlist flex align-center" onClick={onCreateNewPlaylist}>
                     <div><span>+</span></div><p>Create Playlist</p>
                 </div>
                 <div className="liked-songs flex">
