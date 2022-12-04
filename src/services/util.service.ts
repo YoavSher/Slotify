@@ -1,3 +1,4 @@
+import { current } from "@reduxjs/toolkit"
 import axios from "axios"
 
 export const utilService = {
@@ -6,7 +7,8 @@ export const utilService = {
     getPhotos,
     makeId,
     getDetailedTime,
-    shuffle
+    shuffle,
+    getCurrentPartOfTheDay
 }
 
 function makeId(length = 8) {
@@ -94,4 +96,12 @@ function shuffle<T>(array: T[]): T[] {
     }
 
     return array
+}
+
+function getCurrentPartOfTheDay() {
+    const currentHour = (new Date()).getHours()
+    if (currentHour > 22 || currentHour < 4) return 'night'
+    else if (currentHour > 17) return 'evening'
+    else if (currentHour > 11) return 'afternoon'
+    else if (currentHour >= 4) return 'morning'
 }

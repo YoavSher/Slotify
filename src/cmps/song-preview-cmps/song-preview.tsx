@@ -61,6 +61,13 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
         onClickPlay()
     }
 
+    const onToggleModal = (ev: React.MouseEvent) => {
+        if (type === 'queue') {
+            song = { ...song, index }
+        }
+        toggleModal(ev, song)
+    }
+
     const isImageDisplayed = () => {
         return !(currPlayingIdx !== index && type === 'queue' && isMobile)
     }
@@ -90,7 +97,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
             {type !== 'playlist-details-search' && <div className="song-actions flex align-center">
                 {!isMobile &&
                     <p>{utilService.millisToMinutesAndSeconds(song.duration)}</p>}
-                <button onClick={(event) => { toggleModal(event, song) }} className="actions-btn">
+                <button onClick={onToggleModal} className="actions-btn">
                     <span><HiOutlineDotsHorizontal /></span>
                 </button>
             </div>}

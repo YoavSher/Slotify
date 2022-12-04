@@ -6,6 +6,7 @@ import { playlistService } from "../services/playlist.service"
 import { setPlaylists } from "../store/playlist/playlist.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { utilService } from "../services/util.service"
 
 export const Home = () => {
 
@@ -24,8 +25,9 @@ export const Home = () => {
         <>
             <section className="home-page">
                 <Helmet><title>Slotify</title></Helmet>
+                <h2 className="greeting">Good {utilService.getCurrentPartOfTheDay()}</h2>
                 <PlaylistList playlists={playlists} />
-            <div className="pusher"></div>
+                <div className="pusher"></div>
             </section>
             <Outlet></Outlet>
         </>

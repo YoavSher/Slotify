@@ -29,7 +29,6 @@ export const UserHeaderDisplay = () => {
                     <BsPerson />
                 </button>
                     {isModalOpen && <section className="user-options-modal">
-                        <button>Profile</button>
                         <button onClick={onLogOut}>Logout</button>
                     </section>}
                 </>

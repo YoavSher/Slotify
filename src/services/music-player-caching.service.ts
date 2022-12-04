@@ -30,8 +30,8 @@ function saveCurrentVolume(number: number): void {
     _saveToStorage(CURRENT_VOLUME, number)
 }
 
-function saveCurrentPlaylist(playlist: Playlist | PseudoPlaylist): void {
-    _saveToStorage(CURRENT_PLAYLIST, playlist)
+function saveCurrentPlaylist(playlistInfo: { songs: Song[], playlistId: number | null }): void {
+    _saveToStorage(CURRENT_PLAYLIST, playlistInfo)
 }
 function getPlayingTime(): number {
     return _loadFromStorage(PLAYING_TIME_KEY)
@@ -42,7 +42,7 @@ function getCurrentVolume(): number {
 function getPlayingIdx(): number {
     return _loadFromStorage(PLAYING_INDEX_KEY)
 }
-function getPlaylist(): Playlist | PseudoPlaylist {
+function getPlaylist(): { songs: Song[], playlistId: number | null } {
     return _loadFromStorage(CURRENT_PLAYLIST)
 }
 

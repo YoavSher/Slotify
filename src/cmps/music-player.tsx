@@ -33,16 +33,16 @@ export const MusicPlayer = () => {
     const [isMobileFullScreen, setIsMobileFullScreen] = useState(false)
 
     useEffect(() => {
-        // const playlist = cachingService.getPlaylist()
-        // const volume = cachingService.getCurrentVolume()
-        // if (volume || volume === 0) onVolumeChange(volume)
-        // if (playlist) {
-        //     const idx = cachingService.getPlayingIdx()
-            // dispatch(setPlaylist(playlist))
-        //     dispatch(setPlayingIdx(idx))
-        //     const playingTime = cachingService.getPlayingTime()
-        //     playingTimeFromCache.current = playingTime
-        // }
+        const previousPlaylistInfo = cachingService.getPlaylist()
+        const volume = cachingService.getCurrentVolume()
+        if (volume || volume === 0) onVolumeChange(volume)
+        if (previousPlaylistInfo) {
+            const idx = cachingService.getPlayingIdx()
+            dispatch(setPlaylist(previousPlaylistInfo))
+            dispatch(setPlayingIdx(idx))
+            const playingTime = cachingService.getPlayingTime()
+            playingTimeFromCache.current = playingTime
+        }
     }, [])
 
     useEffect(() => {
