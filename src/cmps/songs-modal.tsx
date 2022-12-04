@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom"
 import { useSongLikingSystem } from "../hooks/useSongLikingSystem"
 
 import { Song } from "../interfaces/song"
-import { addToQueue } from "../store/music-player/music-player.reducer"
+import { addToQueue, removeFromQueue } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { AddToPlaylistModal } from "./add-to-playlist-modal"
 
@@ -25,7 +25,6 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
     // i think a good way to handle it is to render a child prop that is like modalextended for each type of parent,
     // if it's queue or playlist-details or search and so on,
 
-    const location = useLocation()
 
     const [addModal, setAddModal] = useState(false)
     const dispatch = useAppDispatch()
@@ -38,7 +37,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
     const likedSongs = useAppSelector(state => state.user.likedSongs)
 
     const removeSongFromQueue = () => {
-
+        if (typeof song?.index === 'number') dispatch(removeFromQueue(song.index))
         // generally if i have the index i should have no problem of removing
         // i just have to splice.
         closeModal()
@@ -65,7 +64,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
 
     }
 
-    console.log(location)
+    console.log(song)
     return (
         <>
             <section onClick={ev => { ev.stopPropagation(); closeModal() }} style={calcModalPos()}
@@ -76,7 +75,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile }: Props) => {
                     <p className="artist-name">{song?.artist}</p>
                 </section>}
                 <button onClick={addSongToQueue}>Add to queue</button>
-                <button onClick={removeSongFromQueue}>Remove from queue</button>
+                {typeof song?.index === 'number' && <button onClick={removeSongFromQueue}>Remove from queue</button>}
                 {likedSongs && <button onClick={toggleSongLike} >{(isSongLiked) ? 'Remove song from liked songs' : 'Add song to liked songs'}</button>}
                 <button>Remove from Playlist</button>
                 <button onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">

@@ -18,7 +18,6 @@ export interface PseudoPlaylist {
 
 
 const initialState: MusicPlayerState = {
-    // currPlaylist: { songs: [] },
     currPlayingIdx: 0,
     isSongPlaying: false,
     songs: [],
@@ -29,16 +28,16 @@ const musicPlayerSlice = createSlice({
     name: 'musicPlayer',
     initialState,
     reducers: {
-        removeFromQueue: (state, action: PayloadAction<string>) => {
-            const idx = state.songs.findIndex(song => song.id === action.payload)
-            state.songs.splice(idx, 1)
+        removeFromQueue: (state, action: PayloadAction<number>) => {
+            state.songs.splice(action.payload, 1)
             // state.playlistId = null
-            // cachingService.saveCurrentPlaylist(state.songs)
+
+            cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         },
         reorderSongsList: (state, action: PayloadAction<Song[]>) => {
             state.songs = action.payload
             state.playlistId = null
-            // cachingService.saveCurrentPlaylist(state.songs)
+            cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         },
         setIsSongPlaying: (state, action: PayloadAction<boolean>) => {
             state.isSongPlaying = action.payload
@@ -47,13 +46,13 @@ const musicPlayerSlice = createSlice({
         addToQueue: ((state, action: PayloadAction<Song>) => {
             state.songs.push(action.payload)
             // state.playlistId = null
-            // cachingService.saveCurrentPlaylist(state.currPlaylist)
+            cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         }),
         replacePlaylist: ((state, action: PayloadAction<Song>) => {
             state.songs = [action.payload]
             state.playlistId = null
             state.currPlayingIdx = 0
-            // cachingService.saveCurrentPlaylist(state.songs)
+            cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
             cachingService.savePlayingIdx(state.currPlayingIdx)
         }),
         setPlayingIdx: (state, action: PayloadAction<number>) => {
@@ -70,7 +69,7 @@ const musicPlayerSlice = createSlice({
             state.currPlayingIdx = 0
             state.playlistId = action.payload.playlistId
             state.songs = action.payload.songs
-            // cachingService.saveCurrentPlaylist(state.songs)
+            cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
             cachingService.savePlayingIdx(state.currPlayingIdx)
         },
     }

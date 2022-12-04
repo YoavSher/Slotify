@@ -34,7 +34,6 @@ export const Login = () => {
             if (user) {
                 dispatch(setUser(user))
                 const songs = await songService.getLikedSongs(user._id) as Song[]
-                songs.sort((a, b) => +b.addedAt - +a.addedAt)
                 dispatch(setLikedSongs(songs))
             }
 
