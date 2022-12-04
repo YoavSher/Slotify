@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../store/store.hooks"
 import { SongPreview } from "../song-preview-cmps/song-preview"
 
 interface Props {
-    playlistId: string | undefined,
+    playlistId: number | undefined,
     onAddToPlaylist: any,
     screenWidth:number
 }

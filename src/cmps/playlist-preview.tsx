@@ -47,7 +47,7 @@ export const PlayListPreview = ({ playlistPre }: Props) => {
         <section className="playlist-preview">
             <div className="playlist-preview-container flex">
                 <div className="img-container">
-                    <img src={playlistPre.imgUrl} alt="" />
+                    <img src={playlistPre.image} alt="" />
                 </div>
                 <div className='playlist-preview-content flex align-center justify-between'>
                     <div className='playlist-preview-content title'>

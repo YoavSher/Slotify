@@ -34,7 +34,7 @@ async function getDataFromYoutube(term: string) {
         songs = songs.splice(0, 5)
         console.log(songs)
         //send songs  to backend {post}api/songs
-        // songService.addSongs(songs)
+        songService.addSongsFromSearch(songs)
         return songs
     } catch (err) {
         console.log('err:', err)

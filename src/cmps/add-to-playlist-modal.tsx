@@ -25,7 +25,7 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
         }
     }
 
-    const onAddToPlaylist = async (playlistId: string | undefined) => {
+    const onAddToPlaylist = async (playlistId: number | undefined) => {
         try {
             if (playlistId) {
                 const playlist = await playlistService.getPlaylistById(playlistId)
@@ -65,7 +65,7 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
             <div>
                 {!isMobile ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
                     : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id)} className="mini-playlist">
-                        <img src={p.imgUrl} alt="" />
+                        <img src={p.image} alt="" />
                         <section className="texts">
                             <p>{p.name}</p>
                             <p>{p.createdBy.fullName}</p>
