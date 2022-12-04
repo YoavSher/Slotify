@@ -68,7 +68,7 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
                         <img src={p.image} alt="" />
                         <section className="texts">
                             <p>{p.name}</p>
-                            <p>{p.createdBy.fullName}</p>
+                            {/* <p>{p.createdBy.fullName}</p> */}
                         </section>
                     </article>)}
             </div>
