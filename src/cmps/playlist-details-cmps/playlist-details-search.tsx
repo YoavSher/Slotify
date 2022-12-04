@@ -10,22 +10,22 @@ import { SongPreview } from "../song-preview-cmps/song-preview"
 interface Props {
     playlistId: number | undefined,
     onAddToPlaylist: any,
-    screenWidth:number
+    screenWidth: number
 }
 
-interface PseudoPlaylist {
-    songs: Song[]
-}
+// interface PseudoPlaylist {
+//     songs: Song[]
+// }
 
-export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist,screenWidth }: Props) => {
+export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist, screenWidth }: Props) => {
 
     const [searchResults, setSearchResults] = useState<Song[] | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
     // const [pseudoPlaylist, setPseudoPlaylist] = useState<PseudoPlaylist | null>(null)
     const dispatch = useAppDispatch()
-    const playlist: PseudoPlaylist = {
-        songs: []
-    }
+    // const playlist: PseudoPlaylist = {
+    //     songs: []
+    // }
 
     useEffect(() => {
         return () => {
@@ -52,8 +52,8 @@ export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist,screenWidth 
 
     const playSongFromPlaylist = (index: number) => {
         if (searchResults) {
-            playlist.songs = searchResults
-            dispatch(setPlaylist(playlist))
+            // playlist.songs = searchResults
+            dispatch(setPlaylist({ songs: searchResults, playlistId: null }))
             dispatch(setPlayingIdx(index))
         }
     }

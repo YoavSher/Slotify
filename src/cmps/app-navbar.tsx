@@ -28,7 +28,7 @@ export const AppNavbar = () => {
 
     const onCreateNewPlaylist = async () => {
         const newPlaylist = await playlistService.createPlaylist()
-        // navigate(`playlist/${newPlaylist._id}`)
+        navigate(`playlist/${newPlaylist._id}`)
     }
     const loadPlayList = async () => {
         const playlists = await playlistService.query()

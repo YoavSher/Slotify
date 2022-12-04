@@ -5,10 +5,8 @@ export interface Playlist {
     _id?: number,
     name: string,
     image:string,
-    tags: string[],
-    createdBy: MiniUser,
-    likedByUsers: MiniUser[],
-    songs: Song[]
+    creatorId: number,
+    // likedByUsers: MiniUser[],
 }
 
 
