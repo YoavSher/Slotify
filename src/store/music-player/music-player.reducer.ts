@@ -48,7 +48,6 @@ const musicPlayerSlice = createSlice({
         },
         setIsSongPlaying: (state, action: PayloadAction<boolean>) => {
             state.isSongPlaying = action.payload
-            // state.playlistId = null
         },
         addToQueue: ((state, action: PayloadAction<Song>) => {
             state.songs.push(action.payload)
@@ -63,7 +62,7 @@ const musicPlayerSlice = createSlice({
             cachingService.savePlayingIdx(state.currPlayingIdx)
         }),
         setPlayingIdx: (state, action: PayloadAction<number>) => {
-            if (action.payload <= 0) {
+            if (action.payload < 0) {
                 return
             } else if (action.payload >= state.songs.length) {
                 state.currPlayingIdx = 0

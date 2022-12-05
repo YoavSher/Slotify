@@ -1,7 +1,6 @@
 import { MouseEvent, MouseEventHandler, useState } from "react"
 import { Helmet } from "react-helmet"
-import { ChildrenTest } from "../cmps/childrenTest"
-import { ParentTest } from "../cmps/parentTest"
+
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { SongsQueueList } from "../cmps/songs-queue-list"
@@ -26,10 +25,7 @@ export const Queue = () => {
     return (
         <>
             <Helmet><title>Slotify - Play Queue </title></Helmet>
-            {/* <ParentTest babi={<ChildrenTest />} /> */}
-            {/* <ParentTest>
-                
-            </ParentTest> */}
+            
             <section className="queue-page" onScroll={closeModal} onClick={closeModal}>
                 <h3 className="title">Queue</h3>
                 {songs[currPlayingIdx] && <><h4 className="mini-title">Now playing</h4>

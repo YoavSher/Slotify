@@ -9,7 +9,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-    loggedInUser: userService.getLoggedInUser(), // if we decide to keep the user loggedin it should be via the backend,sending a request and getting a response if the cookie persist,then login and allso make it a function so it loads the songs and all the important things onInit
+    loggedInUser: null,
     likedSongs: null
 }
 
@@ -23,6 +23,7 @@ const userSlice = createSlice({
                 state.likedSongs = null
             }
             state.loggedInUser = action.payload
+            state.likedSongs = []
         },
         onSongLike: (state, action: PayloadAction<Song>) => {
             if (state.likedSongs) {

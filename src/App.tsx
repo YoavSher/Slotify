@@ -5,11 +5,11 @@ import { MusicPlayer } from './cmps/music-player';
 import './assets/styles/main.scss'
 import { AppNavbar } from './cmps/app-navbar';
 import { AppHeader } from './cmps/app-header';
-import useEnhancedEffect from '@mui/material/utils/useEnhancedEffect';
 import { useAppDispatch, useAppSelector } from './store/store.hooks';
 import { setPlaylists } from './store/playlist/playlist.reducer';
 import { playlistService } from './services/playlist.service';
 import { setScreenWidth } from './store/helper/helper.reducer';
+import { useCookieToGetUser } from './hooks/useCookieToGetUser';
 
 function App() {
   const dispatch = useAppDispatch()
@@ -22,9 +22,12 @@ function App() {
     }
   }, [])
 
+  useCookieToGetUser()
+
   const setDimensions = () => {
     dispatch(setScreenWidth(window.innerWidth))
   }
+
   const loadPlayLists = async () => {
     const playlists = await playlistService.query()
     if (playlists) dispatch(setPlaylists(playlists))

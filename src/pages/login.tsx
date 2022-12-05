@@ -32,6 +32,7 @@ export const Login = () => {
         try {
             const user = await userService.login(userCred)
             if (user) {
+                //TODO: request it's playlists
                 dispatch(setUser(user))
                 const songs = await songService.getLikedSongs(user._id) as Song[]
                 dispatch(setLikedSongs(songs))
