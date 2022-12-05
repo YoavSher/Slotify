@@ -38,9 +38,9 @@ export const AppNavbar = () => {
     // maybe we can render the paths as a map only need to figure the thing with location.pathName for the exact thingy
     return (
         <nav className="app-navbar flex column">
-            {!isMobile && <h1 className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
+            {!isMobile && <h1 onClick={() => { navigate('/') }} className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
             <ul className="nav-links-main">
-                <li> 
+                <li>
                     <NavLink to="" className='flex align-center'>
                         {location.pathname === '/' ? <span><RiHome2Fill /></span> :
                             <span><RiHome2Line /></span>}

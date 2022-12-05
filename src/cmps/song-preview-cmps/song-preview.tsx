@@ -74,9 +74,11 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} onClick={onPlayFromPhone}>
             <div className="top-song flex align-center">
-                {!isMobile && index !== undefined && <SongPreviewIndex
-                    onClickPlay={onClickPlay} index={index}
-                    isThisSongPlaying={isThisSongPlaying} isHover={isHover} />}
+                {!isMobile && index !== undefined && type !== 'playlist-details-search' && (
+                    < SongPreviewIndex
+                        onClickPlay={onClickPlay} index={index}
+                        isThisSongPlaying={isThisSongPlaying} isHover={isHover} />
+                )}
 
                 {isImageDisplayed() && <SongPreviewImage
                     image={song.image} onClickPlay={onClickPlay}
@@ -85,8 +87,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                 <SongPreviewDesc artist={song.artist}
                     isThisSongPlaying={isThisSongPlaying} title={song.title} />
             </div>
-            {/* the topsong part is the main section of the song preview and the constant one */}
-            {/* turn to two components,one for all type that arent playlist details dearch and for former */}
+
             {type === 'playlist-details-search' &&
                 <div className="add-to-playlist-btn"><button onClick={() => onAddToPlaylist(song)}>Add</button></div>}
             {type === 'playlist-details' && <div className="added-at">
