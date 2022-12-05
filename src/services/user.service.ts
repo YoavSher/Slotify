@@ -1,4 +1,5 @@
 import { MiniPlaylist } from "../interfaces/mini-playlist"
+import { MiniUser } from "../interfaces/mini-user"
 import { Playlist } from "../interfaces/playlist"
 import { Song } from "../interfaces/song"
 import { storageService } from "./async-storage.service"
@@ -8,8 +9,7 @@ export const userService = {
     login,
     signup,
     logout,
-    getLoggedInUser,
-    saveUser
+    checkLoginToken
 }
 export interface User {
     fullName: string,
@@ -30,51 +30,35 @@ interface Credentials {
 const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
 const STORAGE_KEY = 'users'
 
+async function checkLoginToken() {
+    try {
+        console.log('getting to the last point in the front')
+        return await httpService.get('auth/', null)
+    } catch (err) {
+
+    }
+}
+
 async function login({ password, username }: Credentials) {
     try {
-        const user = await httpService.post('auth/login', { password, username })
-        if (user) {
-            return saveLocalUser(user)
-        }
+        return await httpService.post('auth/login', { password, username }) as MiniUser
     } catch (err) {
         console.log('cant login')
         //do something
     }
-    //     // const users = await storageService.query(STORAGE_KEY)
-    //     // if we promise.all  return [user,likedsongs,recentlyplayedPlaylists]
-    //     const user = await httpService.post(userCred)
-    //     // const user = users.find((currUser: User) => currUser.username.toLowerCase() === userCred.username.toLowerCase())
-    //     // for now it is enough to validate username becuase these things should be in the backend recieving the cred and finding out whether it is okay
-    //     
 }
 
 async function signup(credentials: NewUser) {
-    // const user = await storageService.post(STORAGE_KEY, newUser)
     try {
-        const user = await httpService.post('auth/signup', credentials)
-        return saveLocalUser(user)
+        return await httpService.post('auth/signup', credentials) as MiniUser
     } catch (err) {
+        console.log('cant signup')
     }
 }
+
 async function logout() {
     await httpService.post('auth/logout', null)
-    sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN_USER)
-}
-
-async function saveUser(user: User) {
-    await storageService.put(STORAGE_KEY, user)
-    saveLocalUser(user)
-    // not the best written
 }
 
 
-function saveLocalUser(user: User) {
-    sessionStorage.setItem(STORAGE_KEY_LOGGEDIN_USER, JSON.stringify(user))
-    return user
-}
 
-function getLoggedInUser(): User | null {
-    const loggedInUser = sessionStorage.getItem(STORAGE_KEY_LOGGEDIN_USER)
-    if (loggedInUser) return JSON.parse(loggedInUser)
-    else return null
-}

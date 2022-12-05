@@ -27,12 +27,12 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     const dispatch = useAppDispatch()
     const [isHover, setIsHover] = useState(false)
 
-
-    const isCurrSong = song.videoId === queueSongs[currPlayingIdx]?.videoId
+    const isSameSong = song.videoId === queueSongs[currPlayingIdx]?.videoId
+    const isCurrSong = (type === 'queue') ?
+        isSameSong && currPlayingIdx === index :
+        isSameSong
     const isMobile = screenWidth <= 770
-    const isThisSongPlaying = (type === 'queue') ?
-        isSongPlaying && currPlayingIdx === index &&
-        isCurrSong : isSongPlaying && isCurrSong
+    const isThisSongPlaying = isSongPlaying && isCurrSong
 
 
     const onClickPlay = () => {
@@ -83,7 +83,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
                     type={type} isThisSongPlaying={isThisSongPlaying} />}
 
                 <SongPreviewDesc artist={song.artist}
-                    isThisSongPlaying={isThisSongPlaying} title={song.title} />
+                    isCurrSong={isCurrSong} title={song.title} />
             </div>
 
             {type === 'playlist-details-search' &&

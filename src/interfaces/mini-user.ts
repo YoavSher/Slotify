@@ -1,7 +1,6 @@
 
 
 export interface MiniUser {
-    _id: string,
+    _id: number,
     fullName: string,
-    imgUrl: string
 }

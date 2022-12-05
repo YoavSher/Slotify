@@ -14,18 +14,11 @@ interface Props {
     closeModal: any,
     modalPos: { left: number, top: number },
     isMobile: boolean,
-    removeSongFromPlaylist?: any
-    // type:string,
-    // index?:number
+    renderedChild?: React.ReactNode,
+
 }
 
-export const SongsModal = ({ song, closeModal, modalPos, isMobile, removeSongFromPlaylist }: Props) => {
-    //the first song of the queue shouldnt have the option to be removed from the queue ,
-    // all rhe other songs in the queue should be and only them should have the option displayed of removing the idnex
-    // inside a playlist should have the option to remove from this playlist,
-    // i think a good way to handle it is to render a child prop that is like modalextended for each type of parent,
-    // if it's queue or playlist-details or search and so on,
-
+export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild }: Props) => {
 
     const [addModal, setAddModal] = useState(false)
     const dispatch = useAppDispatch()
@@ -39,15 +32,12 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, removeSongFro
 
     const removeSongFromQueue = () => {
         if (typeof song?.idx === 'number') dispatch(removeFromQueue(song.idx))
-        // generally if i have the index i should have no problem of removing
-        // i just have to splice.
         closeModal()
     }
 
     const calcModalPos = () => {
         if (isMobile) return { left: '0', top: '0' }
         else return {
-            // currently the height is 185 
             left: `${modalPos.left - 185}px`,
             top: `${modalPos.top + 10}px`
         }
@@ -78,7 +68,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, removeSongFro
                 <button onClick={addSongToQueue}>Add to queue</button>
                 {typeof song?.idx === 'number' && <button onClick={removeSongFromQueue}>Remove from queue</button>}
                 {likedSongs && <button onClick={toggleSongLike} >{(isSongLiked) ? 'Remove song from liked songs' : 'Add song to liked songs'}</button>}
-                {<button onClick={() => removeSongFromPlaylist(song)}>Remove from Playlist</button>}
+                {renderedChild}
                 <button onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
                     Add to playlist <span><AiFillCaretRight /></span></button>
                 {addModal &&

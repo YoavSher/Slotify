@@ -8,14 +8,16 @@ import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { useEffect, useState } from 'react'
+import { useEffect, useState, MouseEvent, MouseEventHandler } from 'react'
 import { setLikedSongs, setUser } from "../store/user/user.reducer"
 import { userService } from "../services/user.service"
 import { useSongModal } from "../hooks/useSongModal"
 import { songService } from "../services/songs.service"
+import { FaPauseCircle } from "react-icons/fa"
+import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"
+import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 
 export const LikedSongs = () => {
-    const dispatch = useAppDispatch()
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const likedSongs = useAppSelector(state => state.user.likedSongs)
@@ -24,31 +26,9 @@ export const LikedSongs = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const LIKED_SONGS_PLAYLIST_ID = 0
 
-    useEffect(() => {
-        // loadSongs()
-    }, [])
-    const loadSongs = async () => {
-        if (loggedInUser) {
-            try {
-                const songs = await songService.getLikedSongs(loggedInUser._id)
-                if (songs) dispatch(setLikedSongs(songs))
-            } catch (err) {
-                console.log('err:', err)
-            }
-        }
-    }
-
-    //maybe the screensiwdth should be a hook that returns isMobile directly and all the components can just use this
-    const onSetPlaylist = () => {
-        if (loggedInUser && likedSongs) {
-            dispatch(setPlaylist({ songs: likedSongs, playlistId: LIKED_SONGS_PLAYLIST_ID }))
-        }
-    }
-
-    const playSongFromPlaylist = (index: number) => {
-        onSetPlaylist()
-        dispatch(setPlayingIdx(index))
-    }
+    const {
+        playSongFromPlaylist,
+        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []))
 
     return (
         <>
@@ -68,21 +48,17 @@ export const LikedSongs = () => {
                 </header>
                 <div className="playlist-details-main">
                     <div className="playlist-details-main action-btns flex align-center">
-                        <button className="play-btn" onClick={onSetPlaylist}><span><BsFillPlayCircleFill /></span></button>
+                        <button className="play-btn" onClick={onClickPlay}>
+                            <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span></button>
+
                     </div>
                     <div className="playlist-details-main-content">
-                        <div className="songs-titles-container">
-                            <div className="songs-titles">
-                                <div className="hash">#</div>
-                                <div className="title">TITLE</div>
-                                <div className="date">DATE ADDED</div>
-                                <div className="clock"><CiClock2 /></div>
-                            </div>
-                        </div>
-
+                        {likedSongs && likedSongs.length > 0 && < SongsTableHead isMobile={isMobile} />}
                         <div className="songs-container">
                             {likedSongs?.map((s, idx) => {
-                                return <SongPreview key={s.videoId} screenWidth={screenWidth} playSongFromPlaylist={playSongFromPlaylist} song={s} toggleModal={toggleModal} index={idx} type={'playlist-details'} />
+                                return <SongPreview key={s.videoId} screenWidth={screenWidth}
+                                    playSongFromPlaylist={playSongFromPlaylist} song={s}
+                                    toggleModal={toggleModal} index={idx} type={'playlist-details'} />
                             })}
                         </div>
                     </div>
