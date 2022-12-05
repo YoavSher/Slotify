@@ -74,7 +74,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
     return (<>
         <div className={`top-songs-results flex align-center`} onMouseOver={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)} onClick={onPlayFromPhone}>
             <div className="top-song flex align-center">
-                {!isMobile && index !== undefined && <SongPreviewIndex
+                {!isMobile && index !== undefined && type !== 'playlist-details-search' && <SongPreviewIndex
                     onClickPlay={onClickPlay} index={index}
                     isThisSongPlaying={isThisSongPlaying} isHover={isHover} />}
 

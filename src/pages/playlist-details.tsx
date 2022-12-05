@@ -81,7 +81,7 @@ export const PlaylistDetails = () => {
                 const { videoId } = reorderedItem
                 // playlist.songs.splice(result.destination.index, 0, reorderedItem)
                 updatedSongs.splice(destinationIdx, 0, reorderedItem)
-                await playlistService.reIndexPlaylistSongs({playlistId, videoId, sourceIdx, destinationIdx})
+                await playlistService.reIndexPlaylistSongs({ playlistId, videoId, sourceIdx, destinationIdx })
                 setSongs(updatedSongs)
             } catch (err) {
                 console.log('err:', err)
@@ -181,11 +181,12 @@ export const PlaylistDetails = () => {
 
     const removeSongFromPlaylist = (song: Song) => {
         // console.log('songId:', songId)
+        const { videoId, idx } = song
         if (playlistId) {
             setSongs(prevState => {
                 return prevState.filter(s => s.videoId !== song.videoId)
             })
-            songService.removeFromPlaylist(song.videoId, playlistId)
+            if (idx !== undefined) songService.removeFromPlaylist({ playlistId, videoId, idx })
         }
     }
 

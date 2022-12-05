@@ -54,9 +54,14 @@ async function addSongToPlaylist(song: PlaylistSong) {
     }
 }
 
-async function removeFromPlaylist(songId: string, playlistId: number) {
+interface removedSong {
+    videoId: string,
+    playlistId: number,
+    idx: number
+}
+async function removeFromPlaylist(removedSong: removedSong) {
     try {
-        await httpService.delete(`song/playlist/${playlistId}/${songId}`, null)
+        await httpService.delete(`song/playlist/${removedSong.playlistId}`, removedSong)
         // return songs as Song[]
     } catch (err) {
         console.log('err:', err)
