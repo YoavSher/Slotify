@@ -8,10 +8,11 @@ import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { useState } from 'react'
-import { setUser } from "../store/user/user.reducer"
+import { useEffect, useState } from 'react'
+import { setLikedSongs, setUser } from "../store/user/user.reducer"
 import { userService } from "../services/user.service"
 import { useSongModal } from "../hooks/useSongModal"
+import { songService } from "../services/songs.service"
 
 export const LikedSongs = () => {
     const dispatch = useAppDispatch()
@@ -23,7 +24,19 @@ export const LikedSongs = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const LIKED_SONGS_PLAYLIST_ID = 0
 
-
+    useEffect(() => {
+        // loadSongs()
+    }, [])
+    const loadSongs = async () => {
+        if (loggedInUser) {
+            try {
+                const songs = await songService.getLikedSongs(loggedInUser._id)
+                if (songs) dispatch(setLikedSongs(songs))
+            } catch (err) {
+                console.log('err:', err)
+            }
+        }
+    }
 
     //maybe the screensiwdth should be a hook that returns isMobile directly and all the components can just use this
     const onSetPlaylist = () => {

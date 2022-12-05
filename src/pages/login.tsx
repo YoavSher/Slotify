@@ -11,7 +11,7 @@ import { setLikedSongs, setUser } from "../store/user/user.reducer"
 export const Login = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const [userCred, setUserCred] = useState({ username: 'a', password: '' })
+    const [userCred, setUserCred] = useState({ username: '', password: '' })
     const onCloseModal = () => {
         navigate('/')
     }

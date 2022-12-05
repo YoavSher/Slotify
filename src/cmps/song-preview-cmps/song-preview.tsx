@@ -63,7 +63,7 @@ export const SongPreview = ({ song, type, index, toggleModal, playSongFromPlayli
 
     const onToggleModal = (ev: React.MouseEvent) => {
         if (type === 'queue') {
-            song = { ...song, index }
+            song = { ...song, idx: index }
         }
         toggleModal(ev, song)
     }

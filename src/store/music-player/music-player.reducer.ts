@@ -37,7 +37,7 @@ const musicPlayerSlice = createSlice({
         },
         removeFromQueue: (state, action: PayloadAction<number>) => {
             state.songs.splice(action.payload, 1)
-            state.playlistId = null
+            // state.playlistId = null
 
             cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         },
@@ -48,7 +48,7 @@ const musicPlayerSlice = createSlice({
         },
         setIsSongPlaying: (state, action: PayloadAction<boolean>) => {
             state.isSongPlaying = action.payload
-            state.playlistId = null
+            // state.playlistId = null
         },
         addToQueue: ((state, action: PayloadAction<Song>) => {
             state.songs.push(action.payload)

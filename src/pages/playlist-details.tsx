@@ -41,7 +41,6 @@ export const PlaylistDetails = () => {
 
     useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs)
 
-
     const isCurrPlaylistOnQueue = (currPlaylist) ? currPlaylist._id === queuePlaylistId : false
     const isMobile = screenWidth <= 770
 
@@ -51,13 +50,25 @@ export const PlaylistDetails = () => {
     const onAddPlaylistToQueue = () => {
         if (songs) dispatch(addSongsToQueue(songs))
     }
+    
+
     const handleOnDragEnd = async (result: any) => {
-        if (currPlaylist) {
-            const playlist = structuredClone(currPlaylist)
-            const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
-            playlist.songs.splice(result.destination.index, 0, reorderedItem)
-            setCurrPlaylist(playlist)
-            await playlistService.updatePlaylist(playlist)
+        if (playlistId) {
+            try {
+                const updatedSongs = [...songs]
+                // const [reorderedItem] = playlist.songs.splice(result.source.index, 1)
+                const sourceIdx = result.source.index
+                const destinationIdx = result.destination.index
+                const [reorderedItem] = updatedSongs.splice(sourceIdx, 1)
+                console.log('reorderedItem:', reorderedItem)
+                const { videoId } = reorderedItem
+                // playlist.songs.splice(result.destination.index, 0, reorderedItem)
+                updatedSongs.splice(destinationIdx, 0, reorderedItem)
+                await playlistService.reIndexPlaylistSongs({playlistId, videoId, sourceIdx, destinationIdx})
+                setSongs(updatedSongs)
+            } catch (err) {
+                console.log('err:', err)
+            }
         }
     }
 
@@ -80,12 +91,20 @@ export const PlaylistDetails = () => {
     }
 
     const onChangePhoto = async (ev: ChangeEvent<HTMLInputElement>) => {
-        if (currPlaylist) {
+        try {
             const newPhoto = await uploadService.uploadImg(ev)
-            if (newPhoto) {
-                currPlaylist.image = newPhoto.url
-                await playlistService.updatePlaylist(currPlaylist)
+            if (currPlaylist) {
+                if (newPhoto) {
+                    setCurrPlaylist(prevState => {
+                        if (prevState) {
+                            return { ...prevState, image: newPhoto.url }
+                        }
+                    })
+                    onSaveChanges({ ...currPlaylist, image: newPhoto.url })
+                }
             }
+        } catch (err) {
+            console.log('err:', err)
         }
     }
 
@@ -98,7 +117,7 @@ export const PlaylistDetails = () => {
     }
 
     const onSetPlaylist = () => {
-        if (currPlaylist && queuePlaylistId && playlistId) {
+        if (currPlaylist && playlistId) {
             if (isCurrPlaylistOnQueue && isSongPlaying) {
                 dispatch(setIsSongPlaying(false))
             } else if (isCurrPlaylistOnQueue && !isSongPlaying) {
@@ -122,7 +141,7 @@ export const PlaylistDetails = () => {
     const onRemovePlaylist = async () => {
         if (playlistId) {
             try {
-                // await playlistService.removePlaylist(playlistId)
+                await playlistService.removePlaylist(playlistId)
                 navigate('/')
             } catch (err) {
                 console.log('err:', err)
@@ -140,6 +159,16 @@ export const PlaylistDetails = () => {
                 return [...prevState, { ...song, addedAt: Date.now() }]
             })
             songService.addSongToPlaylist(newSong)
+        }
+    }
+
+    const removeSongFromPlaylist = (song: Song) => {
+        // console.log('songId:', songId)
+        if (playlistId) {
+            setSongs(prevState => {
+                return prevState.filter(s => s.videoId !== song.videoId)
+            })
+            songService.removeFromPlaylist(song.videoId, playlistId)
         }
     }
 
@@ -202,7 +231,8 @@ export const PlaylistDetails = () => {
                 closeModal={closeModal}
                 song={songForModal}
                 modalPos={modalPos}
-                isMobile={isMobile} />}
+                isMobile={isMobile}
+                removeSongFromPlaylist={removeSongFromPlaylist} />}
             <PlaylistDetailsSearch screenWidth={screenWidth} playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
             <div className="pusher"></div>
         </section>

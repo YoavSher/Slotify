@@ -3,12 +3,14 @@ import { storageService } from "./async-storage.service";
 import { httpService } from "./http.service";
 import { getPlaylists } from "./playlist.data";
 
+
 export const playlistService = {
     query,
     getPlaylistById,
     createPlaylist,
     updatePlaylist,
-    removePlaylist
+    removePlaylist,
+    reIndexPlaylistSongs
 }
 
 const STORAGE_KEY = 'playlists'
@@ -17,12 +19,8 @@ const gPlaylists = getPlaylists()
 
 async function query() {
     try {
-        // let playlists = await storageService.query(STORAGE_KEY)
-        // if (!playlists || playlists.length === 0) {
-        //     playlists = await storageService.postMany(STORAGE_KEY, gPlaylists)
-        // }
         const playlists = await httpService.get('playlist', null)
-        console.log('playlists:', playlists)
+        // console.log('playlists:', playlists)
         return playlists
 
     } catch (err) {
@@ -33,7 +31,6 @@ async function query() {
 
 async function getPlaylistById(playlistId: number) {
     try {
-        // const playlist = await storageService.get(STORAGE_KEY, playlistId)
         const playlist = await httpService.get(`playlist/${playlistId}`, null)
         // console.log('playlist:', playlist)
         return playlist
@@ -45,12 +42,14 @@ async function getPlaylistById(playlistId: number) {
 async function createPlaylist() {
 
     const newPlaylist = await httpService.post('playlist/', null)
+    console.log('playlist: ', newPlaylist)
     return newPlaylist
 }
 
 async function updatePlaylist(playlist: Playlist) {
     try {
-        const updatedPlaylist = await storageService.put(STORAGE_KEY, playlist)
+        const updatedPlaylist = await httpService.put(`playlist/${playlist._id}`, playlist)
+        // const updatedPlaylist = await storageService.put(STORAGE_KEY, playlist)
     } catch (err) {
         console.log('err:', err)
     }
@@ -58,7 +57,22 @@ async function updatePlaylist(playlist: Playlist) {
 
 async function removePlaylist(playlistId: number) {
     try {
-        // const updatedPlaylist = await storageService.remove(STORAGE_KEY, playlistId)
+        const updatedPlaylist = await httpService.delete(`playlist/${playlistId}`, null)
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+interface reIndexInfo {
+    playlistId: number,
+    videoId: string,
+    sourceIdx: number,
+    destinationIdx: number
+}
+
+async function reIndexPlaylistSongs(reIndexInfo: reIndexInfo) {
+    try {
+        await httpService.put(`song/playlist/${reIndexInfo.playlistId}`,reIndexInfo)
     } catch (err) {
         console.log('err:', err)
     }
