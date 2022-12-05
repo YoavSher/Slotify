@@ -181,6 +181,7 @@ export const PlaylistDetails = () => {
             </Helmet>
             <PlaylistDetailsHeader
                 playlist={currPlaylist}
+                songsLength={songs.length}
                 onChangePhoto={onChangePhoto}
                 onChangeTitle={onChangeTitle}
                 onSaveChanges={onSaveChanges}

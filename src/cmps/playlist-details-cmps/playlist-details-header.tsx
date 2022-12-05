@@ -10,13 +10,14 @@ interface Props {
     onChangePhoto: any,
     onChangeTitle: any,
     onSaveChanges: any,
-    isMobile: boolean
+    isMobile: boolean,
+    songsLength: number
 }
 
 
 
 
-export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, isMobile }: Props) => {
+export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, isMobile, songsLength }: Props) => {
     const loggedinUser = useAppSelector(state => state.user.loggedInUser)
     return (
         <header className="playlist-details-header flex">
@@ -37,8 +38,8 @@ export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, 
                 <input disabled={false}
                     type="text" className="playlist-title"
                     onChange={onChangeTitle} onBlur={() => onSaveChanges(undefined)} value={playlist.name} />
-                {/* <h5>{playlist?.createdBy?.fullName}
-                    {playlist?.songs?.length > 0 && <span> • {playlist?.songs?.length} songs</span>}</h5> */}
+                <h5>{playlist?.fullName}
+                    {songsLength > 0 && <span> • {songsLength} songs</span>}</h5>
             </div>
         </header>
     )
