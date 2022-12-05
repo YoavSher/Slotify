@@ -28,6 +28,13 @@ const musicPlayerSlice = createSlice({
     name: 'musicPlayer',
     initialState,
     reducers: {
+        addSongsToQueue: (state, action: PayloadAction<Song[]>) => {
+            console.log(action.payload)
+            console.log(state.songs)
+            state.songs.splice(state.currPlayingIdx + 1, 0, ...action.payload)
+            state.playlistId = null
+            cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
+        },
         removeFromQueue: (state, action: PayloadAction<number>) => {
             state.songs.splice(action.payload, 1)
             // state.playlistId = null
@@ -74,7 +81,7 @@ const musicPlayerSlice = createSlice({
         },
     }
 })
-export const { setPlaylist, addToQueue, replacePlaylist, setIsSongPlaying, setPlayingIdx, reorderSongsList, removeFromQueue } = musicPlayerSlice.actions
+export const { setPlaylist, addToQueue, replacePlaylist, setIsSongPlaying, setPlayingIdx, reorderSongsList, removeFromQueue, addSongsToQueue } = musicPlayerSlice.actions
 
 
 export default musicPlayerSlice.reducer

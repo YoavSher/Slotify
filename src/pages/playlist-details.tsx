@@ -7,14 +7,13 @@ import { BsFillPlayCircleFill, BsPauseCircleFill } from 'react-icons/bs'
 import { FaPauseCircle } from 'react-icons/fa'
 
 import { CiClock2 } from 'react-icons/ci'
-import { HiOutlineDotsHorizontal } from 'react-icons/hi'
 
 import { Playlist } from "../interfaces/playlist"
 import { playlistService } from "../services/playlist.service"
 import { uploadService } from "../services/upload.service"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { setIsSongPlaying, setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
+import { addSongsToQueue, setIsSongPlaying, setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { PlaylistDetailsSearch } from "../cmps/playlist-details-cmps/playlist-details-search"
@@ -24,50 +23,34 @@ import { useSongModal } from "../hooks/useSongModal"
 import { songService } from "../services/songs.service"
 
 export const PlaylistDetails = () => {
-
     const params = useParams()
-    let playlistId = params.playlistId ? +params.playlistId : null
+    const playlistId = params.playlistId ? +params.playlistId : null
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+
+    const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
+    const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
+    const playlists = useAppSelector(state => state.playlist.playlists)
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
+
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
-    const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-
-    const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
-    const playlists = useAppSelector(state => state.playlist.playlists)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const dispatch = useAppDispatch()
+    useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs)
 
     const isCurrPlaylistOnQueue = (currPlaylist) ? currPlaylist._id === queuePlaylistId : false
     const isMobile = screenWidth <= 770
 
-    useEffect(() => {
-        loadSongs()
-        loadPlaylist()
-    }, [playlistId, playlists])
-    // console.log('playlistId :', playlistId)
 
-    const loadPlaylist = () => {
-        if (playlistId !== undefined && playlists) {
-            const playlist = playlists.find((p: Playlist) => p._id === playlistId)
-            console.log('playlist:', playlist)
-            setCurrPlaylist(playlist)
-        }
-    }
 
-    const loadSongs = async () => {
-        if (playlistId) {
-            try {
-                const songs = await songService.getPlaylistSongs(playlistId)
-                if (songs) setSongs(songs)
-            } catch (err) {
-                console.log('err:', err)
-            }
-        }
+
+    const onAddPlaylistToQueue = () => {
+        if (songs) dispatch(addSongsToQueue(songs))
     }
+    
 
     const handleOnDragEnd = async (result: any) => {
         if (playlistId) {
@@ -209,6 +192,7 @@ export const PlaylistDetails = () => {
                     <button className="menu-btn" onClick={onOpenModal}><span>• • •</span></button>
                     {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
                         <button onClick={onRemovePlaylist}>Delete</button>
+                        <button onClick={onAddPlaylistToQueue}>Add to queue</button>
                     </section>}
                 </div>
                 <div className="playlist-details-main-content">
@@ -254,4 +238,31 @@ export const PlaylistDetails = () => {
             <div className="pusher"></div>
         </section>
     )
+}
+
+
+const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
+    setCurrPlaylist: React.Dispatch<React.SetStateAction<Playlist | undefined>>,
+    setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
+    useEffect(() => {
+        loadSongs()
+        loadPlaylist()
+    }, [playlistId, playlists])
+
+    const loadPlaylist = () => {
+        if (playlistId !== undefined && playlists) {
+            const playlist = playlists.find((p: Playlist) => p._id === playlistId)
+            setCurrPlaylist(playlist)
+        }
+    }
+    const loadSongs = async () => {
+        if (playlistId) {
+            try {
+                const songs = await songService.getPlaylistSongs(playlistId)
+                if (songs) setSongs(songs)
+            } catch (err) {
+                console.log('err:', err)
+            }
+        }
+    }
 }
