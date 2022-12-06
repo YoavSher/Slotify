@@ -23,12 +23,15 @@
             margin-bottom: 20px;
             position: relative;
 
+
             .play-btn {
-                @include green-play-btn
+                @include green-play-btn;
+                z-index: 30;
             }
 
             .menu-btn {
                 @include cleared-btn;
+                z-index: 30;
 
                 span {
                     font-size: 1.2rem;

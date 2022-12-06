@@ -7,6 +7,23 @@
     }
 }
 
+.playlist-details-main {
+    .playlist-details-main {
+        .like-song {
+            .like-btn {
+                opacity: 1;
+                transform: translateX(-12px);
+                left: -10px;
+            }
+
+            svg {
+                width: 51px;
+            }
+        }
+    }
+}
+
+
 .like-song {
     width: 34px;
 
@@ -132,9 +149,14 @@
         }
 
         svg {
-            color: white;
-            width: 44px;
-            height: 40px;
+            color: #b3b3b3;
+
+            &:hover {
+                color: white;
+            }
+
+            width: 26px;
+
             overflow: visible;
         }
     }
