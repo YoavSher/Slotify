@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { NewUser, User, userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
+import { GoogleLoginBtn } from "../cmps/google-login-btn";
 export const Signup = () => {
     const [userCred, setUserCred] = useState({ username: '', fullName: '', password: '', email: '', })
     const navigate = useNavigate()
@@ -16,10 +17,15 @@ export const Signup = () => {
     const onStopPropagation = (ev: MouseEvent) => {
         ev.stopPropagation()
     }
+
     const onSignUp = async (ev: React.SyntheticEvent) => {
         ev.preventDefault()
+        signUp()
+    }
+
+    const signUp = async (newUser = userCred) => {
         try {
-            const user = await userService.signup(userCred as NewUser)
+            const user = await userService.signup(newUser as NewUser)
             if (user) dispatch(setUser(user))
             onCloseModal()
         } catch (err) {
@@ -58,6 +64,7 @@ export const Signup = () => {
                     ))}
                     <button disabled={!isCredValid()} className="sign-up-btn">SIGN UP</button>
                 </form>
+                <GoogleLoginBtn cbFunc={signUp} />
                 <Link className="back" to="/" >Back</Link>
                 <Link to="/login" >Already on Slotify? <span>LOGIN</span> </Link>
             </section>

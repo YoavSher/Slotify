@@ -1,0 +1,26 @@
+.google-login-btn {
+
+    // @include cleared-btn;
+    margin-top: 20px;
+    border-radius: 50px;
+    padding: 11px 48px;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all .3s;
+
+    &:hover {
+        background-color: rgb(197, 194, 194);
+        transition: all .3s;
+    }
+
+    h3 {
+        color: #454545;
+    }
+
+    span {
+        font-size: 1.5rem;
+        position: relative;
+        top: 2px;
+    }
+}
