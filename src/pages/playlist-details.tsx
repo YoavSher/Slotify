@@ -77,6 +77,7 @@ export const PlaylistDetails = () => {
 
     const onSaveChanges = async (newPlaylist = currPlaylist) => {
         if (newPlaylist) {
+            //should update users playlist on store (navbar)
             await playlistService.updatePlaylist(newPlaylist)
         }
     }
