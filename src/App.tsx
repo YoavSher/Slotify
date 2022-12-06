@@ -13,22 +13,10 @@ import { setScreenWidth } from './store/helper/helper.reducer';
 import { useCookieToGetUser } from './hooks/useCookieToGetUser';
 
 function App() {
-
-
   useLoadPlaylists()
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    window.addEventListener('resize', setDimensions)
-    return () => {
-      window.removeEventListener('resize', setDimensions)
-    }
-  }, [])
-
+  useScreenWidth()
   useCookieToGetUser()
 
-  const setDimensions = () => {
-    dispatch(setScreenWidth(window.innerWidth))
-  }
   return (
     <GoogleOAuthProvider clientId="216579650458-fu09u5p61i2tmdg7deqe3epompbcj7fv.apps.googleusercontent.com">
       <div className='root-app' >
@@ -67,10 +55,22 @@ const useLoadPlaylists = () => {
 
   }, [])
 
-
   const loadPlayLists = async () => {
     const playlists = await playlistService.query()
     if (playlists) dispatch(setPlaylists(playlists))
   }
 
+}
+
+const useScreenWidth = () => {
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    window.addEventListener('resize', setDimensions)
+    return () => {
+      window.removeEventListener('resize', setDimensions)
+    }
+  }, [])
+  const setDimensions = () => {
+    dispatch(setScreenWidth(window.innerWidth))
+  }
 }
