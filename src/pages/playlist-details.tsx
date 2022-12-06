@@ -114,16 +114,20 @@ export const PlaylistDetails = () => {
         }
     }
 
-    const onAddToPlaylist = (song: Song) => {
+    const onAddToPlaylist = async (song: Song) => {
+        try {
 
-        const { videoId } = song
-        if (songs !== undefined && playlistId) {
-            if (songs.some(s => s.videoId === videoId)) return
-            const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
-            setSongs(prevState => {
-                return [...prevState, { ...song, addedAt: Date.now() }]
-            })
-            songService.addSongToPlaylist(newSong)
+            const { videoId } = song
+            if (songs !== undefined && playlistId) {
+                if (songs.some(s => s.videoId === videoId)) return
+                const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
+                await songService.addSongToPlaylist(newSong)
+                setSongs(prevState => {
+                    return [...prevState, { ...song, addedAt: Date.now() }]
+                })
+            }
+        } catch (err) {
+            console.log('err:', err)
         }
     }
 

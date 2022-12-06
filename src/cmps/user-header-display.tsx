@@ -25,9 +25,11 @@ export const UserHeaderDisplay = () => {
     return (
         <div className="header-user flex align-center">
             {loggedInUser ?
-                <><button className="user-btn" onClick={toggleModal}>
-                    <BsPerson />
-                </button>
+                <>
+                    <p style={{ color: '#fff' }}>{loggedInUser.fullName}</p>
+                    <button className="user-btn" onClick={toggleModal}>
+                        <BsPerson />
+                    </button>
                     {isModalOpen && <section className="user-options-modal">
                         <button onClick={onLogOut}>Logout</button>
                     </section>}
