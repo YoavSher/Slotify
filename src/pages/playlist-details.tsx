@@ -21,6 +21,7 @@ import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"
 import { RemoveFromPlaylistBtn } from "./remove-from-playlist"
 import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { SongsTable } from "../cmps/playlist-details-cmps/songs-table"
+import { LikeButtonPlaylist } from "../cmps/playlist-details-cmps/like-button-playlist"
 
 export const PlaylistDetails = () => {
     const params = useParams()
@@ -28,6 +29,7 @@ export const PlaylistDetails = () => {
     const navigate = useNavigate()
 
     const playlists = useAppSelector(state => state.playlist.playlists)
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
@@ -158,7 +160,9 @@ export const PlaylistDetails = () => {
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
                     <button className="play-btn" onClick={onClickPlay}>
-                        <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span></button>
+                        <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
+                    </button>
+                    {loggedInUser && < LikeButtonPlaylist playlist={currPlaylist} />}
                     <button className="menu-btn" onClick={onTogglePlaylistModal}><span>• • •</span></button>
                     {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
                         <button onClick={onRemovePlaylist}>Delete</button>

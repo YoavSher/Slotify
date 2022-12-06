@@ -1,16 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Playlist } from '../../interfaces/playlist'
 import { Song } from '../../interfaces/song'
 import { LikedSongs } from '../../pages/liked-songs'
 import { User, userService } from '../../services/user.service'
 
 interface UserState {
     loggedInUser: User | null,
-    likedSongs: Song[] | null
+    likedSongs: Song[] | null,
+    playlists: Playlist[] | null,
 }
 
 const initialState: UserState = {
     loggedInUser: null,
-    likedSongs: null
+    likedSongs: null,
+    playlists: null
 }
 
 const userSlice = createSlice({
@@ -24,6 +27,7 @@ const userSlice = createSlice({
             }
             state.loggedInUser = action.payload
             state.likedSongs = []
+            state.playlists = []
         },
         onSongLike: (state, action: PayloadAction<Song>) => {
             if (state.likedSongs) {

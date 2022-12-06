@@ -7,10 +7,11 @@
     padding: 16px;
     grid-area: now-playing-bar;
     display: flex;
-    z-index: 100;
+    z-index: 400;
 
 
     &.full {
+
         .close-modal-btn {
             @include cleared-btn;
             position: absolute;
@@ -126,6 +127,8 @@
 
             .names-container {
                 .song-name {
+                    height: 24px;
+                    overflow: hidden;
                     color: white;
                     margin: 0 0 6px 10px;
                 }
