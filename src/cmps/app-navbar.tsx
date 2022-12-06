@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react"
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
-import { BsSpotify, BsPlusSquare } from 'react-icons/bs'
+import { useEffect } from "react"
+import { NavLink, useLocation, useNavigate } from "react-router-dom"
+import { BsSpotify } from 'react-icons/bs'
 import { RiHome2Line, RiHeartFill, RiHome2Fill, RiSearchFill } from 'react-icons/ri'
 import { FiSearch } from 'react-icons/fi'
 import { IoLibraryOutline, IoLibrary } from 'react-icons/io5'
-import { TiThListOutline } from 'react-icons/ti'
+import { HiOutlineQueueList, HiQueueList } from 'react-icons/hi2'
 
 import { playlistService } from "../services/playlist.service"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { setPlaylists } from "../store/playlist/playlist.reducer"
+import { NavLinksList } from "./app-navbar-cmps/nav-links-list"
+import { PlaylistLinks } from "./app-navbar-cmps/playlists-links"
 
 
 export const AppNavbar = () => {
@@ -19,10 +21,15 @@ export const AppNavbar = () => {
     const dispatch = useAppDispatch()
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const isMobile = screenWidth <= 770
+
     useEffect(() => {
         loadPlayList()
     }, [location])
 
+    const loadPlayList = async () => {
+        const playlists = await playlistService.query()//show only users liked playlists
+        if (playlists) dispatch(setPlaylists(playlists))
+    } //shouldn't exist - should be taken from store
 
 
 
@@ -30,43 +37,20 @@ export const AppNavbar = () => {
         const newPlaylist = await playlistService.createPlaylist()
         navigate(`playlist/${newPlaylist._id}`)
     }
-    const loadPlayList = async () => {
-        const playlists = await playlistService.query()
-        if (playlists) dispatch(setPlaylists(playlists))
-    }
     // make the location.pathname.includes() a function with a nicer name(?), have inside cmps like pathways,and playlist list. isMobile 
     // maybe we can render the paths as a map only need to figure the thing with location.pathName for the exact thingy
+    const routes = [
+        { location: '/', icon: <RiHome2Line />, activeIcon: <RiHome2Fill />, txt: 'Home', isRendered: true },
+        { location: 'search', icon: <FiSearch />, activeIcon: <RiSearchFill />, txt: 'Search', isRendered: true },
+        { location: 'collection', icon: <IoLibraryOutline />, activeIcon: <IoLibrary />, txt: 'Collection', isRendered: true },
+        { location: 'queue', icon: <HiOutlineQueueList />, activeIcon: <HiQueueList />, txt: 'Queue', isRendered: isMobile },
+    ]
+
     return (
         <nav className="app-navbar flex column">
             {!isMobile && <h1 onClick={() => { navigate('/') }} className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
-            <ul className="nav-links-main">
-                <li>
-                    <NavLink to="" className='flex align-center'>
-                        {location.pathname === '/' ? <span><RiHome2Fill /></span> :
-                            <span><RiHome2Line /></span>}
-                        <p>Home</p>
-                    </NavLink>
-                </li>
-                <li>
-                    <NavLink to="search" className='flex align-center'>
-                        {location.pathname.includes('search') ? <span><RiSearchFill /></span> :
-                            <span><FiSearch /></span>}
-                        <p>Search</p>
-                    </NavLink>
-                </li>
-                <li><NavLink to="collection" className=" flex align-center">
-                    {location.pathname.includes('collection') ? <span><IoLibrary /></span> :
-                        <span><IoLibraryOutline /></span>}
-                    <p>Your Library</p>
-                </NavLink>
-                </li>
-                {isMobile && (
-                    <li><NavLink to="queue" className="flex align-center">
-                        <span><TiThListOutline /></span><p>Queue</p>
-                    </NavLink>
-                    </li>
-                )}
-            </ul>
+            <NavLinksList routes={routes} />
+
             {!isMobile && <div className="nav-links-second">
                 <div className="create-playlist flex align-center" onClick={onCreateNewPlaylist}>
                     <div><span>+</span></div><p>Create Playlist</p>
@@ -79,19 +63,7 @@ export const AppNavbar = () => {
                     <hr />
                     <div className="separator"></div>
                 </div>
-                <div className="playlists-links">
-                    <div className="playlists-links-container">
-                        <div className="scroll-container">
-                            <ul>
-                                <div>
-                                    {playlists?.map(p => {
-                                        return <li key={p._id}><NavLink to={`playlist/${p._id}`}>{p.name}</NavLink></li>
-                                    })}
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {playlists && <PlaylistLinks playlists={playlists} />}
             </div>}
         </nav>
     )
