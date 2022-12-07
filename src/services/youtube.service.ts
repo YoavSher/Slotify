@@ -9,8 +9,9 @@ export const youtubeService = {
     getDataFromYoutube
 }
 
+// const API_KEY = 'AIzaSyBWpU91iAlKuAggBXKxl_IIN3pz4pVo-8I'
 const API_KEY = 'AIzaSyAansJ7yEAvHhN37JgeevGanfgWuYVWBLc'
-const combinedCleaner = /\([^\)]*\)|\[[^\]]*\]|HD|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|[`~!@#$%^*()_|+=?;:",.<>\{\}\[\]\\\/]|&#39|39|&39|&quot|&amp;|vevo|music|-topic| - topic|official/ig
+const combinedCleaner = /\([^\)]*\)|\[[^\]]*\]|HD|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|[`'~!@#$%^*()_|+=?;:",.<>\{\}\[\]\\\/]|&#39|39|&39|&quot|&amp;|vevo|music|-topic| - topic|official/ig
 
 
 
@@ -19,7 +20,7 @@ async function getDataFromYoutube(term: string) {
     try {
         const res = await axios
             .get(
-                `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=15&key=${API_KEY}&q=${term}`)
+                `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=45&key=${API_KEY}&q=${term}`)
 
         const str = res.data.items.map((item: { id: { videoId: string } }) => '' + `${item.id.videoId}%2C`).join('').slice(0, -3)
         const durationData = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`)
@@ -33,6 +34,7 @@ async function getDataFromYoutube(term: string) {
         songs = songs.filter((song: Song) => song.duration > 0 && song.duration < 900000)
         // songs = songs.splice(0, 5)
         //send songs  to backend {post}api/songs
+        console.log('songs:', songs)
         songService.addSongsFromSearch(songs)
         return songs
     } catch (err) {

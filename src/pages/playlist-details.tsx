@@ -22,6 +22,7 @@ import { RemoveFromPlaylistBtn } from "./remove-from-playlist"
 import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { SongsTable } from "../cmps/playlist-details-cmps/songs-table"
 import { LikeButtonPlaylist } from "../cmps/playlist-details-cmps/like-button-playlist"
+import { ActionMsg } from "../cmps/action-msg"
 
 export const PlaylistDetails = () => {
     const params = useParams()
@@ -32,6 +33,7 @@ export const PlaylistDetails = () => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
+    const [msg, setMsg] = useState('')
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
@@ -126,6 +128,7 @@ export const PlaylistDetails = () => {
                     return [...prevState, { ...song, addedAt: Date.now() }]
                 })
                 await songService.addSongToPlaylist(newSong)
+                showActionMsg('Song added to playlist')
             }
         } catch (err) {
             setSongs(prevState => {
@@ -145,6 +148,7 @@ export const PlaylistDetails = () => {
                     return prevState.filter(s => s.videoId !== song.videoId)
                 })
                 await songService.removeFromPlaylist({ playlistId, videoId, idx })
+                showActionMsg('Song removed')
             }
         } catch (err) {
             setSongs(prevState => {
@@ -154,6 +158,13 @@ export const PlaylistDetails = () => {
             })
             console.log(err)
         }
+    }
+
+    const showActionMsg = (txt: string) => {
+        setMsg(txt)
+        setTimeout(() => {
+            setMsg('')
+        }, 2000)
     }
 
     if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>
@@ -193,6 +204,7 @@ export const PlaylistDetails = () => {
                         playSongFromPlaylist={playSongFromPlaylist} />
                 </div>
             </div>
+            {msg && <ActionMsg msg={msg} />}
             {isModalOpen && songForModal && <SongsModal
                 closeModal={closeModal}
                 song={songForModal}
