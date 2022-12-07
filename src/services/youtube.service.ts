@@ -9,7 +9,7 @@ export const youtubeService = {
     getDataFromYoutube
 }
 
-const API_KEY = 'AIzaSyB68OvbDNN7gFqkCGOoyxLWC36rnRfVEmQ'
+const API_KEY = 'AIzaSyBWpU91iAlKuAggBXKxl_IIN3pz4pVo-8I'
 const combinedCleaner = /\([^\)]*\)|\[[^\]]*\]|HD|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|[`~!@#$%^*()_|+=?;:",.<>\{\}\[\]\\\/]|&#39|39|&39|&quot|&amp;|vevo|music|-topic| - topic|official/ig
 
 

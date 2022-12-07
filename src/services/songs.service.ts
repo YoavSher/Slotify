@@ -50,7 +50,7 @@ async function addSongToPlaylist(song: PlaylistSong) {
         await httpService.post(`song/playlist`, song)
         // return songs as Song[]
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }
 
@@ -61,6 +61,7 @@ interface removedSong {
 }
 async function removeFromPlaylist(removedSong: removedSong) {
     try {
+        console.log('de')
         await httpService.delete(`song/playlist/${removedSong.playlistId}`, removedSong)
         // return songs as Song[]
     } catch (err) {

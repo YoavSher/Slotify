@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent, MouseEvent, MouseEventHandler, useEffect, useState } from "react"
+import { ChangeEvent, FocusEvent, MouseEvent, MouseEventHandler, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Helmet } from 'react-helmet'
 
@@ -52,11 +52,10 @@ export const PlaylistDetails = () => {
                 const sourceIdx = result.source.index
                 const destinationIdx = result.destination.index
                 const [reorderedItem] = updatedSongs.splice(sourceIdx, 1)
-                console.log('reorderedItem:', reorderedItem)
                 const { videoId } = reorderedItem
                 updatedSongs.splice(destinationIdx, 0, reorderedItem)
-                await playlistService.reIndexPlaylistSongs({ playlistId, videoId, sourceIdx, destinationIdx })
                 setSongs(updatedSongs)
+                await playlistService.reIndexPlaylistSongs({ playlistId, videoId, sourceIdx, destinationIdx })
             } catch (err) {
                 console.log('err:', err)
             }
@@ -68,7 +67,7 @@ export const PlaylistDetails = () => {
         const { value } = ev.target
         if (currPlaylist) {
             setCurrPlaylist((prevState) => {
-                if (prevState !== undefined) {
+                if (prevState) {
                     return { ...prevState, name: value }
                 }
             })
@@ -119,26 +118,46 @@ export const PlaylistDetails = () => {
     const onAddToPlaylist = async (song: Song) => {
         try {
             const { videoId } = song
-            if (songs !== undefined && playlistId) {
+            if (songs && playlistId) {
                 if (songs.some(s => s.videoId === videoId)) return
                 const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
-                await songService.addSongToPlaylist(newSong)
                 setSongs(prevState => {
                     return [...prevState, { ...song, addedAt: Date.now() }]
                 })
+                await songService.addSongToPlaylist(newSong)
             }
         } catch (err) {
-            console.log('err:', err)
-        }
-    }
-
-    const removeSongFromPlaylist = (song: Song) => {
-        const { videoId, idx } = song
-        if (playlistId) {
             setSongs(prevState => {
                 return prevState.filter(s => s.videoId !== song.videoId)
             })
-            if (idx !== undefined) songService.removeFromPlaylist({ playlistId, videoId, idx })
+            console.log(err)
+        }
+    }
+    // const blockerRef = useRef(false)
+    // const blockFunction = () => {
+    //     blockerRef.current = true
+    //     setTimeout(() => {
+    //         blockerRef.current = false
+    //     }, 100)
+    // }
+
+    const removeSongFromPlaylist = async (song: Song) => {
+        // blockFunction()
+        console.log('trying to remove')
+        try {
+            const { videoId } = song
+            if (playlistId) {
+                const idx = songs.findIndex(s => videoId === s.videoId)
+                if (idx === -1) return
+                setSongs(prevState => {
+                    return prevState.filter(s => s.videoId !== song.videoId)
+                })
+                console.log('starting to delete', Date.now())
+                await songService.removeFromPlaylist({ playlistId, videoId, idx })
+                console.log('deleted!', Date.now())
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 
