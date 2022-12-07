@@ -45,8 +45,8 @@ async function removeLikedSong(videoId: string) {
 }
 
 async function addSongToPlaylist(song: PlaylistSong) {
-    console.log('song:', song)
     try {
+        console.log('new song!', song)
         await httpService.post(`song/playlist/`, song)
         // return songs as Song[]
     } catch (err) {
@@ -65,7 +65,7 @@ async function removeFromPlaylist(removedSong: removedSong) {
         await httpService.delete(`song/playlist/${removedSong.playlistId}`, removedSong)
         // return songs as Song[]
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }
 

@@ -1,11 +1,7 @@
 .home-page {
-    overflow-y: scroll;
-    position: absolute;
-    bottom: 0;
-    top: 52px;
-    right: 0;
-    left: 0;
+    @include main-content-scroll;
     padding: 20px;
+    top: 52px;
 
     .greeting {
         color: white;

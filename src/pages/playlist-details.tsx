@@ -36,6 +36,7 @@ export const PlaylistDetails = () => {
     const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
     const isMobile = screenWidth <= 770
+    const isCurrentUserPlaylistOwner = loggedInUser?._id === currPlaylist?.creatorId
 
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
@@ -133,30 +134,24 @@ export const PlaylistDetails = () => {
             console.log(err)
         }
     }
-    // const blockerRef = useRef(false)
-    // const blockFunction = () => {
-    //     blockerRef.current = true
-    //     setTimeout(() => {
-    //         blockerRef.current = false
-    //     }, 100)
-    // }
 
     const removeSongFromPlaylist = async (song: Song) => {
-        // blockFunction()
-        console.log('trying to remove')
+        const { videoId } = song
+        const idx = songs.findIndex(s => videoId === s.videoId)
+        if (idx === -1) return
         try {
-            const { videoId } = song
             if (playlistId) {
-                const idx = songs.findIndex(s => videoId === s.videoId)
-                if (idx === -1) return
                 setSongs(prevState => {
                     return prevState.filter(s => s.videoId !== song.videoId)
                 })
-                console.log('starting to delete', Date.now())
                 await songService.removeFromPlaylist({ playlistId, videoId, idx })
-                console.log('deleted!', Date.now())
             }
         } catch (err) {
+            setSongs(prevState => {
+
+                prevState.splice(idx, 0, song)
+                return [...prevState]
+            })
             console.log(err)
         }
     }
@@ -169,6 +164,7 @@ export const PlaylistDetails = () => {
                 <title>Slotify - {currPlaylist.name}</title>
             </Helmet>
             <PlaylistDetailsHeader
+                isCurrentUserPlaylistOwner={isCurrentUserPlaylistOwner}
                 playlist={currPlaylist}
                 songsLength={songs.length}
                 onChangePhoto={onChangePhoto}
@@ -180,7 +176,7 @@ export const PlaylistDetails = () => {
                     <button className="play-btn" onClick={onClickPlay}>
                         <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
                     </button>
-                    {loggedInUser && < LikeButtonPlaylist playlist={currPlaylist} />}
+                    {loggedInUser && !isCurrentUserPlaylistOwner && < LikeButtonPlaylist playlist={currPlaylist} />}
                     <button className="menu-btn" onClick={onTogglePlaylistModal}><span>• • •</span></button>
                     {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
                         <button onClick={onRemovePlaylist}>Delete</button>
@@ -202,7 +198,7 @@ export const PlaylistDetails = () => {
                 song={songForModal}
                 modalPos={modalPos}
                 isMobile={isMobile}
-                renderedChild={<RemoveFromPlaylistBtn
+                renderedChild={<RemoveFromPlaylistBtn isRendered={isCurrentUserPlaylistOwner}
                     song={songForModal} removeSongFromPlaylist={removeSongFromPlaylist} />}
             />}
             <PlaylistDetailsSearch screenWidth={screenWidth} playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
@@ -215,6 +211,7 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     setCurrPlaylist: React.Dispatch<React.SetStateAction<Playlist | undefined>>,
     setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
     useEffect(() => {
+
         loadSongs()
         loadPlaylist()
     }, [playlistId, playlists])
@@ -222,7 +219,6 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     const loadPlaylist = () => {
         if (playlistId !== undefined && playlists) {
             const playlist = playlists.find((p: Playlist) => p._id === playlistId)
-            // if(!playlist) // fetch it
             setCurrPlaylist(playlist)
         }
     }
@@ -230,6 +226,7 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     const loadSongs = async () => {
         if (playlistId) {
             try {
+                setSongs([])
                 const songs = await songService.getPlaylistSongs(playlistId)
                 if (songs) setSongs(songs)
             } catch (err) {

@@ -3,11 +3,13 @@ import { Helmet } from "react-helmet"
 import { BsSpotify } from "react-icons/bs"
 import { Link, useNavigate } from "react-router-dom"
 import { GoogleLoginBtn } from "../cmps/google-login-btn"
+import { Playlist } from "../interfaces/playlist"
 import { PlaylistSong, Song } from "../interfaces/song"
+import { playlistService } from "../services/playlist.service"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
-import { setLikedSongs, setUser } from "../store/user/user.reducer"
+import { setLikedPlaylists, setLikedSongs, setUser } from "../store/user/user.reducer"
 
 export const Login = () => {
     const navigate = useNavigate()
@@ -31,10 +33,13 @@ export const Login = () => {
         try {
             const user = await userService.login(loggesinUser)
             if (user) {
-                //TODO: request it's playlists
+
                 dispatch(setUser(user))
                 const songs = await songService.getLikedSongs(user._id) as Song[]
                 dispatch(setLikedSongs(songs))
+                const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
+                dispatch(setLikedPlaylists(playlists))
+                
             }
 
             onCloseModal()

@@ -101,6 +101,10 @@
                             padding-bottom: 50px;
                             width: 92px;
 
+                            img {
+                                clip-path: inset(12.5% 0 12.5%);
+                            }
+
                         }
 
                         .icon-container {
@@ -115,7 +119,8 @@
                                 @include green-play-btn
                             }
                         }
-                        h3{
+
+                        h3 {
                             white-space: nowrap;
                             overflow-x: hidden;
                             text-overflow: ellipsis;
@@ -167,6 +172,7 @@
 
                             img {
                                 height: 100%;
+                                clip-path: inset(12.5% 0 12.5%);
                             }
 
                             .photo-play {

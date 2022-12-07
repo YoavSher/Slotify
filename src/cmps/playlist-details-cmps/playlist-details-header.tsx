@@ -11,19 +11,19 @@ interface Props {
     onChangeTitle: any,
     onSaveChanges: any,
     isMobile: boolean,
-    songsLength: number
+    songsLength: number,
+    isCurrentUserPlaylistOwner: boolean
 }
 
 
 
 
-export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, isMobile, songsLength }: Props) => {
-    const loggedinUser = useAppSelector(state => state.user.loggedInUser)
+export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, isMobile, songsLength, isCurrentUserPlaylistOwner }: Props) => {
     return (
         <header className="playlist-details-header flex">
             <div className="img-container">
                 <img src={playlist.image} alt="" />
-                <div className="change-photo-btn" >
+                {isCurrentUserPlaylistOwner && <div className="change-photo-btn" >
                     <label htmlFor="changePhoto">
                         <div className="photo-label flex column align-center">
                             <span><FiEdit2 /></span>
@@ -31,11 +31,11 @@ export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, 
                         </div>
                     </label>
                     <input type="file" id="changePhoto" onChange={onChangePhoto} hidden />
-                </div>
+                </div>}
             </div>
             <div className="playlist-description flex column">
                 {!isMobile && <h3>PLAYLIST</h3>}
-                <input disabled={false}
+                <input disabled={!isCurrentUserPlaylistOwner}
                     type="text" className="playlist-title"
                     onChange={onChangeTitle} onBlur={() => onSaveChanges(undefined)} value={playlist.name} />
                 <h5>{playlist?.fullName}

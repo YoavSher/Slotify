@@ -1,20 +1,45 @@
 import { Playlist } from "../../interfaces/playlist"
-import { useAppSelector } from "../../store/store.hooks"
+import { playlistService } from "../../services/playlist.service"
+import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
+import { onPlaylistDislike, onPlaylistLike } from "../../store/user/user.reducer"
 import { HeartSvg } from "../../svgs/heart-svg"
 
 interface Props {
     playlist: Playlist
 }
 export const LikeButtonPlaylist = ({ playlist }: Props) => {
-    const isPlaylistLiked = false
     const playlists = useAppSelector(state => state.user.playlists)
-    const togglePlaylistLike = () => {
-
-    }
+    const { isPlaylistLiked, togglePlaylistLike } = usePlaylistLikingSystem(playlist)
+    if (!playlists) return <></>
     return (<div className="like-song">
         <button className={`like-btn ${(isPlaylistLiked) ? 'liked' : 'unliked'}`} onClick={togglePlaylistLike}>
             <HeartSvg />
         </button>
 
     </div>)
+}
+
+const usePlaylistLikingSystem = (playlist: Playlist) => {
+    const userPlaylists = useAppSelector(state => state.user.playlists)
+
+    const dispatch = useAppDispatch()
+    const currPlaylistId = playlist._id
+    const isPlaylistLiked = userPlaylists?.some(p => p._id === currPlaylistId)
+    const togglePlaylistLike = async (ev: React.MouseEvent<HTMLElement>) => {
+        ev.stopPropagation()
+        if (userPlaylists) {
+            try {
+                if (isPlaylistLiked) {
+                    await playlistService.removeLikedPlaylist(currPlaylistId)
+                    dispatch(onPlaylistDislike(currPlaylistId))
+                } else {
+                    await playlistService.addLikedPlaylist(currPlaylistId)
+                    dispatch(onPlaylistLike(playlist))
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+    return { isPlaylistLiked, togglePlaylistLike }
 }

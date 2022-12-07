@@ -10,7 +10,11 @@ export const playlistService = {
     createPlaylist,
     updatePlaylist,
     removePlaylist,
-    reIndexPlaylistSongs
+    reIndexPlaylistSongs,
+    addLikedPlaylist,
+    removeLikedPlaylist,
+    getUserPlaylists
+
 }
 
 const STORAGE_KEY = 'playlists'
@@ -20,7 +24,6 @@ const gPlaylists = getPlaylists()
 async function query() {
     try {
         const playlists = await httpService.get('playlist', null)
-        // console.log('playlists:', playlists)
         return playlists
 
     } catch (err) {
@@ -32,24 +35,25 @@ async function query() {
 async function getPlaylistById(playlistId: number) {
     try {
         const playlist = await httpService.get(`playlist/${playlistId}`, null)
-        // console.log('playlist:', playlist)
         return playlist
     } catch (err) {
         console.log('err:', err)
     }
 }
-//adjustments
 async function createPlaylist() {
+    try {
 
-    const newPlaylist = await httpService.post('playlist/', null)
-    console.log('playlist: ', newPlaylist)
-    return newPlaylist
+        const newPlaylist = await httpService.post('playlist/', null)
+        console.log('playlist: ', newPlaylist)
+        return newPlaylist
+    } catch (err) {
+        console.error(err)
+    }
 }
 
 async function updatePlaylist(playlist: Playlist) {
     try {
-        const updatedPlaylist = await httpService.put(`playlist/${playlist._id}`, playlist)
-        // const updatedPlaylist = await storageService.put(STORAGE_KEY, playlist)
+        await httpService.put(`playlist/${playlist._id}`, playlist)
     } catch (err) {
         console.log('err:', err)
     }
@@ -57,7 +61,7 @@ async function updatePlaylist(playlist: Playlist) {
 
 async function removePlaylist(playlistId: number) {
     try {
-        const updatedPlaylist = await httpService.delete(`playlist/${playlistId}`, null)
+        await httpService.delete(`playlist/${playlistId}`, null)
     } catch (err) {
         console.log('err:', err)
     }
@@ -72,7 +76,34 @@ interface reIndexInfo {
 
 async function reIndexPlaylistSongs(reIndexInfo: reIndexInfo) {
     try {
-        await httpService.put(`song/playlist/${reIndexInfo.playlistId}`,reIndexInfo)
+        await httpService.put(`song/playlist/${reIndexInfo.playlistId}`, reIndexInfo)
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+async function addLikedPlaylist(playlistId: number) {
+    try {
+        await httpService.post('playlist/user', { playlistId })
+    } catch (err) {
+        console.log('err:', err)
+    }
+
+}
+
+async function removeLikedPlaylist(playlistId: number) {
+    try {
+        await httpService.delete(`playlist/user/${playlistId}`, null)
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+async function getUserPlaylists(userId: number) {
+    try {
+        const likedPlaylists = await httpService.get(`playlist/user/${userId}`, null)
+        console.log('got em', likedPlaylists)
+        return likedPlaylists
     } catch (err) {
         console.log('err:', err)
     }

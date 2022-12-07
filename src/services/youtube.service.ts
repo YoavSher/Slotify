@@ -9,7 +9,7 @@ export const youtubeService = {
     getDataFromYoutube
 }
 
-const API_KEY = 'AIzaSyBWpU91iAlKuAggBXKxl_IIN3pz4pVo-8I'
+const API_KEY = 'AIzaSyAansJ7yEAvHhN37JgeevGanfgWuYVWBLc'
 const combinedCleaner = /\([^\)]*\)|\[[^\]]*\]|HD|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|[`~!@#$%^*()_|+=?;:",.<>\{\}\[\]\\\/]|&#39|39|&39|&quot|&amp;|vevo|music|-topic| - topic|official/ig
 
 
@@ -53,5 +53,6 @@ function _makeSong(video: any) {
 
 function _translateDuration(duration: string): number {
     let durations = duration.slice(2, duration.length - 1).split('M')
+    if (durations.length === 1) return +durations[0] * 60 * 1000
     return +durations.reduce((minute, second) => ((+minute * 60 + +second) * 1000).toString())
 }

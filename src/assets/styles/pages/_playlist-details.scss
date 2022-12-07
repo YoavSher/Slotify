@@ -1,13 +1,8 @@
 .playlist-details {
     color: #fff;
-    overflow-y: scroll;
     padding-left: 20xp;
-    position: absolute;
     resize: none;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
+    @include main-content-scroll;
     margin: 0;
     outline: none;
     overflow-x: inherit;

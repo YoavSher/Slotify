@@ -1,5 +1,6 @@
 .queue-page {
-    padding: 0 16px;
+    padding: 0 16px 24px;
+    @include main-content-scroll;
 
     h3.title {
         color: white;
@@ -11,7 +12,7 @@
         color: #A7A7A7;
         font-family: curlyBold;
         margin: 30px 0 5px 5px;
-        font-size: 18px;    
+        font-size: 18px;
     }
 
     .queue-song-list {
