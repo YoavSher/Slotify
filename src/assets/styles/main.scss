@@ -11,8 +11,8 @@
 @import 'cmps/music-player-mobile';
 @import 'cmps/app-navbar';
 @import 'cmps/app-header';
-@import 'cmps/playlist-list';
-@import 'cmps/playlist-preview';
+@import 'cmps/recently-played-list';
+@import 'cmps/recently-played-preview';
 @import 'cmps/login-page';
 @import 'cmps/queue-list';
 @import 'cmps/actions-modal';
@@ -20,6 +20,10 @@
 @import 'cmps/playlist-details-header';
 @import 'cmps/playlist-details-search';
 @import 'cmps/google-login-btn';
+@import 'cmps/action-msg';
+@import 'cmps/playlist-container';
+@import 'cmps/playlists-list';
+@import 'cmps/playlist-preview';
 
 // PAGES
 @import 'pages/main-app';

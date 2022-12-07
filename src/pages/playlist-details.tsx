@@ -22,6 +22,7 @@ import { RemoveFromPlaylistBtn } from "./remove-from-playlist"
 import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { SongsTable } from "../cmps/playlist-details-cmps/songs-table"
 import { LikeButtonPlaylist } from "../cmps/playlist-details-cmps/like-button-playlist"
+import { ActionMsg } from "../cmps/action-msg"
 
 export const PlaylistDetails = () => {
     const params = useParams()
@@ -32,6 +33,7 @@ export const PlaylistDetails = () => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
 
+    const [msg, setMsg] = useState('')
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
@@ -125,6 +127,7 @@ export const PlaylistDetails = () => {
                     return [...prevState, { ...song, addedAt: Date.now() }]
                 })
                 await songService.addSongToPlaylist(newSong)
+                showActionMsg('Song added to playlist')
             }
         } catch (err) {
             setSongs(prevState => {
@@ -152,13 +155,21 @@ export const PlaylistDetails = () => {
                 setSongs(prevState => {
                     return prevState.filter(s => s.videoId !== song.videoId)
                 })
-                console.log('starting to delete', Date.now())
+                // console.log('starting to delete', Date.now())
                 await songService.removeFromPlaylist({ playlistId, videoId, idx })
-                console.log('deleted!', Date.now())
+                showActionMsg('Song removed')
+                // console.log('deleted!', Date.now())
             }
         } catch (err) {
             console.log(err)
         }
+    }
+
+    const showActionMsg = (txt: string) => {
+        setMsg(txt)
+        setTimeout(() => {
+            setMsg('')
+        }, 2000)
     }
 
     if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>
@@ -197,6 +208,7 @@ export const PlaylistDetails = () => {
                         playSongFromPlaylist={playSongFromPlaylist} />
                 </div>
             </div>
+            {msg && <ActionMsg msg={msg} />}
             {isModalOpen && songForModal && <SongsModal
                 closeModal={closeModal}
                 song={songForModal}

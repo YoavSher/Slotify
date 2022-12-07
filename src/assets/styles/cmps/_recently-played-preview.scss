@@ -1,0 +1,104 @@
+.recently-played-preview {
+    background-color: hsla(0, 0%, 100%, .1);
+    border-radius: 4px;
+    height: 80px;
+    overflow: hidden;
+    position: relative;
+    transition: background-color .3s ease;
+
+    @media(min-width:770px) {
+
+        &:hover .recently-played-preview-container .recently-played-preview-content.icon-container {
+            opacity: 1;
+
+        }
+
+        &:hover {
+            background: hsla(0, 0%, 100%, .2);
+        }
+    }
+
+
+
+    .recently-played-preview-container {
+        gap: 10px;
+
+        .img-container {
+            -webkit-box-align: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            align-items: center;
+            background-color: hsla(0, 0%, 100%, .2);
+            box-shadow: 0 8px 24px rgb(0 0 0 / 50%);
+            display: -webkit-box;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            width: 80px;
+            height: 80px;
+            min-width: 80px;
+
+            img {
+                display: block;
+                height: 100%;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%;
+            }
+
+        }
+
+        .recently-played-preview-content {
+            -webkit-box-align: center;
+            -webkit-box-flex: 1;
+            -webkit-box-pack: justify;
+            color: #fff;
+            display: -webkit-box;
+            flex: 1;
+            padding: 0 16px;
+
+            &.title {
+                a {
+                    color: #fff;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            &.icon-container {
+                margin-left: 8px;
+                border-radius: 500px;
+                display: flex;
+                opacity: 0;
+                position: absolute;
+                right: 10px;
+                transition: all .3s ease;
+                z-index: 2;
+                &.playing {
+                    opacity: 1;
+                }
+                button {
+                    @include green-play-btn
+                }
+            }
+
+            &.pause-container {
+                margin-left: 8px;
+                border-radius: 500px;
+                display: flex;
+                position: absolute;
+                right: 10px;
+                transition: all .3s ease;
+                z-index: 2;
+
+                button {
+                    @include green-play-btn
+                }
+
+            }
+        }
+    }
+}

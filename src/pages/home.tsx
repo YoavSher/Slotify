@@ -1,12 +1,13 @@
 import { useEffect } from "react"
 import { Helmet } from "react-helmet"
 import { Outlet } from "react-router-dom"
-import { PlaylistList } from "../cmps/playlist-list"
+import { RecentlyPlayedList } from "../cmps/recently-played-list"
 import { playlistService } from "../services/playlist.service"
 import { setPlaylists } from "../store/playlist/playlist.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 import { utilService } from "../services/util.service"
+import { PlaylistContainer } from "../cmps/playlist-perview-cmps/playlists-container"
 
 export const Home = () => {
 
@@ -26,7 +27,8 @@ export const Home = () => {
             <section className="home-page">
                 <Helmet><title>Slotify</title></Helmet>
                 <h2 className="greeting">Good {utilService.getCurrentPartOfTheDay()}</h2>
-                <PlaylistList playlists={playlists} />
+                {/* <RecentlyPlayedList playlists={playlists} /> */}
+                <PlaylistContainer playlists={playlists}/>
                 <div className="pusher"></div>
             </section>
             <Outlet></Outlet>
@@ -34,3 +36,5 @@ export const Home = () => {
 
     )
 }
+
+
