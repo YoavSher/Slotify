@@ -118,7 +118,6 @@ export const PlaylistDetails = () => {
 
     const onAddToPlaylist = async (song: Song) => {
         try {
-
             const { videoId } = song
             if (songs !== undefined && playlistId) {
                 if (songs.some(s => s.videoId === videoId)) return
