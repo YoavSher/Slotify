@@ -1,22 +1,29 @@
 .playlist-preview {
-    background: #181818;
-    border-radius: 5px;
-    flex: 1;
     isolation: isolate;
-    padding: 16px;
+    padding: 16px 16px 16px 0;
     position: relative;
     transition: background-color .3s ease;
-    width: 100%;
     cursor: pointer;
+    width: 180px;
 
-    &:hover .img-container .icon-container {
-        opacity: 1;
-        bottom: 8px;
+    @media(min-width: 770px) {
+
+        border-radius: 5px;
+        background: #181818;
+        flex: 1;
+        width: 100%;
+        padding: 16px;
+
+        &:hover .img-container .icon-container {
+            opacity: 1;
+            bottom: 8px;
+        }
+
+        &:hover {
+            background: #282828;
+        }
     }
 
-    &:hover {
-        background: #282828
-    }
 
     .img-container {
         box-shadow: 0 8px 24px rgb(0 0 0 / 50%);

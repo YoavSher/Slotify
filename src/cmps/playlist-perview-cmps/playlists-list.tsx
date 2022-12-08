@@ -10,7 +10,7 @@ interface Props {
 export const PlaylistsList = ({ topic, playlists }: Props) => {
     return (
         <section className="playlists-list">
-            <h1>{topic}</h1>
+            <h1 className="topic">{topic}</h1>
             <section className="playlist-preview-container ">
                 {playlists.map(p => <PlaylistPreview key={p._id} playlistPre={p} />)}
             </section>

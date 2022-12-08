@@ -20,6 +20,7 @@ interface Props {
 
 export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild }: Props) => {
 
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const [addModal, setAddModal] = useState(false)
     const dispatch = useAppDispatch()
     const addSongToQueue = () => {
@@ -55,6 +56,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
 
     }
 
+
     console.log(song)
     return (
         <>
@@ -69,7 +71,9 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
                 {typeof song?.idx === 'number' && <button onClick={removeSongFromQueue}>Remove from queue</button>}
                 {likedSongs && <button onClick={toggleSongLike} >{(isSongLiked) ? 'Remove song from liked songs' : 'Add song to liked songs'}</button>}
                 {renderedChild}
-                <button onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
+                <button disabled={loggedInUser ? false : true}
+                    style={{ cursor: `${loggedInUser ? 'default' : 'not-allowed'}` }}
+                    onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
                     Add to playlist <span><AiFillCaretRight /></span></button>
                 {addModal &&
                     <AddToPlaylistModal

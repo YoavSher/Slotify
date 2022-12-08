@@ -42,7 +42,7 @@ export const AppNavbar = () => {
     const routes = [
         { location: '/', icon: <RiHome2Line />, activeIcon: <RiHome2Fill />, txt: 'Home', isRendered: true },
         { location: 'search', icon: <FiSearch />, activeIcon: <RiSearchFill />, txt: 'Search', isRendered: true },
-        { location: 'collection', icon: <IoLibraryOutline />, activeIcon: <IoLibrary />, txt: 'Collection', isRendered: true },
+        { location: 'collection', icon: <IoLibraryOutline />, activeIcon: <IoLibrary />, txt: 'Your Library', isRendered: true },
         { location: 'queue', icon: <HiOutlineQueueList />, activeIcon: <HiQueueList />, txt: 'Queue', isRendered: isMobile },
     ]
 

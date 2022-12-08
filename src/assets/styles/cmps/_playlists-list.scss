@@ -1,20 +1,56 @@
 .playlists-list {
     content-visibility: auto;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
-    min-height: 300px;
+    min-height: 260px;
     min-width: 100%;
     position: relative;
     color: #fff;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media(min-width: 770px) {
+        min-height: 300px;
+        overflow: hidden;
+    }
+
+    .topic {
+        position: sticky;
+        left: 0;
+        @media(min-width: 770px) {
+           position: static;
+        } 
+    }
 
     .playlist-preview-container {
-        grid-gap: 25px;
-        display: grid;
-        grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
-        grid-auto-rows: 0;
-        grid-template-rows: 1fr;
+        display: flex;
+        gap: 10px;
+        position: absolute;
+        top: 25px;
+        bottom: 0;
+        right: 0;
+        left: 0;
+
+        // overflow: hidden;
+        // &::-webkit-scrollbar {
+        //     display: none;
+        // }
+
+        width: 1185px;
+
+        @media(min-width: 770px) {
+            grid-gap: 25px;
+            display: grid;
+            grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
+            grid-auto-rows: 0;
+            grid-template-rows: 1fr;
+            width: auto;
+
+        }
     }
 }

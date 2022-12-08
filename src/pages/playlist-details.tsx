@@ -213,7 +213,10 @@ export const PlaylistDetails = () => {
                 renderedChild={<RemoveFromPlaylistBtn isRendered={isCurrentUserPlaylistOwner}
                     song={songForModal} removeSongFromPlaylist={removeSongFromPlaylist} />}
             />}
-            <PlaylistDetailsSearch screenWidth={screenWidth} playlistId={currPlaylist._id} onAddToPlaylist={onAddToPlaylist} />
+            {isCurrentUserPlaylistOwner && <PlaylistDetailsSearch
+                screenWidth={screenWidth}
+                playlistId={currPlaylist._id}
+                onAddToPlaylist={onAddToPlaylist} />}
             <div className="pusher"></div>
         </section>
     )
