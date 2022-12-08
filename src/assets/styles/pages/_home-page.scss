@@ -1,12 +1,16 @@
 .home-page {
     @include main-content-scroll;
-    padding: 20px;
+    padding: 20px 0 20px 20px;
     top: 52px;
+
+    @media(min-width:770px) {
+        padding: 20px;
+    }
 
     .greeting {
         color: white;
         font-family: 'curlyBold';
         font-size: 34px;
-        margin-bottom:25px;
+        margin-bottom: 25px;
     }
 }

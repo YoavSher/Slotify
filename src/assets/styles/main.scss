@@ -24,6 +24,8 @@
 @import 'cmps/playlist-container';
 @import 'cmps/playlists-list';
 @import 'cmps/playlist-preview';
+@import 'cmps/library-playlist-container';
+@import 'cmps/liked-songs-preview';
 
 // PAGES
 @import 'pages/main-app';
@@ -31,3 +33,4 @@
 @import 'pages/search-results';
 @import 'pages/playlist-details';
 @import 'pages/liked-songs';
+@import 'pages/library';

@@ -16,6 +16,7 @@ import { songService } from "../services/songs.service"
 import { FaPauseCircle } from "react-icons/fa"
 import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"
 import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
+import { useCheckLoggedInUser } from "../hooks/useCheckLoggedInUser"
 
 export const LikedSongs = () => {
 
@@ -25,7 +26,7 @@ export const LikedSongs = () => {
     const isMobile = screenWidth <= 770
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const LIKED_SONGS_PLAYLIST_ID = 0
-
+    useCheckLoggedInUser()
     const {
         playSongFromPlaylist,
         onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []))
@@ -69,3 +70,4 @@ export const LikedSongs = () => {
         </>
     )
 }
+

@@ -4,7 +4,7 @@ import routes from './routes';
 import { Route, Routes } from 'react-router-dom';
 import { MusicPlayer } from './cmps/music-player';
 import './assets/styles/main.scss'
-import { AppNavbar } from './cmps/app-navbar';
+import { AppNavbar } from './cmps/app-navbar-cmps/app-navbar';
 import { AppHeader } from './cmps/app-header';
 import { useAppDispatch, useAppSelector } from './store/store.hooks';
 import { setPlaylists } from './store/playlist/playlist.reducer';

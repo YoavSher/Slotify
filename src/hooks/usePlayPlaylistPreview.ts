@@ -12,6 +12,7 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist) => {
 
     const onSetPlaylist = async (ev:MouseEvent<HTMLButtonElement>) => {
         ev.stopPropagation()
+        console.log('playlistPre:', playlistPre)
         if (isCurrPlaylistOnQueue && isSongPlaying) {
             dispatch(setIsSongPlaying(false))
         } else if (isCurrPlaylistOnQueue && !isSongPlaying) {

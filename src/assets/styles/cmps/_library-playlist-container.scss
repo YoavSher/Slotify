@@ -1,0 +1,12 @@
+.library-playlist-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    
+    @media(min-width: 770px) {
+        grid-gap: 25px;
+
+        grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
+        grid-auto-rows: 1fr;
+    }
+}

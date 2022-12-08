@@ -229,6 +229,10 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
 
         loadSongs()
         loadPlaylist()
+        return (() => {
+            setCurrPlaylist(undefined)
+            setSongs([])
+        })
     }, [playlistId, playlists])
 
     const loadPlaylist = () => {
@@ -241,7 +245,6 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     const loadSongs = async () => {
         if (playlistId) {
             try {
-                setSongs([])
                 const songs = await songService.getPlaylistSongs(playlistId)
                 if (songs) setSongs(songs)
             } catch (err) {

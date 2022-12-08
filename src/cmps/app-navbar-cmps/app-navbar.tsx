@@ -1,25 +1,31 @@
 import { useEffect } from "react"
 import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import { BsSpotify } from 'react-icons/bs'
+import { HiOutlineSpeakerWave } from 'react-icons/hi2'
 import { RiHome2Line, RiHeartFill, RiHome2Fill, RiSearchFill } from 'react-icons/ri'
 import { FiSearch } from 'react-icons/fi'
 import { IoLibraryOutline, IoLibrary } from 'react-icons/io5'
 import { HiOutlineQueueList, HiQueueList } from 'react-icons/hi2'
 
-import { playlistService } from "../services/playlist.service"
-import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { setPlaylists } from "../store/playlist/playlist.reducer"
-import { NavLinksList } from "./app-navbar-cmps/nav-links-list"
-import { PlaylistLinks } from "./app-navbar-cmps/playlists-links"
+import { playlistService } from "../../services/playlist.service"
+import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
+import { setPlaylists } from "../../store/playlist/playlist.reducer"
+import { NavLinksList } from "./nav-links-list"
+import { PlaylistLinks } from "./playlists-links"
 
 
 export const AppNavbar = () => {
 
     const navigate = useNavigate()
     const location = useLocation()
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlists = useAppSelector(state => state.playlist.playlists)
     const dispatch = useAppDispatch()
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
+    const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
+    const isCurrPlaylistOnQueue = 0 === queuePlaylistId
+    const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
     const isMobile = screenWidth <= 770
 
     useEffect(() => {
@@ -34,8 +40,11 @@ export const AppNavbar = () => {
 
 
     const onCreateNewPlaylist = async () => {
-        const newPlaylist = await playlistService.createPlaylist()
-        navigate(`playlist/${newPlaylist._id}`)
+        if (!loggedInUser) return
+        else {
+            const newPlaylist = await playlistService.createPlaylist()
+            navigate(`playlist/${newPlaylist._id}`)
+        }
     }
     // make the location.pathname.includes() a function with a nicer name(?), have inside cmps like pathways,and playlist list. isMobile 
     // maybe we can render the paths as a map only need to figure the thing with location.pathName for the exact thingy
@@ -57,7 +66,10 @@ export const AppNavbar = () => {
                 </div>
                 <div className="liked-songs flex">
                     <NavLink to='/liked-songs' className="flex align-center">
-                        <div><span><RiHeartFill /></span></div><p>Liked Songs</p></NavLink>
+                        <div><span><RiHeartFill /></span></div><p>Liked Songs</p>
+                    </NavLink>
+                    {isCurrPlaylistPlaying &&
+                        <span className="nav-bar-playing"><HiOutlineSpeakerWave /></span>}
                 </div>
                 <div className="bottom-border">
                     <hr />

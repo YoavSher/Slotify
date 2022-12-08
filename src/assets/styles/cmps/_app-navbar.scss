@@ -94,6 +94,8 @@
         }
 
         .liked-songs {
+            justify-content: space-between;
+
             a {
                 @include nav-link;
 
@@ -113,6 +115,15 @@
                         top: 3px;
                         left: 1px
                     }
+                }
+            }
+
+            .nav-bar-playing {
+                position: relative;
+                top: 6px;
+
+                * {
+                    color: var(--green-color1);
                 }
             }
         }
@@ -170,7 +181,7 @@
 
 
                         li {
-                            
+
 
                             a {
                                 @include nav-link;

@@ -13,7 +13,8 @@ export const useMusicPlayerMethods = (playlistId: number | null, songs: Song[]) 
         if (songs) dispatch(addSongsToQueue(songs))
     }
 
-    const onClickPlay = () => {
+    const onClickPlay = (ev:React.MouseEvent<HTMLElement>) => {
+        ev.stopPropagation()
         if (playlistId || playlistId === 0) {
             if (isCurrPlaylistPlaying) {
                 dispatch(setIsSongPlaying(false))
