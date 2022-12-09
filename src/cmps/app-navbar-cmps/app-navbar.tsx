@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { MouseEvent, useEffect, useState } from "react"
 import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import { BsSpotify } from 'react-icons/bs'
 import { HiOutlineSpeakerWave } from 'react-icons/hi2'
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
 import { setPlaylists } from "../../store/playlist/playlist.reducer"
 import { NavLinksList } from "./nav-links-list"
 import { PlaylistLinks } from "./playlists-links"
+import { NeedToLoginModal } from "../need-to-login-modal"
 
 
 export const AppNavbar = () => {
@@ -24,6 +25,9 @@ export const AppNavbar = () => {
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [txtType, setTxtType] = useState('')
+
     const isCurrPlaylistOnQueue = 0 === queuePlaylistId
     const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
     const isMobile = screenWidth <= 770
@@ -40,11 +44,25 @@ export const AppNavbar = () => {
 
 
     const onCreateNewPlaylist = async () => {
-        if (!loggedInUser) return
+        if (!loggedInUser) {
+            openModal('create playlist')
+        }
         else {
             const newPlaylist = await playlistService.createPlaylist()
             navigate(`playlist/${newPlaylist._id}`)
         }
+    }
+
+    const checkUser = (ev: MouseEvent<HTMLAnchorElement>) => {
+        if (!loggedInUser) {
+            ev.preventDefault()
+            openModal('liked songs')
+        }
+    }
+
+    const openModal = (type: string) => {
+        setIsModalOpen(true)
+        setTxtType(type)
     }
     // make the location.pathname.includes() a function with a nicer name(?), have inside cmps like pathways,and playlist list. isMobile 
     // maybe we can render the paths as a map only need to figure the thing with location.pathName for the exact thingy
@@ -64,8 +82,8 @@ export const AppNavbar = () => {
                 <div className="create-playlist flex align-center" onClick={onCreateNewPlaylist}>
                     <div><span>+</span></div><p>Create Playlist</p>
                 </div>
-                <div className="liked-songs flex">
-                    <NavLink to='/liked-songs' className="flex align-center">
+                <div className="liked-songs flex" >
+                    <NavLink to='/liked-songs' className="flex align-center" onClick={checkUser}>
                         <div><span><RiHeartFill /></span></div><p>Liked Songs</p>
                     </NavLink>
                     {isCurrPlaylistPlaying &&
@@ -77,6 +95,7 @@ export const AppNavbar = () => {
                 </div>
                 {playlists && <PlaylistLinks playlists={playlists} />}
             </div>}
+            {isModalOpen && <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen}/>}
         </nav>
     )
 }

@@ -9,8 +9,13 @@ interface Props {
 export const PlaylistLinks = ({ playlists }: Props) => {
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-    // const isCurrPlaylistOnQueue = 0 === queuePlaylistId
-    // const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
+    
+    const isCurrPlaylist = (playlistId: number) => {
+        const isCurrPlaylistOnQueue = playlistId === queuePlaylistId
+        const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
+        return isCurrPlaylistPlaying ? true : false
+
+    }
     return (
         <section className="playlists-links">
             <div className="playlists-links-container">
@@ -20,8 +25,8 @@ export const PlaylistLinks = ({ playlists }: Props) => {
                             {playlists?.map(p => {
                                 return <li key={p._id} className="flex justify-between">
                                     <NavLink to={`playlist/${p._id}`}>{p.name}</NavLink>
-                                    {/* {isCurrPlaylistPlaying &&
-                                        <span className="nav-bar-playing"><HiOutlineSpeakerWave /></span>} */}
+                                    {isCurrPlaylist(p._id) &&
+                                        <span className="nav-bar-playing"><HiOutlineSpeakerWave /></span>}
                                 </li>
                             })}
                         </div>

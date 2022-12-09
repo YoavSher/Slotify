@@ -21,7 +21,7 @@
     @media(min-width:770px) {
         padding: 20px 0 0 20px;
         background-color: #000;
-        position: initial;
+        position: relative;
         height: auto;
         width: 263px;
     }
@@ -185,6 +185,12 @@
 
                             a {
                                 @include nav-link;
+                            }
+
+                            .nav-bar-playing {
+                                * {
+                                    color: var(--green-color1)
+                                }
                             }
 
                             margin-bottom: 10px;
