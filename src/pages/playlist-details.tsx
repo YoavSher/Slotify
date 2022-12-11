@@ -46,7 +46,7 @@ export const PlaylistDetails = () => {
 
     const {
         onAddPlaylistToQueue, playSongFromPlaylist,
-        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(playlistId, songs)
+        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(playlistId, songs, loggedInUser)
 
     const handleOnDragEnd = async (result: any) => {
         if (playlistId) {

@@ -64,8 +64,7 @@ export const AppNavbar = () => {
         setIsModalOpen(true)
         setTxtType(type)
     }
-    // make the location.pathname.includes() a function with a nicer name(?), have inside cmps like pathways,and playlist list. isMobile 
-    // maybe we can render the paths as a map only need to figure the thing with location.pathName for the exact thingy
+
     const routes = [
         { location: '/', icon: <RiHome2Line />, activeIcon: <RiHome2Fill />, txt: 'Home', isRendered: true },
         { location: 'search', icon: <FiSearch />, activeIcon: <RiSearchFill />, txt: 'Search', isRendered: true },

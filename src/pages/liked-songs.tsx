@@ -1,7 +1,5 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
 import { Helmet } from "react-helmet"
 import { BsFillPlayCircleFill } from "react-icons/bs"
-import { CiClock2 } from "react-icons/ci"
 import { RiHeartFill } from "react-icons/ri"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
@@ -29,7 +27,8 @@ export const LikedSongs = () => {
     useCheckLoggedInUser()
     const {
         playSongFromPlaylist,
-        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []))
+        onClickPlay,
+        isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []), loggedInUser)
 
     return (
         <>
@@ -64,7 +63,8 @@ export const LikedSongs = () => {
                         </div>
                     </div>
                 </div>
-                {isModalOpen && songForModal && <SongsModal isMobile={isMobile} closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+                {isModalOpen && songForModal && <SongsModal isMobile={isMobile}
+                    closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
 
             </section>
         </>

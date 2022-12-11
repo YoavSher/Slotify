@@ -9,11 +9,11 @@ interface Props {
     playlistPre: Playlist
 }
 export const RecentlyPlayedPreview = ({ playlistPre }: Props) => {
-
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const isMobile = screenWidth <= 770
 
-    const { onSetPlaylist, isThisPlaylist, isPlaylistPlaying } = usePlayPlaylistPreview(playlistPre)
+    const { onSetPlaylist, isThisPlaylist, isPlaylistPlaying } = usePlayPlaylistPreview(playlistPre, loggedInUser)
 
     return (
         <section className="recently-played-preview">
@@ -26,14 +26,14 @@ export const RecentlyPlayedPreview = ({ playlistPre }: Props) => {
                         <h1><Link to={`playlist/${playlistPre._id}`}>{playlistPre.name}</Link></h1>
                     </div>
                     {!isMobile &&
-                        <div className={isPlaylistPlaying() ?
+                        <div className={isPlaylistPlaying ?
                             'recently-played-preview-content icon-container playing' :
                             'recently-played-preview-content icon-container'}>
                             <button onClick={onSetPlaylist}>
-                                <span>{isPlaylistPlaying() ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
+                                <span>{isPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
                             </button>
                         </div>}
-                    {isMobile && isPlaylistPlaying() && <div>
+                    {isMobile && isPlaylistPlaying && <div>
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt="" />
                     </div>}
                     {isMobile && isThisPlaylist() && <div>

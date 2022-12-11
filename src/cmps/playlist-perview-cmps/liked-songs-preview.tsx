@@ -15,7 +15,7 @@ export const LikedSongsPreview = () => {
     const LIKED_SONGS_PLAYLIST_ID = 0
 
     const {
-        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []))
+        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []), loggedInUser)
 
     const onGoToPlaylist = () => {
         navigate(`/liked-songs`)
@@ -47,8 +47,8 @@ export const LikedSongsPreview = () => {
                     <span><RiHeartFill /></span>
                 </div>
                 <div className="playlist-info">
-                <h3>Liked Songs</h3>
-            </div>
+                    <h3>Liked Songs</h3>
+                </div>
             </>}
         </section>
     )

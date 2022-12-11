@@ -13,9 +13,10 @@ export const PlaylistPreview = ({ playlistPre }: Props) => {
 
     const navigate = useNavigate()
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const isMobile = screenWidth <= 770
 
-    const { onSetPlaylist, isPlaylistPlaying } = usePlayPlaylistPreview(playlistPre)
+    const { onSetPlaylist, isPlaylistPlaying } = usePlayPlaylistPreview(playlistPre, loggedInUser)
 
     const onGoToPlaylist = () => {
         navigate(`/playlist/${playlistPre._id}`)
@@ -24,9 +25,9 @@ export const PlaylistPreview = ({ playlistPre }: Props) => {
         <section className="playlist-preview" onClick={onGoToPlaylist}>
             <div className="img-container">
                 <img src={playlistPre.image} alt="" />
-                {!isMobile && <div className={isPlaylistPlaying() ? 'icon-container playing' : 'icon-container'}>
+                {!isMobile && <div className={isPlaylistPlaying ? 'icon-container playing' : 'icon-container'}>
                     <button onClick={onSetPlaylist}>
-                        <span>{isPlaylistPlaying() ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
+                        <span>{isPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
                     </button>
                 </div>}
             </div>

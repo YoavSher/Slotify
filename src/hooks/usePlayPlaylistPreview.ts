@@ -1,16 +1,18 @@
 import { MouseEvent } from "react"
+import { MiniUser } from "../interfaces/mini-user"
 import { Playlist } from "../interfaces/playlist"
+import { playlistService } from "../services/playlist.service"
 import { songService } from "../services/songs.service"
 import { setIsSongPlaying, setPlaylist } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 
-export const usePlayPlaylistPreview = (playlistPre: Playlist) => {
+export const usePlayPlaylistPreview = (playlistPre: Playlist, loggedInUser: MiniUser | null) => {
     const dispatch = useAppDispatch()
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const isCurrPlaylistOnQueue = (playlistPre) ? playlistPre._id === queuePlaylistId : false
 
-    const onSetPlaylist = async (ev:MouseEvent<HTMLButtonElement>) => {
+    const onSetPlaylist = async (ev: MouseEvent<HTMLButtonElement>) => {
         ev.stopPropagation()
         console.log('playlistPre:', playlistPre)
         if (isCurrPlaylistOnQueue && isSongPlaying) {
@@ -19,7 +21,16 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist) => {
             dispatch(setIsSongPlaying(true))
         } else {
             const songs = await loadSongs()
-            if (songs && playlistPre._id) dispatch(setPlaylist({ songs, playlistId: playlistPre._id }))
+            if (songs && playlistPre._id) {
+                dispatch(setPlaylist({ songs, playlistId: playlistPre._id }))
+                if (loggedInUser) {
+                    try {
+                        playlistService.addToRecentlyPlayed(playlistPre._id)
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            }
         }
     }
 
@@ -38,14 +49,7 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist) => {
         if (isCurrPlaylistOnQueue && !isSongPlaying) return true
         return false
     }
+    const isPlaylistPlaying = isSongPlaying && isCurrPlaylistOnQueue
 
-    const isPlaylistPlaying = () => {
-        if (isSongPlaying
-            && isCurrPlaylistOnQueue) {
-            // && playlistPre.songs.some(s => s.id === playlist?.songs[currPlayingIdx]?.id)) {
-            return true
-        }
-        return false
-    }
     return { onSetPlaylist, isThisPlaylist, isPlaylistPlaying }
 }

@@ -13,13 +13,11 @@ export const playlistService = {
     reIndexPlaylistSongs,
     addLikedPlaylist,
     removeLikedPlaylist,
-    getUserPlaylists
+    getUserPlaylists,
+    addToRecentlyPlayed,
+    getUserRecentPlaylists
 
 }
-
-const STORAGE_KEY = 'playlists'
-
-const gPlaylists = getPlaylists()
 
 async function query() {
     try {
@@ -106,5 +104,22 @@ async function getUserPlaylists(userId: number) {
         return likedPlaylists
     } catch (err) {
         console.log('err:', err)
+    }
+}
+
+async function getUserRecentPlaylists(userId: number) {
+    try {
+        const recentPlaylists = await httpService.get(`playlist/user/recent/${userId}`, null)
+        return recentPlaylists
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+async function addToRecentlyPlayed(playlistId: number) {
+    try {
+        await httpService.post('playlist/user/recent/', { playlistId })
+    } catch (err) {
+        console.log(err)
     }
 }

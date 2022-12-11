@@ -18,6 +18,8 @@ export const useCookieToGetUser = () => {
                 dispatch(setLikedSongs(songs))
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))
+                const recentlyPlayed = await playlistService.getUserRecentPlaylists(user._id) as Playlist[]
+                console.log(recentlyPlayed)
             }
         }
     }

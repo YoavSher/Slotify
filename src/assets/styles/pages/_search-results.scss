@@ -1,6 +1,7 @@
 .search-results-page {
     margin-top: 20px;
     color: #fff;
+    @include main-content-scroll;
 
     .search-bar-results {
         flex-grow: 1;

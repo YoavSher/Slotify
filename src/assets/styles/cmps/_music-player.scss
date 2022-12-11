@@ -124,19 +124,26 @@
 
         .below-image {
             display: flex;
+            width: 85%;
 
             .names-container {
+                width: 50%;
+                overflow-x: hidden;
+                margin: 0 10px;
+
                 .song-name {
+                    white-space: nowrap;
                     height: 24px;
-                    overflow: hidden;
+                    width: fit-content;
                     color: white;
-                    margin: 0 0 6px 10px;
+                    font-size: 15px;
+                    position: relative;
+                    transition: 1s;
                 }
 
                 .artist-name {
                     color: var(--text-subdued);
                     font-size: 12px;
-                    margin: 0 0 0 10px;
                 }
 
             }
@@ -247,20 +254,6 @@
             font-size: 20px;
             line-height: 12px;
         }
-    }
-
-    .dev-button {
-        position: absolute;
-        top: -200px;
-
-        &.one {
-            left: 0px;
-        }
-
-        &.two {
-            left: 50px;
-        }
-
     }
 
     .css-eg0mwd-MuiSlider-thumb::after {

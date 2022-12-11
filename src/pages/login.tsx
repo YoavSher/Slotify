@@ -39,7 +39,9 @@ export const Login = () => {
                 dispatch(setLikedSongs(songs))
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))
-                
+                const recentlyPlayed = await playlistService.getUserRecentPlaylists(user._id) as Playlist[]
+                console.log(recentlyPlayed)
+
             }
 
             onCloseModal()
@@ -57,7 +59,7 @@ export const Login = () => {
         { name: 'username', type: 'text', placeholder: 'User name', value: userCred.username },
         { name: 'password', type: 'password', placeholder: 'password', value: userCred.password },
     ]
-    
+
     return (
         <section className="login-screen-cover" onClick={onCloseModal}>
             <Helmet><title>Slotify - Login </title></Helmet>

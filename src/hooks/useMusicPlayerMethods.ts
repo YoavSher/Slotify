@@ -1,8 +1,11 @@
+import { MiniUser } from "../interfaces/mini-user"
 import { Song } from "../interfaces/song"
+import { playlistService } from "../services/playlist.service"
+import { User } from "../services/user.service"
 import { addSongsToQueue, setIsSongPlaying, setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 
-export const useMusicPlayerMethods = (playlistId: number | null, songs: Song[]) => {
+export const useMusicPlayerMethods = (playlistId: number | null, songs: Song[], loggedInUser: MiniUser | null) => {
     // the playlist likedSongs has a playlistId of 0 //
     const dispatch = useAppDispatch()
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
@@ -13,14 +16,23 @@ export const useMusicPlayerMethods = (playlistId: number | null, songs: Song[]) 
         if (songs) dispatch(addSongsToQueue(songs))
     }
 
-    const onClickPlay = (ev:React.MouseEvent<HTMLElement>) => {
+    const onClickPlay = (ev: React.MouseEvent<HTMLElement>) => {
         ev.stopPropagation()
         if (playlistId || playlistId === 0) {
             if (isCurrPlaylistPlaying) {
                 dispatch(setIsSongPlaying(false))
             } else if (isCurrPlaylistOnQueue && !isSongPlaying) {
                 dispatch(setIsSongPlaying(true))
-            } else dispatch(setPlaylist({ songs, playlistId }))
+            } else {
+                dispatch(setPlaylist({ songs, playlistId }))
+                if (loggedInUser && playlistId !== 0) {
+                    try {
+                        playlistService.addToRecentlyPlayed(playlistId)
+                    } catch (err) {
+                        console.log(err)
+                    }
+                }
+            }
         }
     }
 

@@ -5,8 +5,8 @@ import { TiThListOutline } from 'react-icons/ti'
 import { BsChevronDown } from 'react-icons/bs';
 import { FiRepeat } from 'react-icons/fi';
 import { useSwipeable } from 'react-swipeable';
-import { useNavigate } from 'react-router-dom';
-import React, { useRef, useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useRef, useState, useEffect, LegacyRef, useLayoutEffect } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { reorderSongsList, setIsSongPlaying, setPlayingIdx, setPlaylist } from '../store/music-player/music-player.reducer';
 import { useAppDispatch, useAppSelector } from '../store/store.hooks';
@@ -26,11 +26,15 @@ export const MusicPlayer = () => {
     const currSong = queueSongs[currPlayingIdx]
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
 
     const playerRef = useRef<any>()
     const durationIntervalId = useRef<number>()
     const playingTimeFromCache = useRef<number | null>()
     const [isMobileFullScreen, setIsMobileFullScreen] = useState(false)
+
+
+
 
     useEffect(() => {
         const previousPlaylistInfo = cachingService.getPlaylist()
@@ -61,9 +65,7 @@ export const MusicPlayer = () => {
     const [songTimer, setSongTimer] = useState(0)
 
     const [volume, setVolume] = useState(50)
-    const [isShuffled, setIsShuffled] = useState(false)
     const [isLoopingEnabled, setIsLoopingEnabled] = useState(false)
-    const unShuffledSongs = useRef<Song[] | null>(null)
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         playerRef.current = ev.target
@@ -150,23 +152,7 @@ export const MusicPlayer = () => {
         timeBarDebounceId.current = window.setTimeout(later, 1000)
     }
 
-    const toggleSongsShuffle = () => {
-        if (isShuffled) unShuffleSongs()
-        else shuffleSongs()
-    }
-
-    const shuffleSongs = () => {
-        unShuffledSongs.current = queueSongs
-        const beforePlayingIdx = queueSongs.slice(0, currPlayingIdx + 1)
-        const afterPlayingIdx = utilService.shuffle(queueSongs.slice(currPlayingIdx + 1))
-        setIsShuffled(true)
-        dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
-    }
-
-    const unShuffleSongs = () => {
-        setIsShuffled(false)
-        if (unShuffledSongs.current) dispatch(reorderSongsList(unShuffledSongs.current))
-    }
+    const { isShuffled, toggleSongsShuffle } = useSongsShuffle(queueSongs, currPlayingIdx)
 
     const onIndexIncrement = () => {
         onIndexChange(1)
@@ -212,6 +198,9 @@ export const MusicPlayer = () => {
 
     const isMobile = screenWidth <= 770
 
+    const { songNameP, namesContainerRef, songNamePos } = useTextRollup(isMobile, screenWidth, currSong)
+
+
     return (
         <>
             {currSong && <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />}
@@ -254,8 +243,8 @@ export const MusicPlayer = () => {
                             <img className="song-image" src={currSong.image} alt="" />
                             <section className="below-image">
 
-                                <div className="names-container">
-                                    <p className="song-name">{currSong.title}</p>
+                                <div ref={namesContainerRef} className="names-container">
+                                    <p style={{ left: `${songNamePos}px` }} ref={songNameP} className="song-name">{currSong.title}</p>
                                     <p className="artist-name">{currSong.artist}</p>
                                 </div>
                                 <LikeButton song={currSong} />
@@ -291,7 +280,10 @@ export const MusicPlayer = () => {
 
                     </div>
                     <section className="right-section">
-                        <button onClick={() => navigate('/queue')} className="queue-btn"><TiThListOutline /></button>
+                        <button onClick={() => {
+                            if (location.pathname.includes('queue')) navigate(-1)
+                            else navigate('/queue')
+                        }} className="queue-btn"><TiThListOutline /></button>
                         <button className="volume-btn" onClick={toggleMute} >{getVolumeIcon()}</button>
                         <Slider
                             min={0}
@@ -305,3 +297,79 @@ export const MusicPlayer = () => {
     )
 }
 
+
+const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
+    const [isShuffled, setIsShuffled] = useState(false)
+    const unShuffledSongs = useRef<Song[] | null>(null)
+    const dispatch = useAppDispatch()
+    const playlistId = useAppSelector(state => state.musicPlayer.playlistId)
+
+    const toggleSongsShuffle = () => {
+        if (isShuffled) unShuffleSongs()
+        else shuffleSongs()
+    }
+    useEffect(() => {
+        if (isShuffled && playlistId) {
+            shuffleSongs()
+            // maybe should mix the first song aswell,but not really critical.
+        } else {
+            setIsShuffled(false)
+        }
+    }, [playlistId])
+
+    const shuffleSongs = () => {
+        unShuffledSongs.current = songs
+        const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
+        const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
+        setIsShuffled(true)
+        dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
+    }
+
+    const unShuffleSongs = () => {
+        setIsShuffled(false)
+        if (unShuffledSongs.current) dispatch(reorderSongsList(unShuffledSongs.current))
+    }
+
+    return { isShuffled, toggleSongsShuffle }
+}
+
+const useTextRollup = (isMobile: boolean, screenWidth: number, currSong: Song) => {
+    const songNameP = useRef<HTMLParagraphElement>(null)
+    const namesContainerRef = useRef<HTMLDivElement>(null)
+    const nameMovementIntervalId = useRef<number>(1)
+    const [songNamePos, setSongNamePos] = useState(0)
+    useEffect(() => {
+        setSongNamePos(0)
+        window.clearInterval(nameMovementIntervalId.current)
+        if (namesContainerRef?.current?.clientWidth && songNameP?.current?.clientWidth && !isMobile) {
+            const safetyMeasure = 10
+            const distance = namesContainerRef.current.clientWidth - songNameP.current.clientWidth - safetyMeasure
+            if (distance < -safetyMeasure) {
+                let direction = 'backward'
+                nameMovementIntervalId.current = window.setInterval(() => {
+                    setSongNamePos((prev) => {
+                        if (direction === 'backward') {
+                            if (prev <= distance) {
+                                direction = 'forward'
+                                return prev + 2
+                            }
+                            return prev - 2
+                        } else {
+                            if (prev >= safetyMeasure) {
+                                direction = 'backward'
+                                return prev - 2
+                            }
+                            return prev + 2
+                        }
+                    })
+                }, 250)
+            }
+
+        }
+        return () => {
+            window.clearInterval(nameMovementIntervalId.current)
+        }
+    }, [currSong, screenWidth])
+
+    return { songNameP, namesContainerRef, songNamePos }
+}
