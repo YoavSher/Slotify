@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Playlist } from '../../interfaces/playlist'
 import { Song } from '../../interfaces/song'
 
 
 interface searchState {
-    searchTerm: string | null, 
-    searchResults: Song[] | null | undefined
+    searchTerm: string | null,
+    searchResults: Song[] | null | undefined,
+    searchedPlaylists: Playlist[] | null
 }
 
 const initialState: searchState = {
     searchTerm: null,
-    searchResults: null
+    searchResults: null,
+    searchedPlaylists: null
 }
 
 const searchSlice = createSlice({
@@ -21,9 +24,12 @@ const searchSlice = createSlice({
         },
         setSearchResults: (state, action: PayloadAction<Song[]>) => {
             state.searchResults = action.payload
+        },
+        setSearchedPlaylists: (state, action: PayloadAction<Playlist[]>) => {
+            state.searchedPlaylists = action.payload
         }
     }
 })
-export const { setSearchResults } = searchSlice.actions
+export const { setSearchResults, setSearchedPlaylists } = searchSlice.actions
 
 export default searchSlice.reducer

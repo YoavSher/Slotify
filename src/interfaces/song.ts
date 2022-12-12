@@ -7,7 +7,8 @@ export interface Song { // perhaps we should change to videoId so we dont get co
     image: string,
     duration: number,
     addedAt?: number
-    idx?: number
+    idx?: number,
+    name?: string
 }
 
 export interface PlaylistSong {

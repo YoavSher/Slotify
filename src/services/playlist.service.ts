@@ -6,7 +6,8 @@ import { getPlaylists } from "./playlist.data";
 
 export const playlistService = {
     query,
-    getPlaylistById,
+    getSearchedPlaylist,
+    // getPlaylistById,
     createPlaylist,
     updatePlaylist,
     removePlaylist,
@@ -30,14 +31,14 @@ async function query() {
 
 }
 
-async function getPlaylistById(playlistId: number) {
-    try {
-        const playlist = await httpService.get(`playlist/${playlistId}`, null)
-        return playlist
-    } catch (err) {
-        console.log('err:', err)
-    }
-}
+// async function getPlaylistById(playlistId: number) {
+//     try {
+//         const playlist = await httpService.get(`playlist/${playlistId}`, null)
+//         return playlist
+//     } catch (err) {
+//         console.log('err:', err)
+//     }
+// }
 async function createPlaylist() {
     try {
 
@@ -119,6 +120,15 @@ async function getUserRecentPlaylists(userId: number) {
 async function addToRecentlyPlayed(playlistId: number) {
     try {
         await httpService.post('playlist/user/recent/', { playlistId })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function getSearchedPlaylist(searchTerm: string) {
+    try {
+        const playlist = await httpService.get(`playlist/${searchTerm}`, null)
+        return playlist
     } catch (err) {
         console.log(err)
     }

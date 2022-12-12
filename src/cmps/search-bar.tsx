@@ -2,10 +2,11 @@ import React, { ChangeEvent, useEffect, useState } from "react"
 
 import { FiSearch } from 'react-icons/fi'
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { playlistService } from "../services/playlist.service"
 
 import { utilService } from "../services/util.service"
 import { youtubeService } from "../services/youtube.service"
-import { setSearchResults } from "../store/search/search.reducer"
+import { setSearchedPlaylists, setSearchResults } from "../store/search/search.reducer"
 import { useAppDispatch } from "../store/store.hooks"
 
 interface Props {
@@ -29,8 +30,11 @@ export const SearchBar = ({ fromResults }: Props) => {
     const getResultsFromParams = async (term: string) => {
         console.log('im results from params')
         try {
-            const resData = await youtubeService.getDataFromYoutube(term)
-            dispatch(setSearchResults(resData))
+            const songsSearchResults = await youtubeService.getDataFromYoutube(term)
+            const playlistsSearchResults = await playlistService.getSearchedPlaylist(term)
+            // console.log('playlistsSearchResults:', playlistsSearchResults)
+            dispatch(setSearchResults(songsSearchResults))
+            dispatch(setSearchedPlaylists(playlistsSearchResults))
 
         } catch (err) {
             console.log('err:', err)
@@ -40,13 +44,8 @@ export const SearchBar = ({ fromResults }: Props) => {
     const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {
         let { value } = ev.target
         value = value.includes('/') ? value.replace(/\//g, '-') : value
-        if (fromResults) {
-            getResultsFromParams(value)
-            value ? navigate(`${value}`) : navigate(`${''}`)
-
-        } else {
-            value ? navigate(`search/${value}`) : navigate(`search`)
-        }
+        getResultsFromParams(value)
+        value ? navigate(`/search/${value}`) : navigate(`/search`)
     }
 
     return (
