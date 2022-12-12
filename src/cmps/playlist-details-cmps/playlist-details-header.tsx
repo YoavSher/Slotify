@@ -1,8 +1,11 @@
+import { useColorScheme } from '@mui/material'
+import { useState } from 'react'
 import { FiEdit2 } from 'react-icons/fi'
 import { ArrowFunction, FunctionBody, FunctionExpression } from 'typescript'
 
 import { Playlist } from "../../interfaces/playlist"
 import { useAppSelector } from '../../store/store.hooks'
+import { PlaylistColorExtractor } from './playlist-image-color-extractor'
 
 
 interface Props {
@@ -19,10 +22,17 @@ interface Props {
 
 
 export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, isMobile, songsLength, isCurrentUserPlaylistOwner }: Props) => {
+    const [background, setBackground] = useState<string>('#181818')
+    const returnColors = (colors: string[]) => {
+        const color = `linear-gradient(transparent 0,rgba(18,18,18,1) 100%),${colors[0]}`
+        setBackground(color)
+    }
+
     return (
         <header className="playlist-details-header flex">
+            <div className='color-container' style={{ background }}></div>
             <div className="img-container">
-                <img src={playlist.image} alt="" />
+                <PlaylistColorExtractor imgSrc={playlist.image} returnColors={returnColors} />
                 {isCurrentUserPlaylistOwner && <div className="change-photo-btn" >
                     <label htmlFor="changePhoto">
                         <div className="photo-label flex column align-center">

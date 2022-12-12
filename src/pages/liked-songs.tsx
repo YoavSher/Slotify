@@ -25,10 +25,17 @@ export const LikedSongs = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const LIKED_SONGS_PLAYLIST_ID = 0
     useCheckLoggedInUser()
+    const pseudoPlaylist = {
+        _id: LIKED_SONGS_PLAYLIST_ID,
+        name: 'Liked songs',
+        image: '',
+        creatorId: loggedInUser?._id || 0,
+        fullName: loggedInUser?.fullName || ''
+    }
     const {
         playSongFromPlaylist,
         onClickPlay,
-        isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []), loggedInUser)
+        isCurrPlaylistPlaying } = useMusicPlayerMethods(pseudoPlaylist, (likedSongs || []), loggedInUser)
 
     return (
         <>

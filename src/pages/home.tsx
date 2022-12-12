@@ -8,10 +8,12 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 import { utilService } from "../services/util.service"
 import { PlaylistContainer } from "../cmps/playlist-perview-cmps/playlists-container"
+import { TestColor } from "../cmps/test-colors"
 
 export const Home = () => {
 
     const playlists = useAppSelector(state => state.playlist.playlists)
+    const userRecentPlaylists = useAppSelector(state => state.user.recentPlaylists)
     const dispatch = useAppDispatch()
     useEffect(() => {
         loadPlayList()
@@ -27,8 +29,8 @@ export const Home = () => {
             <section className="home-page">
                 <Helmet><title>Slotify</title></Helmet>
                 <h2 className="greeting">Good {utilService.getCurrentPartOfTheDay()}</h2>
-                {/* <RecentlyPlayedList playlists={playlists} /> */}
-                <PlaylistContainer playlists={playlists}/>
+                {userRecentPlaylists && <RecentlyPlayedList playlists={userRecentPlaylists} />}
+                <PlaylistContainer playlists={playlists} />
                 <div className="pusher"></div>
             </section>
             <Outlet></Outlet>

@@ -7,7 +7,6 @@ export interface Playlist {
     image: string,
     creatorId: number,
     fullName: string
-    // likedByUsers: MiniUser[],
 }
 
 

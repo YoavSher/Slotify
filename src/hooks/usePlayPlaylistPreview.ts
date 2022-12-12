@@ -5,6 +5,7 @@ import { playlistService } from "../services/playlist.service"
 import { songService } from "../services/songs.service"
 import { setIsSongPlaying, setPlaylist } from "../store/music-player/music-player.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
+import { onPlaylistPlay } from "../store/user/user.reducer"
 
 export const usePlayPlaylistPreview = (playlistPre: Playlist, loggedInUser: MiniUser | null) => {
     const dispatch = useAppDispatch()
@@ -25,7 +26,8 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist, loggedInUser: Mini
                 dispatch(setPlaylist({ songs, playlistId: playlistPre._id }))
                 if (loggedInUser) {
                     try {
-                        playlistService.addToRecentlyPlayed(playlistPre._id)
+                        dispatch(onPlaylistPlay(playlistPre))
+                        await playlistService.addToRecentlyPlayed(playlistPre._id)
                     } catch (err) {
                         console.log(err)
                     }

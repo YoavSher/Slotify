@@ -8,18 +8,33 @@ interface UserState {
     loggedInUser: User | null,
     likedSongs: Song[] | null,
     playlists: Playlist[] | null,
+    recentPlaylists: Playlist[] | null
 }
 
 const initialState: UserState = {
     loggedInUser: null,
     likedSongs: null,
-    playlists: null
+    playlists: null,
+    recentPlaylists: null,
 }
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        onPlaylistPlay: (state, action: PayloadAction<Playlist>) => {
+            if (state.recentPlaylists) {
+                const playlistIdx = state.recentPlaylists.findIndex(playlist => playlist._id === action.payload._id)
+                if (playlistIdx !== -1) {
+                    state.recentPlaylists = state.recentPlaylists.filter(playlist => playlist._id !== action.payload._id)
+                }
+                if (state.recentPlaylists.length >= 6) {
+                    state.recentPlaylists.pop()
+                }
+                state.recentPlaylists.unshift(action.payload)
+
+            }
+        },
         onPlaylistLike: (state, action: PayloadAction<Playlist>) => {
             if (state.playlists) {
                 state.playlists.unshift(action.payload)
@@ -34,10 +49,12 @@ const userSlice = createSlice({
             if (!action.payload) {
                 state.likedSongs = null
                 state.playlists = null
+                state.recentPlaylists = null
             }
             state.loggedInUser = action.payload
             state.likedSongs = []
             state.playlists = []
+            state.recentPlaylists = []
         },
         onSongLike: (state, action: PayloadAction<Song>) => {
             if (state.likedSongs) {
@@ -56,10 +73,14 @@ const userSlice = createSlice({
         setLikedPlaylists: (state, action: PayloadAction<Playlist[] | []>) => {
             state.playlists = action.payload
 
+        },
+        setRecentPlaylists: (state, action: PayloadAction<Playlist[] | []>) => {
+            state.recentPlaylists = action.payload
+
         }
     }
 })
-export const { setUser, onSongLike, onSongDislike, setLikedSongs, setLikedPlaylists, onPlaylistDislike, onPlaylistLike } = userSlice.actions
+export const { setUser, onSongLike, onSongDislike, setLikedSongs, setLikedPlaylists, onPlaylistDislike, onPlaylistLike, setRecentPlaylists, onPlaylistPlay } = userSlice.actions
 
 
 export default userSlice.reducer
