@@ -14,7 +14,6 @@ import { SongsModal } from "../cmps/songs-modal"
 import { Song } from "../interfaces/song"
 import { PlaylistDetailsSearch } from "../cmps/playlist-details-cmps/playlist-details-search"
 import { PlaylistDetailsHeader } from "../cmps/playlist-details-cmps/playlist-details-header"
-import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 import { useSongModal } from "../hooks/useSongModal"
 import { songService } from "../services/songs.service"
 import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"
@@ -23,6 +22,7 @@ import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { SongsTable } from "../cmps/playlist-details-cmps/songs-table"
 import { LikeButtonPlaylist } from "../cmps/playlist-details-cmps/like-button-playlist"
 import { ActionMsg } from "../cmps/action-msg"
+import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 
 export const PlaylistDetails = () => {
     const params = useParams()

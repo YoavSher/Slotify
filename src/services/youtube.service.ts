@@ -20,7 +20,7 @@ async function getDataFromYoutube(term: string) {
     try {
         const res = await axios
             .get(
-                `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=45&key=${API_KEY}&q=${term}`)
+                `https://www.googleapis.com/youtube/v3/search?part=snippet&videoCategoryId=10&videoEmbeddable=true&type=video&maxResults=15&key=${API_KEY}&q=${term}`)
 
         const str = res.data.items.map((item: { id: { videoId: string } }) => '' + `${item.id.videoId}%2C`).join('').slice(0, -3)
         const durationData = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${str}&part=contentDetails&key=${API_KEY}`)

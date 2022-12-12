@@ -6,7 +6,8 @@ export interface Playlist {
     name: string,
     image: string,
     creatorId: number,
-    fullName: string
+    fullName?: string,
+    title?:string
 }
 
 
