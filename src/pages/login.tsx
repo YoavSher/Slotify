@@ -9,7 +9,7 @@ import { playlistService } from "../services/playlist.service"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
-import { setLikedPlaylists, setLikedSongs, setUser } from "../store/user/user.reducer"
+import { setLikedPlaylists, setLikedSongs, setRecentPlaylists, setUser } from "../store/user/user.reducer"
 
 export const Login = () => {
     const navigate = useNavigate()
@@ -40,7 +40,7 @@ export const Login = () => {
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))
                 const recentlyPlayed = await playlistService.getUserRecentPlaylists(user._id) as Playlist[]
-                console.log(recentlyPlayed)
+                dispatch(setRecentPlaylists(recentlyPlayed))
 
             }
 

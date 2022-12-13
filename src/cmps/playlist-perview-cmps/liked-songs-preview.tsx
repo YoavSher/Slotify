@@ -13,9 +13,15 @@ export const LikedSongsPreview = () => {
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const isMobile = screenWidth <= 770
     const LIKED_SONGS_PLAYLIST_ID = 0
-
+    const pseudoPlaylist = {
+        _id: LIKED_SONGS_PLAYLIST_ID,
+        name: 'Liked songs',
+        image: '',
+        creatorId: loggedInUser?._id || 0,
+        fullName: loggedInUser?.fullName || ''
+    }
     const {
-        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(LIKED_SONGS_PLAYLIST_ID, (likedSongs || []), loggedInUser)
+        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(pseudoPlaylist, (likedSongs || []), loggedInUser)
 
     const onGoToPlaylist = () => {
         navigate(`/liked-songs`)

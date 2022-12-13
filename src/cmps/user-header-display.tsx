@@ -19,6 +19,7 @@ export const UserHeaderDisplay = () => {
     const onLogOut = async () => {
         await userService.logout()
         dispatch(setUser(null))
+        setIsModalOpen(false)
     }
 
 

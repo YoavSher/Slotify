@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../store/store.hooks"
 import { useEffect } from 'react'
-import { setLikedPlaylists, setLikedSongs, setUser } from "../store/user/user.reducer"
+import { setLikedPlaylists, setLikedSongs, setRecentPlaylists, setUser } from "../store/user/user.reducer"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
 import { Song } from "../interfaces/song"
@@ -19,7 +19,7 @@ export const useCookieToGetUser = () => {
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))
                 const recentlyPlayed = await playlistService.getUserRecentPlaylists(user._id) as Playlist[]
-                console.log(recentlyPlayed)
+                dispatch(setRecentPlaylists(recentlyPlayed))
             }
         }
     }

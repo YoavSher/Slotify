@@ -7,6 +7,8 @@
     outline: none;
     overflow-x: inherit;
     padding: 50px 16px;
+    padding-top: 0;
+    box-sizing: border-box;
 
 
 
@@ -29,7 +31,7 @@
                 z-index: 30;
 
                 span {
-                    font-size: 1.2rem;
+                    font-size: 12px;
                 }
             }
         }

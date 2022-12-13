@@ -311,7 +311,7 @@ const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
     useEffect(() => {
         if (isShuffled && playlistId) {
             shuffleSongs()
-            // maybe should mix the first song aswell,but not really critical.
+            //:TODO indexshuffling before the shuffle song activation
         } else {
             setIsShuffled(false)
         }

@@ -46,7 +46,7 @@ export const PlaylistDetails = () => {
 
     const {
         onAddPlaylistToQueue, playSongFromPlaylist,
-        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(playlistId, songs, loggedInUser)
+        onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(currPlaylist, songs, loggedInUser)
 
     const handleOnDragEnd = async (result: any) => {
         if (playlistId) {
@@ -68,6 +68,7 @@ export const PlaylistDetails = () => {
 
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
         const { value } = ev.target
+        // how about limiting the size to 20 chars or something like that.
         if (currPlaylist) {
             setCurrPlaylist((prevState) => {
                 if (prevState) {

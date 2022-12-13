@@ -8,7 +8,6 @@ export interface Playlist {
     creatorId: number,
     fullName?: string,
     title?:string
-    // likedByUsers: MiniUser[],
 }
 
 

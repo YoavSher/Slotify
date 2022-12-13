@@ -13,18 +13,20 @@ export const AppHeader = () => {
     const isMobile = screenWidth <= 770
     const { onGoBack, onGoForward, locationsLength } = useHistoryStack()
 
-    
+    const style = { background: (location.pathname.includes('playlist') ? 'transparent' : '#181818') }
     return (
-        <section className="app-header flex align-center justify-between">
+        <section style={style} className="app-header flex align-center justify-between" >
             <div className="header-nav-btns flex">
                 <button onClick={onGoBack} className="nav-btn-back"><span><FiChevronLeft /></span></button>
                 <button disabled={locationsLength <= 0} onClick={onGoForward} className="nav-btn-back"><span><FiChevronRight /></span></button>
             </div>
-            {location.pathname.includes("/search") && !isMobile &&
-                <div className="search-bar-header"><SearchBar /></div>}
+            {
+                location.pathname.includes("/search") && !isMobile &&
+                <div className="search-bar-header"><SearchBar /></div>
+            }
 
             <UserHeaderDisplay />
-        </section>
+        </section >
     )
 }
 
