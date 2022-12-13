@@ -10,11 +10,12 @@ import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
 import { replacePlaylist, setIsSongPlaying } from "../store/music-player/music-player.reducer"
 import { SearchBar } from "../cmps/search-bar"
-import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 import { useSongModal } from "../hooks/useSongModal"
 import { Playlist } from "../interfaces/playlist"
 import { usePlayPlaylistPreview } from "../hooks/usePlayPlaylistPreview"
 import { PlaylistPreview } from "../cmps/playlist-perview-cmps/playlist-preview"
+import { Loader } from "../cmps/loader"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 
 
@@ -26,8 +27,7 @@ export const SearchResults = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const songsSearchedResults = useAppSelector(state => state.searchSong.searchResults)
     const playlistsSearchedResults = useAppSelector(state => state.searchSong.searchedPlaylists)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const isMobile = screenWidth <= 770
+    const { isMobile, screenWidth } = useIsMobile()
     const params = useParams()
 
     const { topResult, topSongs } = useSearchResults(songsSearchedResults, playlistsSearchedResults, params)
@@ -49,7 +49,7 @@ export const SearchResults = () => {
 
     }
 
-    if (!songsSearchedResults && params.searchTerm) return <div className="loading-anim"><img src={loading} alt="" /></div>
+    if (!songsSearchedResults && params.searchTerm) return <Loader/>
     return (
         <>
             <section onClick={closeModal} onScroll={closeModal} className="search-results-page">

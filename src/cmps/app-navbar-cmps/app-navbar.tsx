@@ -13,6 +13,7 @@ import { setPlaylists } from "../../store/playlist/playlist.reducer"
 import { NavLinksList } from "./nav-links-list"
 import { PlaylistLinks } from "./playlists-links"
 import { NeedToLoginModal } from "../need-to-login-modal"
+import { useIsMobile } from "../../hooks/useIsMobile"
 
 
 export const AppNavbar = () => {
@@ -22,7 +23,6 @@ export const AppNavbar = () => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlists = useAppSelector(state => state.playlist.playlists)
     const dispatch = useAppDispatch()
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -30,7 +30,7 @@ export const AppNavbar = () => {
 
     const isCurrPlaylistOnQueue = 0 === queuePlaylistId
     const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
-    const isMobile = screenWidth <= 770
+    const { isMobile } = useIsMobile()
 
     useEffect(() => {
         loadPlayList()
@@ -48,8 +48,13 @@ export const AppNavbar = () => {
             openModal('create playlist')
         }
         else {
-            const newPlaylist = await playlistService.createPlaylist()
-            navigate(`playlist/${newPlaylist._id}`)
+            try {
+
+                const newPlaylist = await playlistService.createPlaylist()
+                navigate(`playlist/${newPlaylist._id}`)
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
@@ -94,7 +99,7 @@ export const AppNavbar = () => {
                 </div>
                 {playlists && <PlaylistLinks playlists={playlists} />}
             </div>}
-            {isModalOpen && <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen}/>}
+            {isModalOpen && <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen} />}
         </nav>
     )
 }

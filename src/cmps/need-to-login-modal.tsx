@@ -30,7 +30,6 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
         setIsModalOpen(false)
     }
     const calcTop = () => {
-        // if (isMobile) return { left: '0', top: '0' }
         switch (type) {
             case 'create playlist':
                 return {

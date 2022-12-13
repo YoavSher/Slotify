@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const initialState = {
-    screenWidth: window.innerWidth
+    screenWidth: window.innerWidth,
+    isLoading: false
 }
 
 const HelperSlice = createSlice({
@@ -10,10 +11,13 @@ const HelperSlice = createSlice({
     reducers: {
         setScreenWidth: (state, action: PayloadAction<number>) => {
             state.screenWidth = action.payload
+        },
+        setIsLoading: (state, action: PayloadAction<boolean>) => {
+            state.isLoading = action.payload
         }
     },
 })
 
-export const { setScreenWidth } = HelperSlice.actions
+export const { setScreenWidth, setIsLoading } = HelperSlice.actions
 
 export default HelperSlice.reducer

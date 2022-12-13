@@ -4,14 +4,14 @@ import { FaPauseCircle } from 'react-icons/fa'
 import { useAppSelector } from '../store/store.hooks'
 import { Playlist } from '../interfaces/playlist'
 import { usePlayPlaylistPreview } from '../hooks/usePlayPlaylistPreview'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 interface Props {
     playlistPre: Playlist
 }
 export const RecentlyPlayedPreview = ({ playlistPre }: Props) => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const isMobile = screenWidth <= 770
+    const { isMobile } = useIsMobile()
 
     const { onSetPlaylist, isThisPlaylist, isPlaylistPlaying } = usePlayPlaylistPreview(playlistPre, loggedInUser)
 

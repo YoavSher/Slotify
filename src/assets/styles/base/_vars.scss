@@ -2,14 +2,20 @@
     --text-subdued: #a7a7a7;
     --background-dark: #181818;
     --background-darker: #101010;
-    --green-color1:#1ed760;
+    --green-color1: #1ed760;
     --grid-gap: 24px;
     --grid-count: 4;
-    --column-count:4;
-    @media(min-width:1200px ){
-        --column-count:5;
+    --column-count: 3;
+
+    @media(min-width:1050px) {
+        --column-count: 4;
     }
-    @media(min-width:1300px ){
-        --column-count:6;
+
+    @media(min-width:1250px) {
+        --column-count: 5;
+    }
+
+    @media(min-width:1530px) {
+        --column-count: 6;
     }
 }

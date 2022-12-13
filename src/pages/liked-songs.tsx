@@ -15,13 +15,13 @@ import { FaPauseCircle } from "react-icons/fa"
 import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"
 import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { useCheckLoggedInUser } from "../hooks/useCheckLoggedInUser"
+import { useIsMobile } from "../hooks/useIsMobile"
 
 export const LikedSongs = () => {
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const likedSongs = useAppSelector(state => state.user.likedSongs)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const isMobile = screenWidth <= 770
+    const { isMobile, screenWidth } = useIsMobile()
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const LIKED_SONGS_PLAYLIST_ID = 0
     useCheckLoggedInUser()

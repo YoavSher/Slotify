@@ -16,13 +16,14 @@ import { Song } from '../interfaces/song';
 import { cachingService } from '../services/music-player-caching.service';
 import { LikeButton } from './like-button';
 import { Slider } from '@mui/material';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export const MusicPlayer = () => {
 
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
     const queueSongs = useAppSelector(state => state.musicPlayer.songs)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const { isMobile, screenWidth } = useIsMobile()
     const currSong = queueSongs[currPlayingIdx]
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -37,6 +38,9 @@ export const MusicPlayer = () => {
 
 
     useEffect(() => {
+        // at the componentDidMount stage checks if there are
+        //  previous playlist,volume,playing time and playing index cached if so takes them 
+        // and load them to the store for the app to use.
         const previousPlaylistInfo = cachingService.getPlaylist()
         const volume = cachingService.getCurrentVolume()
         if (volume || volume === 0) onVolumeChange(volume)
@@ -49,7 +53,9 @@ export const MusicPlayer = () => {
         }
     }, [])
 
+
     useEffect(() => {
+        // listens to changes in playing status from across the app,and play or pause the video.
         window.clearInterval(durationIntervalId.current)
         if (isSongPlaying) {
             playerRef.current?.playVideo()
@@ -68,6 +74,8 @@ export const MusicPlayer = () => {
     const [isLoopingEnabled, setIsLoopingEnabled] = useState(false)
 
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
+        // the function that catches the player object from the youtube component
+        // and starts the control over it.
         playerRef.current = ev.target
         if (playingTimeFromCache.current) {
             setSongTimer(playingTimeFromCache.current)
@@ -83,6 +91,8 @@ export const MusicPlayer = () => {
     }
 
     const durationInterval = () => {
+        // the interval that synchronize the time of the current song
+        //  from the youtube component,and the local state.
         durationIntervalId.current = window.setInterval(() => {
             if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
                 setSongTimer(0)
@@ -196,9 +206,9 @@ export const MusicPlayer = () => {
         onSwipedLeft: () => { onIndexIncrement() },
     })
 
-    const isMobile = screenWidth <= 770
 
-    const { songNameP, namesContainerRef, songNamePos } = useTextRollup(isMobile, screenWidth, currSong)
+    const { songNameP, namesContainerRef, songNamePos } = useTextRollup(screenWidth, currSong)
+    // [songNameP, namesContainerRef, songNamePos]
 
 
     return (
@@ -209,8 +219,8 @@ export const MusicPlayer = () => {
                     {currSong && <>
                         <section className="mobile-right">
                             <img className="song-image" src={currSong.image} alt="" />
-                            <div className="names-container">
-                                <p className="song-name">{currSong.title}</p>
+                            <div ref={namesContainerRef} className="names-container">
+                                <p style={{ left: `${songNamePos}px` }} ref={songNameP} className="song-name">{currSong.title}</p>
                                 <p className="artist-name">{currSong.artist}</p>
                             </div>
                         </section>
@@ -333,7 +343,8 @@ const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
     return { isShuffled, toggleSongsShuffle }
 }
 
-const useTextRollup = (isMobile: boolean, screenWidth: number, currSong: Song) => {
+const useTextRollup = (screenWidth: number, currSong: Song) => {
+    // makes that if the text is too long for the container it will spin around back and forth.
     const songNameP = useRef<HTMLParagraphElement>(null)
     const namesContainerRef = useRef<HTMLDivElement>(null)
     const nameMovementIntervalId = useRef<number>(1)
@@ -341,8 +352,9 @@ const useTextRollup = (isMobile: boolean, screenWidth: number, currSong: Song) =
     useEffect(() => {
         setSongNamePos(0)
         window.clearInterval(nameMovementIntervalId.current)
-        if (namesContainerRef?.current?.clientWidth && songNameP?.current?.clientWidth && !isMobile) {
+        if (namesContainerRef?.current?.clientWidth && songNameP?.current?.clientWidth) {
             const safetyMeasure = 10
+            const travelUnit = 2
             const distance = namesContainerRef.current.clientWidth - songNameP.current.clientWidth - safetyMeasure
             if (distance < -safetyMeasure) {
                 let direction = 'backward'
@@ -351,15 +363,15 @@ const useTextRollup = (isMobile: boolean, screenWidth: number, currSong: Song) =
                         if (direction === 'backward') {
                             if (prev <= distance) {
                                 direction = 'forward'
-                                return prev + 2
+                                return prev + travelUnit
                             }
-                            return prev - 2
+                            return prev - travelUnit
                         } else {
                             if (prev >= safetyMeasure) {
                                 direction = 'backward'
-                                return prev - 2
+                                return prev - travelUnit
                             }
-                            return prev + 2
+                            return prev + travelUnit
                         }
                     })
                 }, 250)

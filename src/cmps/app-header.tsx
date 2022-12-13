@@ -4,22 +4,42 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 import { SearchBar } from "./search-bar"
 import { useRef } from "react"
+import { useIsMobile } from "../hooks/useIsMobile"
 import { useAppSelector } from "../store/store.hooks"
+import { playlistService } from "../services/playlist.service"
 
 export const AppHeader = () => {
 
     const location = useLocation()
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const isMobile = screenWidth <= 770
+    const loggedInUser = useAppSelector(state => state.user.loggedInUser)
+    const { isMobile } = useIsMobile()
+    const navigate = useNavigate()
     const { onGoBack, onGoForward, locationsLength } = useHistoryStack()
+
+    const onCreateNewPlaylist = async () => {
+        if (!loggedInUser) return
+        try {
+            const newPlaylist = await playlistService.createPlaylist()
+            navigate(`playlist/${newPlaylist._id}`)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     const style = { background: (location.pathname.includes('playlist') ? 'transparent' : '#181818') }
     return (
         <section style={style} className="app-header flex align-center justify-between" >
-            <div className="header-nav-btns flex">
-                <button onClick={onGoBack} className="nav-btn-back"><span><FiChevronLeft /></span></button>
-                <button disabled={locationsLength <= 0} onClick={onGoForward} className="nav-btn-back"><span><FiChevronRight /></span></button>
-            </div>
+            {!isMobile ? (
+                <div className="header-nav-btns flex">
+                    <button onClick={onGoBack} className="nav-btn-back"><span><FiChevronLeft /></span></button>
+                    <button disabled={locationsLength <= 0} onClick={onGoForward} className="nav-btn-back"><span><FiChevronRight /></span></button>
+                </div>
+            ) : (
+                <div className={`create-playlist flex align-center ${loggedInUser ? '' : 'disabled'}`} onClick={onCreateNewPlaylist}>
+                    <div><span>+</span></div>
+                </div>
+            )}
+
             {
                 location.pathname.includes("/search") && !isMobile &&
                 <div className="search-bar-header"><SearchBar /></div>
