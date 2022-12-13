@@ -22,10 +22,10 @@ const searchSlice = createSlice({
         setSearchTerm: (state, action: PayloadAction<string>) => {
             state.searchTerm = action.payload
         },
-        setSearchResults: (state, action: PayloadAction<Song[]>) => {
+        setSearchResults: (state, action: PayloadAction<Song[] | null>) => {
             state.searchResults = action.payload
         },
-        setSearchedPlaylists: (state, action: PayloadAction<Playlist[]>) => {
+        setSearchedPlaylists: (state, action: PayloadAction<Playlist[] | null>) => {
             state.searchedPlaylists = action.payload
         }
     }

@@ -8,7 +8,8 @@ export const songService = {
     removeLikedSong,
     getPlaylistSongs,
     addSongToPlaylist,
-    removeFromPlaylist
+    removeFromPlaylist,
+    searchSongs
 }
 
 
@@ -72,6 +73,17 @@ async function getPlaylistSongs(playlistId: number) {
         const songs = await httpService.get(`song/playlist/${playlistId}`, null)
         console.log('songs:', songs)
         return songs as Song[]
+    } catch (err) {
+        console.log('err:', err)
+    }
+}
+
+async function searchSongs(searchTerm:string){
+    try {
+        // console.log('searchTerm:', searchTerm)
+        const songs = await httpService.get(`song/${searchTerm}`, null)
+        console.log('songs:', songs)
+        return songs as Song[] 
     } catch (err) {
         console.log('err:', err)
     }

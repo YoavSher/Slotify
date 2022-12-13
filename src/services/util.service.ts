@@ -3,6 +3,7 @@ import axios from "axios"
 
 export const utilService = {
     millisToMinutesAndSeconds,
+    randomInt,
     debounce,
     getPhotos,
     makeId,
@@ -18,6 +19,10 @@ function makeId(length = 8) {
         text += possible.charAt(Math.floor(Math.random() * possible.length))
     }
     return text
+}
+
+function randomInt(min: number, max: number) { // min and max included 
+    return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 function millisToMinutesAndSeconds(millis: number): string {

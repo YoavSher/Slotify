@@ -1,4 +1,5 @@
 import { Playlist } from "../interfaces/playlist";
+import { Song } from "../interfaces/song";
 import { storageService } from "./async-storage.service";
 import { httpService } from "./http.service";
 import { getPlaylists } from "./playlist.data";
@@ -124,10 +125,16 @@ async function addToRecentlyPlayed(playlistId: number) {
         console.log(err)
     }
 }
-
-async function getSearchedPlaylist(searchTerm: string) {
+interface searchedPlaylist {
+    searchTerm: string,
+    songs: Song[]
+}
+async function getSearchedPlaylist({ songs, searchTerm }: searchedPlaylist) {
     try {
-        const playlist = await httpService.get(`playlist/${searchTerm}`, null)
+        const songsIds: string[] = []
+        songs.forEach(s => songsIds.push(s.videoId))
+        console.log('songsIds:', songsIds)
+        const playlist = await httpService.get(`playlist/${searchTerm}/${songsIds}`, null)
         return playlist
     } catch (err) {
         console.log(err)

@@ -250,7 +250,7 @@
                 .playlists-results-container {
                     display: grid;
                     grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
-
+                    gap: 15px;
                 }
             }
         }

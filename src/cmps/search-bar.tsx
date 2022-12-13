@@ -2,12 +2,15 @@ import React, { ChangeEvent, useEffect, useState } from "react"
 
 import { FiSearch } from 'react-icons/fi'
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useGetResultsFromParams } from "../hooks/useGetResultsFromParams"
+import { Song } from "../interfaces/song"
 import { playlistService } from "../services/playlist.service"
+import { songService } from "../services/songs.service"
 
 import { utilService } from "../services/util.service"
 import { youtubeService } from "../services/youtube.service"
 import { setSearchedPlaylists, setSearchResults } from "../store/search/search.reducer"
-import { useAppDispatch } from "../store/store.hooks"
+import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 
 interface Props {
     fromResults?: boolean
@@ -15,31 +18,11 @@ interface Props {
 
 export const SearchBar = ({ fromResults }: Props) => {
 
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const location = useLocation()
-    const params = useParams()
     const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
-    // const { searchTerm } = params
-    // const [searchTerm, setSearchTerm] = useState('')
-    useEffect(() => {
-        console.log('location:', location)
-        getResultsFromParams(searchTerm)
-    }, [location])
+    const { getResultsFromParams } = useGetResultsFromParams()
 
-    const getResultsFromParams = async (term: string) => {
-        console.log('im results from params')
-        try {
-            const songsSearchResults = await youtubeService.getDataFromYoutube(term)
-            const playlistsSearchResults = await playlistService.getSearchedPlaylist(term)
-            // console.log('playlistsSearchResults:', playlistsSearchResults)
-            dispatch(setSearchResults(songsSearchResults))
-            dispatch(setSearchedPlaylists(playlistsSearchResults))
-
-        } catch (err) {
-            console.log('err:', err)
-        }
-    }
 
     const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {
         let { value } = ev.target
@@ -63,3 +46,5 @@ export const SearchBar = ({ fromResults }: Props) => {
         </section>
     )
 }
+
+
