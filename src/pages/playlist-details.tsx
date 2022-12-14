@@ -68,7 +68,6 @@ export const PlaylistDetails = () => {
 
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
         let { value } = ev.target
-        value = value.replaceAll("'", "\'")
         if (currPlaylist) {
             setCurrPlaylist((prevState) => {
                 if (prevState) {
