@@ -17,6 +17,8 @@ function App() {
   useScreenWidth()
   useCookieToGetUser()
 
+  const isLoading = useAppSelector(state => state.helper.isLoading)
+  const style = (isLoading) ? { padding: '0' } : {}
   return (
     <GoogleOAuthProvider clientId="216579650458-fu09u5p61i2tmdg7deqe3epompbcj7fv.apps.googleusercontent.com">
       <div className='root-app' >
@@ -24,7 +26,7 @@ function App() {
           <AppHeader />
           <AppNavbar />
           <main className='content-container'>
-            <div className='main-content'>
+            <div style={style} className='main-content'>
               <Routes>
                 {routes.map(route => {
                   if (route?.children?.length) {

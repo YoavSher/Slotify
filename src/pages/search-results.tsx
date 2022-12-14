@@ -7,11 +7,12 @@ import { useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
-import { SearchBar } from "../cmps/search-cmps/search-bar"
-import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { SearchBar } from "../cmps/search-bar"
 import { useSongModal } from "../hooks/useSongModal"
 import { Playlist } from "../interfaces/playlist"
 import { PlaylistPreview } from "../cmps/playlist-perview-cmps/playlist-preview"
+import { Loader } from "../cmps/loader"
+import { useIsMobile } from "../hooks/useIsMobile"
 import { useGetResultsFromParams } from "../hooks/useGetResultsFromParams"
 import { SearchFilter } from "../cmps/search-cmps/search-filter"
 import { SearchDefault } from "../cmps/search-cmps/seach-default"
@@ -21,8 +22,7 @@ import { SearchDefault } from "../cmps/search-cmps/seach-default"
 export const SearchResults = () => {
     const songsSearchedResults = useAppSelector(state => state.searchSong.searchResults)
     const playlistsSearchedResults = useAppSelector(state => state.searchSong.searchedPlaylists)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const isMobile = screenWidth <= 770
+    const { isMobile, screenWidth } = useIsMobile()
     const params = useParams()
     const [showSongs, setShowSongs] = useState(true)
     const [showPlaylists, setShowPlaylists] = useState(true)
@@ -52,12 +52,12 @@ export const SearchResults = () => {
         }
     }
 
-    if (!songsSearchedResults && params.searchTerm) return <div className="loading-anim"><img src={loading} alt="" /></div>
+    if (!songsSearchedResults && params.searchTerm) return <Loader/>
     return (
         <>
             <section onClick={closeModal} onScroll={closeModal} className="search-results-page">
                 <Helmet><title>Slotify - Search</title></Helmet>
-                {isMobile && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
+                {isMobile && <div className="search-bar-results"><SearchBar /></div>}
                 <div className="search-results-container">
                     {songsSearchedResults && playlistsSearchedResults &&
                         <section className="search-results flex ">
@@ -88,7 +88,6 @@ export const SearchResults = () => {
                                     {topResult.map(p => {
                                         return <PlaylistPreview key={p._id} playlistPre={p} />
                                     })}
-
                                 </div>}
                             </div>}
                         </section>}
@@ -108,10 +107,12 @@ const useSearchResults = (songsSearchedResults: Song[] | null | undefined, playl
     params: Readonly<Params<string>>) => {
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const [topResult, setTopResult] = useState<Playlist[]>()
+    
     useEffect(() => {
         console.log('params:', params)
         getResults()
     }, [songsSearchedResults, playlistsSearchedResults, params])
+
     const getResults = () => {
         if (songsSearchedResults && playlistsSearchedResults) {
             const songs = [...songsSearchedResults]

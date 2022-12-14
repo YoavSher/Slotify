@@ -139,3 +139,24 @@
     bottom: 0;
     left: 0;
 }
+
+@mixin create-playlist {
+    cursor: pointer;
+    @include nav-link;
+    margin-bottom: 15px;
+
+    div {
+        height: 24px;
+        width: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 3px;
+        background-color: #fff;
+
+        span {
+            color: black
+        }
+    }
+
+}

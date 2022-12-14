@@ -4,6 +4,7 @@ import { useAppSelector } from "../../store/store.hooks"
 import { BsFillPlayCircleFill } from 'react-icons/bs'
 import { FaPauseCircle } from 'react-icons/fa'
 import { useNavigate } from "react-router-dom"
+import { useIsMobile } from "../../hooks/useIsMobile"
 
 interface Props {
     playlistPre: Playlist
@@ -12,9 +13,8 @@ interface Props {
 export const PlaylistPreview = ({ playlistPre }: Props) => {
 
     const navigate = useNavigate()
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    const isMobile = screenWidth <= 770
+    const { isMobile } = useIsMobile()
 
     const { onSetPlaylist, isPlaylistPlaying } = usePlayPlaylistPreview(playlistPre, loggedInUser)
 

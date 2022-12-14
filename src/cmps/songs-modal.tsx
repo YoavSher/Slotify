@@ -56,8 +56,6 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
 
     }
 
-
-    console.log(song)
     return (
         <>
             <section onClick={ev => { ev.stopPropagation(); closeModal() }} style={calcModalPos()}

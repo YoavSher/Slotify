@@ -12,11 +12,8 @@ import { youtubeService } from "../../services/youtube.service"
 import { setSearchedPlaylists, setSearchResults } from "../../store/search/search.reducer"
 import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
 
-interface Props {
-    fromResults?: boolean
-}
 
-export const SearchBar = ({ fromResults }: Props) => {
+export const SearchBar = () => {
 
     const navigate = useNavigate()
     const location = useLocation()

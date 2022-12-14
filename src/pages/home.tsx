@@ -5,10 +5,11 @@ import { RecentlyPlayedList } from "../cmps/recently-played-list"
 import { playlistService } from "../services/playlist.service"
 import { setPlaylists } from "../store/playlist/playlist.reducer"
 import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+
 import { utilService } from "../services/util.service"
 import { PlaylistContainer } from "../cmps/playlist-perview-cmps/playlists-container"
 import { TestColor } from "../cmps/test-colors"
+import { Loader } from "../cmps/loader"
 
 export const Home = () => {
 
@@ -23,7 +24,7 @@ export const Home = () => {
         const playlists = await playlistService.query()
         if (playlists) dispatch(setPlaylists(playlists))
     }
-    if (!playlists) return <div className="loading-anim"><img src={loading} alt="" /></div>
+    if (!playlists) return <Loader/>
     return (
         <>
             <section className="home-page">

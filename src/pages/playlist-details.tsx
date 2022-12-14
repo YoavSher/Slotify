@@ -22,7 +22,8 @@ import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { SongsTable } from "../cmps/playlist-details-cmps/songs-table"
 import { LikeButtonPlaylist } from "../cmps/playlist-details-cmps/like-button-playlist"
 import { ActionMsg } from "../cmps/action-msg"
-import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { Loader } from "../cmps/loader"
+import { useIsMobile } from "../hooks/useIsMobile"
 import { onPlaylistDislike, updateUserPlaylist } from "../store/user/user.reducer"
 
 export const PlaylistDetails = () => {
@@ -33,13 +34,12 @@ export const PlaylistDetails = () => {
 
     const playlists = useAppSelector(state => state.playlist.playlists)
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const { isMobile, screenWidth } = useIsMobile()
 
     const [msg, setMsg] = useState('')
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
-    const isMobile = screenWidth <= 770
     const isCurrentUserPlaylistOwner = loggedInUser?._id === currPlaylist?.creatorId
 
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
@@ -69,8 +69,7 @@ export const PlaylistDetails = () => {
 
 
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
-        const { value } = ev.target
-        // how about limiting the size to 20 chars or something like that.
+        let { value } = ev.target
         if (currPlaylist) {
             setCurrPlaylist((prevState) => {
                 if (prevState) {
@@ -172,7 +171,7 @@ export const PlaylistDetails = () => {
         }, 2000)
     }
 
-    if (!currPlaylist) return <div className="loading-anim"><img src={loading} alt="" /></div>
+    if (!currPlaylist) return <Loader />
     return (
         <section className="playlist-details" onScroll={closeModal} onClick={() => { closeModal(); setIsPlaylistModalOpen(false) }}>
 

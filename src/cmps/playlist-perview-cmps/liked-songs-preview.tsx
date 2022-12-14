@@ -5,13 +5,13 @@ import { FaPauseCircle } from 'react-icons/fa'
 import { useMusicPlayerMethods } from "../../hooks/useMusicPlayerMethods"
 
 import { RiHeartFill } from "react-icons/ri"
+import { useIsMobile } from "../../hooks/useIsMobile"
 
 export const LikedSongsPreview = () => {
     const navigate = useNavigate()
     const likedSongs = useAppSelector(state => state.user.likedSongs)
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
-    const isMobile = screenWidth <= 770
+    const { isMobile } = useIsMobile()
     const LIKED_SONGS_PLAYLIST_ID = 0
     const pseudoPlaylist = {
         _id: LIKED_SONGS_PLAYLIST_ID,

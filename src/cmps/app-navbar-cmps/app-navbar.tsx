@@ -13,6 +13,7 @@ import { setPlaylists } from "../../store/playlist/playlist.reducer"
 import { NavLinksList } from "./nav-links-list"
 import { PlaylistLinks } from "./playlists-links"
 import { NeedToLoginModal } from "../need-to-login-modal"
+import { useIsMobile } from "../../hooks/useIsMobile"
 import { onPlaylistLike } from "../../store/user/user.reducer"
 
 
@@ -24,7 +25,6 @@ export const AppNavbar = () => {
     // const playlists = useAppSelector(state => state.playlist.playlists)
     const playlists = useAppSelector(state => state.user.playlists)
     const dispatch = useAppDispatch()
-    const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -32,7 +32,7 @@ export const AppNavbar = () => {
 
     const isCurrPlaylistOnQueue = 0 === queuePlaylistId
     const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
-    const isMobile = screenWidth <= 770
+    const { isMobile } = useIsMobile()
 
     // useEffect(() => {
     //     loadPlayList()
@@ -97,7 +97,7 @@ export const AppNavbar = () => {
                 </div>
                 {playlists && <PlaylistLinks playlists={playlists} />}
             </div>}
-            {isModalOpen && <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen}/>}
+            {isModalOpen && <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen} />}
         </nav>
     )
 }

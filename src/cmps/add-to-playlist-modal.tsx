@@ -33,15 +33,9 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
         try {
             if (playlistId && song) {
                 const songs = await songService.getPlaylistSongs(playlistId)
-                // const playlist = await playlistService.getPlaylistById(playlistId)
-
-                // const s = { ...song, addedAt: Date.now() }
-                // playlist.songs.push(s)
-                // await playlistService.updatePlaylist(playlist)
                 const { videoId } = song
                 if (songs !== undefined) {
                     if (songs.some((currSong: Song) => currSong.videoId === song?.videoId)) return
-                    // if (songs.some(s => s.videoId === videoId)) return
                     const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
                     await songService.addSongToPlaylist(newSong)
 
