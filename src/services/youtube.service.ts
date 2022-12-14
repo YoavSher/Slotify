@@ -34,8 +34,8 @@ async function getDataFromYoutube(term: string) {
         songs = songs.filter((song: Song) => song.duration > 0 && song.duration < 900000)
         // songs = songs.splice(0, 5)
         //send songs  to backend {post}api/songs
-        console.log('songs:', songs)
         songService.addSongsFromSearch(songs)
+        // console.log('songs:', songs)
         return songs
     } catch (err) {
         console.log('err:', err)

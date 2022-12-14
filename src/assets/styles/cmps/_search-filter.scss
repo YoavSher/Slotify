@@ -1,0 +1,18 @@
+.search-filter {
+    display: flex;
+    gap: 5px;
+
+    button {
+        @include cleared-btn;
+        cursor: pointer;
+        background-color: black;
+        padding: 5px 15px;
+        border-radius: 30px;
+
+        &.active {
+            color: #fff;
+        }
+    }
+
+    margin-bottom: 25px;
+}
