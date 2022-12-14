@@ -56,7 +56,7 @@ export const SearchResults = () => {
         <>
             <section onClick={closeModal} onScroll={closeModal} className="search-results-page">
                 <Helmet><title>Slotify - Search</title></Helmet>
-                {isMobile && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
+                {isMobile && <div className="search-bar-results"><SearchBar /></div>}
                 <div className="search-results-container">
                     <SearchFilter
                      onFilterResults={onFilterResults}
@@ -64,7 +64,6 @@ export const SearchResults = () => {
                      showPlaylists={showPlaylists} />
                     {songsSearchedResults && playlistsSearchedResults &&
                         <section className="search-results flex ">
-
                             {showSongs && <div className="top-songs flex column">
                                 <div className="top-songs title">
                                     <h1>Songs</h1>
@@ -87,7 +86,6 @@ export const SearchResults = () => {
                                     {topResult.map(p => {
                                         return <PlaylistPreview key={p._id} playlistPre={p} />
                                     })}
-
                                 </div>}
                             </div>}
                         </section>}
@@ -105,10 +103,12 @@ const useSearchResults = (songsSearchedResults: Song[] | null | undefined, playl
     params: Readonly<Params<string>>) => {
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const [topResult, setTopResult] = useState<Playlist[]>()
+    
     useEffect(() => {
         console.log('params:', params)
         getResults()
     }, [songsSearchedResults, playlistsSearchedResults, params])
+
     const getResults = () => {
         if (songsSearchedResults && playlistsSearchedResults) {
             const songs = [...songsSearchedResults]
