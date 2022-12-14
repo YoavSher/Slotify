@@ -2,15 +2,15 @@ import React, { ChangeEvent, useEffect, useState } from "react"
 
 import { FiSearch } from 'react-icons/fi'
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom"
-import { useGetResultsFromParams } from "../hooks/useGetResultsFromParams"
-import { Song } from "../interfaces/song"
-import { playlistService } from "../services/playlist.service"
-import { songService } from "../services/songs.service"
+import { useGetResultsFromParams } from "../../hooks/useGetResultsFromParams"
+import { Song } from "../../interfaces/song"
+import { playlistService } from "../../services/playlist.service"
+import { songService } from "../../services/songs.service"
 
-import { utilService } from "../services/util.service"
-import { youtubeService } from "../services/youtube.service"
-import { setSearchedPlaylists, setSearchResults } from "../store/search/search.reducer"
-import { useAppDispatch, useAppSelector } from "../store/store.hooks"
+import { utilService } from "../../services/util.service"
+import { youtubeService } from "../../services/youtube.service"
+import { setSearchedPlaylists, setSearchResults } from "../../store/search/search.reducer"
+import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
 
 interface Props {
     fromResults?: boolean

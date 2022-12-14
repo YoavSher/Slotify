@@ -23,9 +23,11 @@ import { SongsTable } from "../cmps/playlist-details-cmps/songs-table"
 import { LikeButtonPlaylist } from "../cmps/playlist-details-cmps/like-button-playlist"
 import { ActionMsg } from "../cmps/action-msg"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
+import { onPlaylistDislike, updateUserPlaylist } from "../store/user/user.reducer"
 
 export const PlaylistDetails = () => {
     const params = useParams()
+    const dispatch = useAppDispatch()
     const playlistId = params.playlistId ? +params.playlistId : null
     const navigate = useNavigate()
 
@@ -81,6 +83,7 @@ export const PlaylistDetails = () => {
     const onSaveChanges = async (newPlaylist = currPlaylist) => {
         if (newPlaylist) {
             //should update users playlist on store (navbar)
+            dispatch(updateUserPlaylist(newPlaylist))
             await playlistService.updatePlaylist(newPlaylist)
         }
     }
@@ -111,8 +114,9 @@ export const PlaylistDetails = () => {
     const onRemovePlaylist = async () => {
         if (playlistId) {
             try {
-                await playlistService.removePlaylist(playlistId)
+                dispatch(onPlaylistDislike(playlistId))
                 navigate('/')
+                await playlistService.removePlaylist(playlistId)
             } catch (err) {
                 console.log('err:', err)
             }
@@ -228,7 +232,6 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
     useEffect(() => {
 
-        loadSongs()
         loadPlaylist()
         return (() => {
             setCurrPlaylist(undefined)
@@ -236,21 +239,16 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
         })
     }, [playlistId, playlists])
 
-    const loadPlaylist = () => {
-        if (playlistId !== undefined && playlists) {
-            const playlist = playlists.find((p: Playlist) => p._id === playlistId)
-            setCurrPlaylist(playlist)
+    const loadPlaylist = async () => {
+        try {
+            if (playlistId !== null) {
+                const { playlist, songs } = await playlistService.getPlaylistById(playlistId)
+                setCurrPlaylist(playlist)
+                setSongs(songs)
+            }
+        } catch (err) {
+            console.log('err:', err)
         }
     }
 
-    const loadSongs = async () => {
-        if (playlistId) {
-            try {
-                const songs = await songService.getPlaylistSongs(playlistId)
-                if (songs) setSongs(songs)
-            } catch (err) {
-                console.log('err:', err)
-            }
-        }
-    }
 }

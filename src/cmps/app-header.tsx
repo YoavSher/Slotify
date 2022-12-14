@@ -2,7 +2,7 @@ import { Location, useLocation, useNavigate, } from "react-router-dom"
 import { UserHeaderDisplay } from './user-header-display'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
-import { SearchBar } from "./search-bar"
+import { SearchBar } from "./search-cmps/search-bar"
 import { useRef } from "react"
 import { useAppSelector } from "../store/store.hooks"
 

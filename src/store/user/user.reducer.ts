@@ -77,10 +77,15 @@ const userSlice = createSlice({
         setRecentPlaylists: (state, action: PayloadAction<Playlist[] | []>) => {
             state.recentPlaylists = action.payload
 
-        }
+        },
+        updateUserPlaylist: (state, action: PayloadAction<Playlist>) => {
+            if (state.playlists) {
+                state.playlists = state.playlists.map(p => p._id === action.payload._id ? action.payload : p)
+            }
+        },
     }
 })
-export const { setUser, onSongLike, onSongDislike, setLikedSongs, setLikedPlaylists, onPlaylistDislike, onPlaylistLike, setRecentPlaylists, onPlaylistPlay } = userSlice.actions
+export const { updateUserPlaylist, setUser, onSongLike, onSongDislike, setLikedSongs, setLikedPlaylists, onPlaylistDislike, onPlaylistLike, setRecentPlaylists, onPlaylistPlay } = userSlice.actions
 
 
 export default userSlice.reducer

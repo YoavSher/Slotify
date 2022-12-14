@@ -1,0 +1,42 @@
+.search-default {
+    display: grid;
+    grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
+    gap: 15px;
+    grid-auto-rows: auto;
+    grid-template-rows: minmax(150px, 1fr);
+    margin-top: 30px;
+
+    .search-default-preview {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        min-height: 150px;
+        cursor: pointer;
+        transition: .4s;
+
+        &:hover {
+            opacity: .7;
+            transition: .4s;
+        }
+
+        h1 {
+            padding: 8px;
+            font-size: 1.3rem;
+        }
+
+        .img-container {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 100px;
+            width: 100px;
+            transform: rotate(25deg) translate(18%, -2%);
+
+            img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}

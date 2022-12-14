@@ -5,7 +5,10 @@
     --green-color1:#1ed760;
     --grid-gap: 24px;
     --grid-count: 4;
-    --column-count:4;
+    --column-count:2;
+    @media(min-width:770px ){
+        --column-count:4;
+    }
     @media(min-width:1200px ){
         --column-count:5;
     }

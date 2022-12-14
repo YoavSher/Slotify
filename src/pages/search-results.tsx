@@ -7,13 +7,14 @@ import { useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
-import { SearchBar } from "../cmps/search-bar"
+import { SearchBar } from "../cmps/search-cmps/search-bar"
 import loading from '../assets/img/Spotify-Loading-Animation-4.gif'
 import { useSongModal } from "../hooks/useSongModal"
 import { Playlist } from "../interfaces/playlist"
 import { PlaylistPreview } from "../cmps/playlist-perview-cmps/playlist-preview"
 import { useGetResultsFromParams } from "../hooks/useGetResultsFromParams"
-import { SearchFilter } from "../cmps/search-filter"
+import { SearchFilter } from "../cmps/search-cmps/search-filter"
+import { SearchDefault } from "../cmps/search-cmps/seach-default"
 
 
 
@@ -58,12 +59,12 @@ export const SearchResults = () => {
                 <Helmet><title>Slotify - Search</title></Helmet>
                 {isMobile && <div className="search-bar-results"><SearchBar fromResults={true} /></div>}
                 <div className="search-results-container">
-                    <SearchFilter
-                     onFilterResults={onFilterResults}
-                     showSongs={showSongs} 
-                     showPlaylists={showPlaylists} />
                     {songsSearchedResults && playlistsSearchedResults &&
                         <section className="search-results flex ">
+                            <SearchFilter
+                                onFilterResults={onFilterResults}
+                                showSongs={showSongs}
+                                showPlaylists={showPlaylists} />
 
                             {showSongs && <div className="top-songs flex column">
                                 <div className="top-songs title">
@@ -91,20 +92,9 @@ export const SearchResults = () => {
                                 </div>}
                             </div>}
                         </section>}
-                    {/* {songsSearchedResults && isMobile && <section className="search-results flex ">
-                        <div className="top-songs-results-container">
-                            {songsSearchedResults.map(song => {
-                                return <SongPreview
-                                    key={song.videoId}
-                                    toggleModal={toggleModal}
-                                    song={song}
-                                    type={'search-results'}
-                                    screenWidth={screenWidth} />
-                            })}
-                            {isModalOpen && songForModal && < SongsModal closeModal={closeModal} isMobile={isMobile} song={songForModal} modalPos={modalPos} />}
-                        </div>
-                    </section>} */}
                     {!songsSearchedResults && <section className="search-resluts-default">
+                        <h1>Browse all</h1>
+                        <SearchDefault />
                     </section>}
                 </div>
                 <div className="pusher"></div>

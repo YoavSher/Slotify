@@ -13,6 +13,7 @@ import { setPlaylists } from "../../store/playlist/playlist.reducer"
 import { NavLinksList } from "./nav-links-list"
 import { PlaylistLinks } from "./playlists-links"
 import { NeedToLoginModal } from "../need-to-login-modal"
+import { onPlaylistLike } from "../../store/user/user.reducer"
 
 
 export const AppNavbar = () => {
@@ -20,7 +21,8 @@ export const AppNavbar = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    const playlists = useAppSelector(state => state.playlist.playlists)
+    // const playlists = useAppSelector(state => state.playlist.playlists)
+    const playlists = useAppSelector(state => state.user.playlists)
     const dispatch = useAppDispatch()
     const screenWidth = useAppSelector(state => state.helper.screenWidth)
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
@@ -32,14 +34,14 @@ export const AppNavbar = () => {
     const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
     const isMobile = screenWidth <= 770
 
-    useEffect(() => {
-        loadPlayList()
-    }, [location])
+    // useEffect(() => {
+    //     loadPlayList()
+    // }, [location])
 
-    const loadPlayList = async () => {
-        const playlists = await playlistService.query()//show only users liked playlists
-        if (playlists) dispatch(setPlaylists(playlists))
-    } //shouldn't exist - should be taken from store
+    // const loadPlayList = async () => {
+    //     const playlists = await playlistService.query()//show only users liked playlists
+    //     if (playlists) dispatch(setPlaylists(playlists))
+    // } //shouldn't exist - should be taken from store
 
 
 
@@ -49,6 +51,7 @@ export const AppNavbar = () => {
         }
         else {
             const newPlaylist = await playlistService.createPlaylist()
+            dispatch(onPlaylistLike(newPlaylist))
             navigate(`playlist/${newPlaylist._id}`)
         }
     }
