@@ -10,7 +10,7 @@
     position: relative;
 
     .color-container {
-        height: calc(130% + 50px);
+        height: calc(130% + 55px);
         width: calc(100% + 32px);
         position: absolute;
         left: 0;
@@ -31,9 +31,14 @@
         margin-inline-end: 12px;
         box-shadow: 0 0 15px 4px black;
         position: relative;
-        height: 150px;
-        max-width: 180px;
+        min-height: 180px;
+        width: 180px;
         align-self: center;
+
+        @media(min-width:870px) {
+            height: 150px;
+            max-width: 180px;
+        }
 
         @media(min-width:1020px) {
             align-self: flex-end;

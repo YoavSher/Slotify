@@ -10,7 +10,8 @@ export const PlaylistContainer = ({ playlists }: Props) => {
     const rapPlaylists = [...playlists].slice(7, 13)
     const popPlaylists = [...playlists].slice(13,18)
     const IsraeliRockPlaylists = [...playlists].slice(18,23)
-    const bestOfPlaylists = [...playlists].slice(23)
+    const bestOfPlaylists = [...playlists].slice(23,29)
+    const decadesPlaylists = [...playlists].slice(29,35)
     return (
         <section className="playlist-container">
             <PlaylistsList topic={'Rock'} playlists={rockPlaylists} />
@@ -18,6 +19,7 @@ export const PlaylistContainer = ({ playlists }: Props) => {
             <PlaylistsList topic={'Pop'} playlists={popPlaylists} />
             <PlaylistsList topic={' ישראלי'} playlists={IsraeliRockPlaylists} />
             <PlaylistsList topic={'Greatest Songs'} playlists={bestOfPlaylists} />
+            <PlaylistsList topic={'Decades'} playlists={decadesPlaylists} />
         </section>
     )
 }
