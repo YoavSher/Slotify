@@ -18,6 +18,10 @@
             bottom: -12px;
             left: 4px;
 
+            span:not(:last-child) {
+                top: 63%
+            }
+
             span:last-child {
                 display: none;
             }

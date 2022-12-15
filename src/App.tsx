@@ -14,7 +14,7 @@ import { useCookieToGetUser } from './hooks/useCookieToGetUser';
 
 function App() {
   useLoadPlaylists()
-  useScreenWidth()
+  useScreenWidthTracker()
   useCookieToGetUser()
 
   const isLoading = useAppSelector(state => state.helper.isLoading)
@@ -64,7 +64,7 @@ const useLoadPlaylists = () => {
 
 }
 
-const useScreenWidth = () => {
+const useScreenWidthTracker = () => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     window.addEventListener('resize', setDimensions)

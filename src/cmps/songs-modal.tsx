@@ -39,7 +39,6 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
     }
 
     const calcModalPos = () => {
-        console.dir(modal.current)
         if (isMobile) return { left: '0', top: '0' }
         else if (modal.current && (window.innerHeight - modalPos.top - modal.current.clientHeight - 110) <= 0) {
             return {
