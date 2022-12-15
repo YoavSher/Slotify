@@ -10,10 +10,11 @@ interface Props {
     modalPos: { left: number, top: number },
     onOpenAddModal: Function,
     isMobile: boolean,
-    toggleModalMobile: Function
+    toggleModalMobile: Function,
+    height: number
 }
 
-export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile }: Props) => {
+export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile, height }: Props) => {
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlists = useAppSelector(state => state.playlist.playlists)
@@ -22,10 +23,11 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
 
 
     const calcModalPos = () => {
-        if (isMobile) return { left: '0', top: '0' }
+        if (isMobile) return { left: '0', top: '0', height }
         else return {
             left: `${modalPos.left - 363}px`,
-            top: `${modalPos.top - 100}px`
+            top: `${modalPos.top - 50}px`,
+            height
         }
     }
 
@@ -63,27 +65,23 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
     }
 
     return (
-        <section style={calcModalPos()} className="add-to-playlist-modal options-modal"
-            onMouseOver={() => onOpenAddModal(true)} onMouseLeave={() => onOpenAddModal(false)}>
+        <section style={calcModalPos()} className="add-to-playlist-modal options-modal add-to-modal"
+            onMouseOver={() => onOpenAddModal(true)} onMouseLeave={() => onOpenAddModal(false)} >
             <div className="input-container">
                 <input className="search-playlist-input" type="text" placeholder="Find a playlist"
                     onClick={onStopPropagation} onChange={onHandleChange} onFocus={() => onOpenAddModal(true)} />
             </div>
-            <div>
-                {!isMobile ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
-                    : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id)} className="mini-playlist">
-                        <img src={p.image} alt="" />
-                        <section className="texts">
-                            <p>{p.name}</p>
-                            {/* <p>{p.createdBy.fullName}</p> */}
-                        </section>
-                    </article>)}
+            <div className="playlists-container">
+                <div>
+                    {!isMobile ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
+                        : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id)} className="mini-playlist">
+                            <img src={p.image} alt="" />
+                            <section className="texts">
+                                <p>{p.name}</p>
+                            </section>
+                        </article>)}
+                </div>
             </div>
         </section>
     )
 }
-
-
-// ( '1w7OgIMMRc4', 'Guns N Roses - Sweet Child O Mine',  'GunsNRoses',  'https://i.ytimg.com/vi/1w7OgIMMRc4/hqdefault.jpg',  303000)
-// ( '8SbUC-UaAxE', 'Guns N Roses - November Rain',  'GunsNRoses',  'https://i.ytimg.com/vi/8SbUC-UaAxE/hqdefault.jpg',  557000)
-// ( 'Rbm6GXllBiw', 'Guns N Roses - Paradise City',  'GunsNRoses',  'https://i.ytimg.com/vi/Rbm6GXllBiw/hqdefault.jpg',  409000)

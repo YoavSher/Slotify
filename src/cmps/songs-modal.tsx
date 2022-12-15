@@ -1,4 +1,4 @@
-import { useState, useEffect, MouseEventHandler, MouseEvent } from "react"
+import { useState, useEffect, MouseEventHandler, MouseEvent, useRef } from "react"
 
 import { AiFillCaretRight } from 'react-icons/ai'
 import { useLocation } from "react-router-dom"
@@ -22,6 +22,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const [addModal, setAddModal] = useState(false)
+    const [pos, setPos] = useState<{ left: string, top: string } | null>(null)
     const dispatch = useAppDispatch()
     const addSongToQueue = () => {
         if (song) dispatch(addToQueue(song))
@@ -37,12 +38,24 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
     }
 
     const calcModalPos = () => {
+        console.dir(modal.current)
         if (isMobile) return { left: '0', top: '0' }
-        else return {
+        else if (modal.current && (window.innerHeight - modalPos.top - modal.current.clientHeight - 110) <= 0) {
+            return {
+                left: `${modalPos.left - 185}px`,
+                top: `${modalPos.top - modal.current.clientHeight}px`
+            }
+        } else return {
             left: `${modalPos.left - 185}px`,
             top: `${modalPos.top + 10}px`
         }
     }
+    const modal = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        console.log(modal.current)
+        setPos(calcModalPos())
+    }, [])
 
     const onOpenAddModal = (isOpen: boolean) => {
         if (isMobile) return
@@ -56,10 +69,11 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
 
     }
 
+
     return (
         <>
-            <section onClick={ev => { ev.stopPropagation(); closeModal() }} style={calcModalPos()}
-                className={`${isMobile ? 'mobile' : ''} options-modal`} onMouseLeave={() => onOpenAddModal(false)}>
+            <section ref={modal} onClick={ev => { ev.stopPropagation(); closeModal() }} style={(pos) ? pos : { opacity: 0 }}
+                className={`${isMobile ? 'mobile' : ''} options-modal`} onMouseLeave={() => onOpenAddModal(false)} >
                 {isMobile && <section className="mini-song">
                     <img src={song?.image} alt="" />
                     <p className="song-name">{song?.title}</p>
@@ -73,13 +87,14 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
                     style={{ cursor: `${loggedInUser ? 'default' : 'not-allowed'}` }}
                     onClick={toggleModalMobile} onMouseOver={() => onOpenAddModal(true)} className="flex align-center justify-between">
                     Add to playlist <span><AiFillCaretRight /></span></button>
-                {addModal &&
+                {addModal && modal.current &&
                     <AddToPlaylistModal
                         modalPos={modalPos}
                         onOpenAddModal={onOpenAddModal}
                         toggleModalMobile={toggleModalMobile}
                         song={song}
-                        isMobile={isMobile} />}
+                        isMobile={isMobile}
+                        height={modal.current.clientHeight} />}
             </section>
 
         </>

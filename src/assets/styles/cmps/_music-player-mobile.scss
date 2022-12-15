@@ -10,17 +10,17 @@
     position: fixed;
     bottom: 75px;
 
-    .css-1rblxne-MuiSlider-root .MuiSlider-thumb {
-        display: none;
-    }
-
     .time-container {
-        .css-1rblxne-MuiSlider-root {
+        &>span {
             position: absolute;
             width: calc(100% - 8px);
             height: 2px;
             bottom: -12px;
             left: 4px;
+
+            span:last-child {
+                display: none;
+            }
         }
     }
 

@@ -1,3 +1,4 @@
+import { MouseEvent } from "react"
 import { NavLink, useLocation } from "react-router-dom"
 interface Route {
     location: string,
@@ -7,9 +8,10 @@ interface Route {
     isRendered: boolean,
 }
 interface Props {
-    routes: Route[]
+    routes: Route[],
+    onValidateLibrary: (ev: MouseEvent<HTMLAnchorElement>) => void
 }
-export const NavLinksList = ({ routes }: Props) => {
+export const NavLinksList = ({ routes, onValidateLibrary }: Props) => {
     const location = useLocation()
     const isIconActive = (routeLocation: string) => {
         if (routeLocation === '/') {
@@ -23,7 +25,7 @@ export const NavLinksList = ({ routes }: Props) => {
             {routes.map(({ location, isRendered, icon, activeIcon, txt }) => {
                 if (isRendered) return (
                     <li>
-                        <NavLink to={location} className='flex align-center'>
+                        <NavLink onClick={(txt === 'Your Library') ? onValidateLibrary : () => { }} to={location} className='flex align-center'>
                             {isIconActive(location) ? <span>{activeIcon}</span> : <span>{icon}</span>}
                             <p>{txt}</p>
                         </NavLink>

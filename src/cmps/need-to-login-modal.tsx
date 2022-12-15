@@ -14,6 +14,8 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
                 return 'Create Playlist'
             case 'liked songs':
                 return 'Enjoy your liked songs'
+            case 'library':
+                return 'Enjoy your liked own library'
         }
     }
 
@@ -23,6 +25,8 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
                 return 'Login to create and share playlists.'
             case 'liked songs':
                 return 'Login to listen to all of your liked songs in one playlists.'
+            case 'library':
+                return 'Login to keep track of all your liked playlists and songs.'
         }
     }
 
@@ -38,6 +42,10 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
             case 'liked songs':
                 return {
                     top: `288px`
+                }
+            case 'library':
+                return {
+                    top: `182px`
                 }
         }
     }

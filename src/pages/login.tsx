@@ -33,18 +33,17 @@ export const Login = () => {
         try {
             const user = await userService.login(loggesinUser)
             if (user) {
-
                 dispatch(setUser(user))
+                onCloseModal()
                 const songs = await songService.getLikedSongs(user._id) as Song[]
                 dispatch(setLikedSongs(songs))
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))
                 const recentlyPlayed = await playlistService.getUserRecentPlaylists(user._id) as Playlist[]
                 dispatch(setRecentPlaylists(recentlyPlayed))
-
             }
 
-            onCloseModal()
+            // onCloseModal()
         } catch (err) { //needs to return errors to the user.
             console.log(err)
         }

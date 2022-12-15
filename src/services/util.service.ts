@@ -72,10 +72,9 @@ function getDetailedTime(time: number) {
     const date = new Date(time)
     const month = _getMonthName(date)
     const day = date.getDate()
-    const hour = date.getHours()
-    const minutes = date.getMinutes()
 
-    return `${month} ${_padNum(day)} at ${_padNum(hour)}:${_padNum(minutes)}`
+
+    return `${month} ${_padNum(day)}`
 }
 
 function _padNum(num: number): string {
@@ -83,8 +82,8 @@ function _padNum(num: number): string {
 }
 
 function _getMonthName(date: Date) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ]
     return monthNames[date.getMonth()]
 }

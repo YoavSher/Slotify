@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Playlist } from '../../interfaces/playlist'
 import { Song } from '../../interfaces/song'
-import { LikedSongs } from '../../pages/liked-songs'
-import { User, userService } from '../../services/user.service'
+import { User} from '../../services/user.service'
 
 interface UserState {
     loggedInUser: User | null,

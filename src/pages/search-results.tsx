@@ -7,7 +7,6 @@ import { useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
-import { SearchBar } from "../cmps/search-cmps/search-bar"
 import { useSongModal } from "../hooks/useSongModal"
 import { Playlist } from "../interfaces/playlist"
 import { PlaylistPreview } from "../cmps/playlist-perview-cmps/playlist-preview"
@@ -16,6 +15,7 @@ import { useIsMobile } from "../hooks/useIsMobile"
 import { useGetResultsFromParams } from "../hooks/useGetResultsFromParams"
 import { SearchFilter } from "../cmps/search-cmps/search-filter"
 import { SearchDefault } from "../cmps/search-cmps/seach-default"
+import { SearchBar } from "../cmps/search-cmps/search-bar"
 
 
 
@@ -107,7 +107,7 @@ const useSearchResults = (songsSearchedResults: Song[] | null | undefined, playl
     params: Readonly<Params<string>>) => {
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
     const [topResult, setTopResult] = useState<Playlist[]>()
-    
+
     useEffect(() => {
         console.log('params:', params)
         getResults()

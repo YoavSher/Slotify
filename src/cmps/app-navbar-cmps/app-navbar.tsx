@@ -22,7 +22,6 @@ export const AppNavbar = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    // const playlists = useAppSelector(state => state.playlist.playlists)
     const playlists = useAppSelector(state => state.user.playlists)
     const dispatch = useAppDispatch()
     const queuePlaylistId = useAppSelector(state => state.musicPlayer.playlistId)
@@ -33,17 +32,6 @@ export const AppNavbar = () => {
     const isCurrPlaylistOnQueue = 0 === queuePlaylistId
     const isCurrPlaylistPlaying = isCurrPlaylistOnQueue && isSongPlaying
     const { isMobile } = useIsMobile()
-
-    // useEffect(() => {
-    //     loadPlayList()
-    // }, [location])
-
-    // const loadPlayList = async () => {
-    //     const playlists = await playlistService.query()//show only users liked playlists
-    //     if (playlists) dispatch(setPlaylists(playlists))
-    // } //shouldn't exist - should be taken from store
-
-
 
     const onCreateNewPlaylist = async () => {
         if (!loggedInUser) {
@@ -56,10 +44,16 @@ export const AppNavbar = () => {
         }
     }
 
-    const checkUser = (ev: MouseEvent<HTMLAnchorElement>) => {
+    const onValidateLikedSongs = (ev: MouseEvent<HTMLAnchorElement>) => {
         if (!loggedInUser) {
             ev.preventDefault()
             openModal('liked songs')
+        }
+    }
+    const onValidateLibrary = (ev: MouseEvent<HTMLAnchorElement>) => {
+        if (!loggedInUser) {
+            ev.preventDefault()
+            openModal('library')
         }
     }
 
@@ -76,16 +70,17 @@ export const AppNavbar = () => {
     ]
 
     return (
+
         <nav className="app-navbar flex column">
             {!isMobile && <h1 onClick={() => { navigate('/') }} className="main-logo flex"><span><BsSpotify /></span> Slotify</h1>}
-            <NavLinksList routes={routes} />
+            <NavLinksList routes={routes} onValidateLibrary={onValidateLibrary} />
 
             {!isMobile && <div className="nav-links-second">
                 <div className="create-playlist flex align-center" onClick={onCreateNewPlaylist}>
                     <div><span>+</span></div><p>Create Playlist</p>
                 </div>
                 <div className="liked-songs flex" >
-                    <NavLink to='/liked-songs' className="flex align-center" onClick={checkUser}>
+                    <NavLink to='/liked-songs' className="flex align-center" onClick={onValidateLikedSongs}>
                         <div><span><RiHeartFill /></span></div><p>Liked Songs</p>
                     </NavLink>
                     {isCurrPlaylistPlaying &&
@@ -97,7 +92,12 @@ export const AppNavbar = () => {
                 </div>
                 {playlists && <PlaylistLinks playlists={playlists} />}
             </div>}
-            {isModalOpen && <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen} />}
+            {isModalOpen && <>
+                <NeedToLoginModal type={txtType} setIsModalOpen={setIsModalOpen} />
+                <div className="closer" onClick={() => { setIsModalOpen(false) }}></div>
+            </>
+            }
         </nav>
+
     )
 }
