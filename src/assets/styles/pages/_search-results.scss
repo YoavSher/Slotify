@@ -3,8 +3,13 @@
     color: #fff;
     @include main-content-scroll;
     top: 63px;
-    left: 30px;
+    left: 10px;
+    right: 10px;
     overflow-x: hidden;
+
+    .pusher {
+        height: 140px;
+    }
 
     .search-bar-results {
         flex-grow: 1;

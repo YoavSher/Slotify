@@ -11,10 +11,11 @@ interface Props {
     onOpenAddModal: Function,
     isMobile: boolean,
     toggleModalMobile: Function,
-    height: number
+    height: number,
+    showActionMsg: any
 }
 
-export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile, height }: Props) => {
+export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile, height, showActionMsg }: Props) => {
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlists = useAppSelector(state => state.playlist.playlists)
@@ -31,21 +32,22 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
         }
     }
 
-    const onAddToPlaylist = async (playlistId: number | undefined) => {
+    const onAddToPlaylist = async (playlistId: number | undefined, name: string | undefined) => {
         try {
-            if (playlistId && song) {
+            if (playlistId && song && name) {
                 const songs = await songService.getPlaylistSongs(playlistId)
                 const { videoId } = song
                 if (songs !== undefined) {
                     if (songs.some((currSong: Song) => currSong.videoId === song?.videoId)) return
                     const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
                     await songService.addSongToPlaylist(newSong)
-
+                    showActionMsg(`Added to ${name}`)
                 }
                 if (isMobile) toggleModalMobile()
                 else onOpenAddModal(false)
             }
         } catch (err) {
+            showActionMsg(`Failed to add to ${name}`)
             console.log('err:', err)
         }
 
@@ -73,8 +75,8 @@ export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAd
             </div>
             <div className="playlists-container">
                 <div>
-                    {!isMobile ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id)}>{p.name}</button>)
-                        : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id)} className="mini-playlist">
+                    {!isMobile ? filteredPlaylists?.map(p => <button key={p._id} onClick={() => onAddToPlaylist(p._id, p.name)}>{p.name}</button>)
+                        : filteredPlaylists?.map(p => <article onClick={() => onAddToPlaylist(p._id, p.name)} className="mini-playlist">
                             <img src={p.image} alt="" />
                             <section className="texts">
                                 <p>{p.name}</p>

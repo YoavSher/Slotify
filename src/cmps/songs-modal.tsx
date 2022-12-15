@@ -15,10 +15,11 @@ interface Props {
     modalPos: { left: number, top: number },
     isMobile: boolean,
     renderedChild?: React.ReactNode,
+    showActionMsg: any
 
 }
 
-export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild }: Props) => {
+export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild, showActionMsg }: Props) => {
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const [addModal, setAddModal] = useState(false)
@@ -93,6 +94,7 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
                         toggleModalMobile={toggleModalMobile}
                         song={song}
                         isMobile={isMobile}
+                        showActionMsg={showActionMsg}
                         height={modal.current.clientHeight} />}
             </section>
 
