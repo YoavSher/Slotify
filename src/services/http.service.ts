@@ -36,16 +36,11 @@ async function ajax(endpoint: string, method = 'GET', data = null) {
         console.log('try succsess')
         return res.data
     } catch (err) {
-        console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
+        console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `)
         console.log('err:', err)
         console.dir(err)
         if (err instanceof AxiosError) {
-            if (err.response && err.response.status === 401) {
-                sessionStorage.clear()
-                window.location.assign('/')
-            }
             throw err
-
         }
     }
 }

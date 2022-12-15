@@ -2,6 +2,7 @@ import { ChangeEvent, MouseEvent, MouseEventHandler, useState } from "react"
 import { Helmet } from "react-helmet"
 import { BsSpotify } from "react-icons/bs"
 import { Link, useNavigate } from "react-router-dom"
+import { ActionMsg } from "../cmps/action-msg"
 import { GoogleLoginBtn } from "../cmps/google-login-btn"
 import { Playlist } from "../interfaces/playlist"
 import { PlaylistSong, Song } from "../interfaces/song"
@@ -22,16 +23,19 @@ export const Login = () => {
     const onStopPropagation = (ev: MouseEvent) => {
         ev.stopPropagation()
     }
+
     const isCredValid = () => {
         return Object.values(userCred).every(field => field)
     }
+
     const onChangeUserCred = (ev: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = ev.target
         setUserCred(prev => ({ ...prev, [name]: value }))
     }
-    const login = async (loggesinUser = userCred) => {
+
+    const login = async (cred = userCred) => {
         try {
-            const user = await userService.login(loggesinUser)
+            const user = await userService.login(cred)
             if (user) {
                 dispatch(setUser(user))
                 onCloseModal()
@@ -43,12 +47,23 @@ export const Login = () => {
                 dispatch(setRecentPlaylists(recentlyPlayed))
             }
 
-            // onCloseModal()
-        } catch (err) { //needs to return errors to the user.
-            console.log(err)
+        } catch (err) { 
+            showActionMsg('Invalid username and password')
         }
 
     }
+
+
+    const [msg, setMsg] = useState('')
+
+    const showActionMsg = (txt: string) => {
+        setMsg(txt)
+        // setTimeout(() => {
+        //     setMsg('')
+        // }, 10000)
+    }
+
+
     const onLogin = async (ev: React.SyntheticEvent) => {
         ev.preventDefault()
         login()
@@ -71,12 +86,13 @@ export const Login = () => {
                             placeholder={input.placeholder} value={input.value}
                             key={input.name} onChange={onChangeUserCred} />
                     ))}
-                    <button disabled={!isCredValid()} className="sign-up-btn">LOG IN</button>
+                    <button disabled={!isCredValid()} onClick={onLogin} className="sign-up-btn">LOG IN</button>
                 </form>
                 <GoogleLoginBtn cbFunc={login} />
                 <Link className="back" to="/" >Back</Link>
                 <Link to="/signup" >Dont have an account? <span>SIGNUP</span> </Link>
             </section>
+            {msg && <ActionMsg msg={msg} />}
         </section>
     )
 }

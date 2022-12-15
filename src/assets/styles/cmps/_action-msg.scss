@@ -6,8 +6,21 @@
     background-color: black;
     border-radius: 4px;
 
+    h3 {
+        color: white;
+    }
+
     @media(min-width: 770px) {
         bottom: 13%;
         left: 50%;
+    }
+}
+
+.login-screen-cover {
+    .action-msg {
+        @media(min-width:770px) {
+            bottom: 100px;
+            left: unset;
+        }
     }
 }

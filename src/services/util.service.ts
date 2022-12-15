@@ -9,7 +9,8 @@ export const utilService = {
     makeId,
     getDetailedTime,
     shuffle,
-    getCurrentPartOfTheDay
+    getCurrentPartOfTheDay,
+    getRandomNumber
 }
 
 function makeId(length = 8) {
@@ -108,4 +109,8 @@ function getCurrentPartOfTheDay() {
     else if (currentHour > 17) return 'evening'
     else if (currentHour > 11) return 'afternoon'
     else if (currentHour >= 4) return 'morning'
+}
+
+function getRandomNumber(max: number): number {
+    return Math.floor(Math.random() * max)
 }

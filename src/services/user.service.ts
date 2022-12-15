@@ -27,15 +27,13 @@ interface Credentials {
     password: string,
 }
 
-const STORAGE_KEY_LOGGEDIN_USER = 'loggedinUser'
-const STORAGE_KEY = 'users'
 
 async function checkLoginToken() {
     try {
         console.log('getting to the last point in the front')
         return await httpService.get('auth/', null)
     } catch (err) {
-
+        throw err
     }
 }
 
@@ -43,8 +41,7 @@ async function login({ password, username }: Credentials) {
     try {
         return await httpService.post('auth/login', { password, username }) as MiniUser
     } catch (err) {
-        console.log('cant login')
-        //do something
+        throw err
     }
 }
 
@@ -52,7 +49,7 @@ async function signup(credentials: NewUser) {
     try {
         return await httpService.post('auth/signup', credentials) as MiniUser
     } catch (err) {
-        console.log('cant signup')
+        throw err
     }
 }
 
