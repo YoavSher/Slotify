@@ -36,7 +36,7 @@ export const RecentlyPlayedPreview = ({ playlistPre }: Props) => {
                     {isMobile && isPlaylistPlaying && <div>
                         <img src="https://open.spotifycdn.com/cdn/images/equaliser-animated-green.f93a2ef4.gif" alt="" />
                     </div>}
-                    {isMobile && isThisPlaylist() && <div>
+                    {isMobile && isThisPlaylist && <div>
                         <h1 style={{ color: 'green', fontSize: '1.5rem' }}>...</h1>
                     </div>}
                 </div>

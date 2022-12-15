@@ -57,7 +57,13 @@
         }
     }
 
+    .search-results-container {
+       
+        .search-results {
+        
 
+            flex-direction: column;
+           
 
             .top-songs {
                 grid-column: 3/-1;

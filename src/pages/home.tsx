@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 
 import { utilService } from "../services/util.service"
 import { PlaylistContainer } from "../cmps/playlist-perview-cmps/playlists-container"
-import { TestColor } from "../cmps/test-colors"
 import { Loader } from "../cmps/loader"
 
 export const Home = () => {
