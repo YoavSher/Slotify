@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
-    min-height: 260px;
+    min-height: 280px;
     min-width: 100%;
     position: relative;
     color: #fff;
@@ -43,7 +43,7 @@
         width: 1185px;
 
         @media(min-width: 770px) {
-            grid-gap: 35px;
+            column-gap: 20px;
             display: grid;
             grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
             grid-auto-rows: 0;
