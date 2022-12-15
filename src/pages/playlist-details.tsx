@@ -25,6 +25,7 @@ import { ActionMsg } from "../cmps/action-msg"
 import { Loader } from "../cmps/loader"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { onPlaylistDislike, updateUserPlaylist } from "../store/user/user.reducer"
+import { useShowActionMsg } from "../hooks/useShowActionMsg"
 
 export const PlaylistDetails = () => {
     const params = useParams()
@@ -36,7 +37,7 @@ export const PlaylistDetails = () => {
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const { isMobile, screenWidth } = useIsMobile()
 
-    const [msg, setMsg] = useState('')
+
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
@@ -45,7 +46,7 @@ export const PlaylistDetails = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
 
     useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs)
-
+    const { msg, showActionMsg } = useShowActionMsg()
     const {
         onAddPlaylistToQueue, playSongFromPlaylist,
         onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(currPlaylist, songs, loggedInUser)
@@ -169,12 +170,7 @@ export const PlaylistDetails = () => {
         }
     }
 
-    const showActionMsg = (txt: string) => {
-        setMsg(txt)
-        setTimeout(() => {
-            setMsg('')
-        }, 2000)
-    }
+
 
     if (!currPlaylist) return <Loader />
     return (
@@ -219,6 +215,7 @@ export const PlaylistDetails = () => {
                 song={songForModal}
                 modalPos={modalPos}
                 isMobile={isMobile}
+                showActionMsg={showActionMsg}
                 renderedChild={<RemoveFromPlaylistBtn isRendered={isCurrentUserPlaylistOwner}
                     song={songForModal} removeSongFromPlaylist={removeSongFromPlaylist} />}
             />}

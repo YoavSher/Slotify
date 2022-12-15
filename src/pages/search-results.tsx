@@ -16,6 +16,7 @@ import { useGetResultsFromParams } from "../hooks/useGetResultsFromParams"
 import { SearchFilter } from "../cmps/search-cmps/search-filter"
 import { SearchDefault } from "../cmps/search-cmps/seach-default"
 import { SearchBar } from "../cmps/search-cmps/search-bar"
+import { useShowActionMsg } from "../hooks/useShowActionMsg"
 
 
 
@@ -30,7 +31,7 @@ export const SearchResults = () => {
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const { topResult, topSongs } = useSearchResults(songsSearchedResults, playlistsSearchedResults, params)
     const { getResultsFromParams } = useGetResultsFromParams()
-
+    const { msg, showActionMsg } = useShowActionMsg()
     useEffect(() => {
         if (params.searchTerm) getResultsFromParams(params.searchTerm)
     }, [])
@@ -52,7 +53,7 @@ export const SearchResults = () => {
         }
     }
 
-    if (!songsSearchedResults && params.searchTerm) return <Loader/>
+    if (!songsSearchedResults && params.searchTerm) return <Loader />
     return (
         <>
             <section onClick={closeModal} onScroll={closeModal} className="search-results-page">
@@ -79,7 +80,8 @@ export const SearchResults = () => {
                                             song={song}
                                             type={'search-results'} />
                                     })}
-                                    {isModalOpen && songForModal && < SongsModal isMobile={isMobile} closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+                                    {isModalOpen && songForModal && < SongsModal
+                                        isMobile={isMobile} closeModal={closeModal} song={songForModal} modalPos={modalPos} showActionMsg={showActionMsg} />}
                                 </div>
                             </div>}
                             {topResult && showPlaylists && <div className="playlists-results">

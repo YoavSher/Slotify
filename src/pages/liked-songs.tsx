@@ -16,6 +16,7 @@ import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"
 import { SongsTableHead } from "../cmps/playlist-details-cmps/songs-table-head"
 import { useCheckLoggedInUser } from "../hooks/useCheckLoggedInUser"
 import { useIsMobile } from "../hooks/useIsMobile"
+import { useShowActionMsg } from "../hooks/useShowActionMsg"
 
 export const LikedSongs = () => {
 
@@ -36,7 +37,7 @@ export const LikedSongs = () => {
         playSongFromPlaylist,
         onClickPlay,
         isCurrPlaylistPlaying } = useMusicPlayerMethods(pseudoPlaylist, (likedSongs || []), loggedInUser)
-
+        const { msg, showActionMsg } = useShowActionMsg()
     return (
         <>
             <section onClick={closeModal} onScroll={closeModal} className="playlist-details liked-songs">
@@ -71,7 +72,7 @@ export const LikedSongs = () => {
                     </div>
                 </div>
                 {isModalOpen && songForModal && <SongsModal isMobile={isMobile}
-                    closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
+                    closeModal={closeModal} song={songForModal} modalPos={modalPos} showActionMsg={showActionMsg}/>}
 
             </section>
         </>
