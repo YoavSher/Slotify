@@ -6,6 +6,7 @@ import { PlaylistDetails } from "./pages/playlist-details";
 import { Queue } from "./pages/queue";
 import { SearchResults } from "./pages/search-results";
 import { Signup } from "./pages/signup";
+import { Genre } from "./pages/genre";
 
 
 
@@ -48,6 +49,10 @@ const routes = [
     {
         path: 'collection',
         component:  Library
+    },
+    {
+        path: 'genre/:genre',
+        component:  Genre
     },
 
 ]

@@ -1,0 +1,22 @@
+.genre-page {
+    @include main-content-scroll;
+    padding: 12px;
+    top: 52px;
+    color: #fff;
+
+    @media(min-width:770px) {
+        padding: 20px;
+    }
+
+    h1 {
+        margin: 30px 0;
+    }
+
+    .playlists-container {
+        display: grid;
+        grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
+        gap: 15px;
+        grid-auto-rows: auto;
+        grid-template-rows: minmax(150px, 1fr);
+    }
+}

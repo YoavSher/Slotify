@@ -14,6 +14,11 @@
 
     .playlist-details-main {
         margin-left: 20px;
+        margin-top: 75px;
+
+        @media(min-width:1020px) {
+            margin-top: 0;
+        }
 
         &.action-btns {
             gap: 20px;
@@ -316,8 +321,8 @@
     }
 }
 
-.loading-anim{
-    img{
+.loading-anim {
+    img {
         height: 100%;
     }
 }

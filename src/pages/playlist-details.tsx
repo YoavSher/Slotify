@@ -80,10 +80,15 @@ export const PlaylistDetails = () => {
     }
 
     const onSaveChanges = async (newPlaylist = currPlaylist) => {
-        if (newPlaylist) {
-            //should update users playlist on store (navbar)
-            dispatch(updateUserPlaylist(newPlaylist))
-            await playlistService.updatePlaylist(newPlaylist)
+        try {
+            if (newPlaylist) {
+                //should update users playlist on store (navbar)
+                dispatch(updateUserPlaylist(newPlaylist))
+                await playlistService.updatePlaylist(newPlaylist)
+            }
+
+        } catch (err) {
+            console.log('err:', err)
         }
     }
 
@@ -236,7 +241,7 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
             setCurrPlaylist(undefined)
             setSongs([])
         })
-    }, [playlistId, playlists])
+    }, [playlistId])
 
     const loadPlaylist = async () => {
         try {

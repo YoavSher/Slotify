@@ -17,7 +17,8 @@ export const playlistService = {
     removeLikedPlaylist,
     getUserPlaylists,
     addToRecentlyPlayed,
-    getUserRecentPlaylists
+    getUserRecentPlaylists,
+    getGenrePlaylists
 
 }
 
@@ -138,6 +139,15 @@ async function getSearchedPlaylist({ songs, searchTerm }: searchedPlaylist) {
         console.log('songsIds:', songsIds)
         const playlist = await httpService.get(`playlist/search/${searchTerm}/${songsIds}`, null)
         return playlist
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function getGenrePlaylists(genre: string) {
+    try {
+        const playlists = await httpService.get(`playlist/genre/${genre}`, null)
+        return playlists
     } catch (err) {
         console.log(err)
     }

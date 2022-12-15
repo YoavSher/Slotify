@@ -37,7 +37,7 @@ const userSlice = createSlice({
         },
         onPlaylistLike: (state, action: PayloadAction<Playlist>) => {
             if (state.playlists) {
-                state.playlists.unshift(action.payload)
+                state.playlists.push(action.payload)
             }
         },
         onPlaylistDislike: (state, action: PayloadAction<number>) => {
