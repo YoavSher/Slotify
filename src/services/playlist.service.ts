@@ -145,6 +145,6 @@ async function getGenrePlaylists(genre: string) {
         const playlists = await httpService.get(`playlist/genre/${genre}`, null)
         return playlists
     } catch (err) {
-        console.log(err)
+        throw err
     }
 }

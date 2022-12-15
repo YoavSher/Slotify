@@ -5,14 +5,16 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { SearchBar } from "./search-cmps/search-bar"
 import { useRef } from "react"
 import { useIsMobile } from "../hooks/useIsMobile"
-import { useAppSelector } from "../store/store.hooks"
+import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { playlistService } from "../services/playlist.service"
+import { onPlaylistLike } from "../store/user/user.reducer"
 
 export const AppHeader = () => {
 
     const location = useLocation()
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const { isMobile } = useIsMobile()
+    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const { onGoBack, onGoForward, locationsLength } = useHistoryStack()
 
@@ -20,6 +22,7 @@ export const AppHeader = () => {
         if (!loggedInUser) return
         try {
             const newPlaylist = await playlistService.createPlaylist()
+            dispatch(onPlaylistLike(newPlaylist))
             navigate(`playlist/${newPlaylist._id}`)
         } catch (err) {
             console.log(err)

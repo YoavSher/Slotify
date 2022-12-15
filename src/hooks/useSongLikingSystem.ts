@@ -15,12 +15,12 @@ export const useSongLikingSystem = (song: Song) => {
             try {
 
                 if (isSongLiked) {
-                    await songService.removeLikedSong(currSongId)
                     dispatch(onSongDislike(currSongId))
+                    await songService.removeLikedSong(currSongId)
                 } else {
-                    await songService.addLikedSong(currSongId)
                     const currSong = { ...song, addedAt: Date.now() }
                     dispatch(onSongLike(currSong))
+                    await songService.addLikedSong(currSongId)
                 }
             } catch (err) {
                 console.log(err)
