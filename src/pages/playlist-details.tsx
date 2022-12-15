@@ -68,7 +68,6 @@ export const PlaylistDetails = () => {
         }
     }
 
-
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
         let { value } = ev.target
         if (currPlaylist) {

@@ -6,6 +6,7 @@ import { NewUser, User, userService } from "../services/user.service"
 import { useAppDispatch } from "../store/store.hooks"
 import { setUser } from "../store/user/user.reducer"
 import { GoogleLoginBtn } from "../cmps/google-login-btn";
+import { ActionMsg } from "../cmps/action-msg"
 export const Signup = () => {
     const [userCred, setUserCred] = useState({ username: '', fullName: '', password: '', email: '', })
     const navigate = useNavigate()
@@ -29,8 +30,17 @@ export const Signup = () => {
             if (user) dispatch(setUser(user))
             onCloseModal()
         } catch (err) {
-            console.log(err)
+            showActionMsg('Can\'t sign up')
         }
+    }
+    
+    const [msg, setMsg] = useState('')
+
+    const showActionMsg = (txt: string) => {
+        setMsg(txt)
+        setTimeout(() => {
+            setMsg('')
+        }, 2000)
     }
 
     const isCredValid = () => {
@@ -68,6 +78,7 @@ export const Signup = () => {
                 <Link className="back" to="/" >Back</Link>
                 <Link to="/login" >Already on Slotify? <span>LOGIN</span> </Link>
             </section>
+            {msg && <ActionMsg msg={msg} />}
         </section>
     )
 }
