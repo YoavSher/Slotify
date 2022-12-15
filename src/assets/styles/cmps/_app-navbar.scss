@@ -1,5 +1,4 @@
 .app-navbar {
-    // flex: 1;
     grid-area: nav-bar;
     min-width: 200px;
     background-color: rgba(8, 8, 8, 0.728);
@@ -9,6 +8,12 @@
     right: 0;
     z-index: 99;
     height: 80px;
+
+    .closer {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+    }
 
     h1 {
         cursor: pointer;
@@ -63,9 +68,6 @@
             display: initial;
         }
 
-        // * {
-        // color: #fff;
-        // }
     }
 
     .nav-links-second {

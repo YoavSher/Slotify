@@ -233,14 +233,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 7px;
 
             span.css-1rblxne-MuiSlider-root {
                 width: calc(100% - 50px);
-                margin: 0px 7px;
             }
 
             p {
-                color: var(--text-subdued); //should be a var
+                color: var(--text-subdued);
                 font-size: 11px;
 
             }

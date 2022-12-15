@@ -8,7 +8,7 @@ export const useSongModal = () => {
     const [modalPos, setModalPos] = useState<{ left: number, top: number }>({ left: 0, top: 0 })
 
     const toggleModal = (ev: CustomEvent, song: Song) => {
-        ev.stopPropagation() // the function needs a better name
+        ev.stopPropagation() 
         const { left, top } = ev.target.getBoundingClientRect()
         setModalPos({ left, top })
         if (songForModal?.videoId === song.videoId) closeModal()

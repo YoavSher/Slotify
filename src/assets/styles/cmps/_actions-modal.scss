@@ -11,6 +11,15 @@
     display: flex;
     flex-direction: column;
     z-index: 100;
+    height: fit-content;
+
+    &.add-to-playlist-modal {
+        .playlists-container {
+            overflow-y: scroll;
+            flex: 1;
+        }
+    }
+
 
     .input-container {
         padding: 3px;

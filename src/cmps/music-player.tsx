@@ -36,7 +36,6 @@ export const MusicPlayer = () => {
 
 
 
-
     useEffect(() => {
         // at the componentDidMount stage checks if there are
         //  previous playlist,volume,playing time and playing index cached if so takes them 
@@ -52,7 +51,6 @@ export const MusicPlayer = () => {
             playingTimeFromCache.current = playingTime
         }
     }, [])
-
 
     useEffect(() => {
         // listens to changes in playing status from across the app,and play or pause the video.
@@ -83,7 +81,7 @@ export const MusicPlayer = () => {
             playingTimeFromCache.current = null
             pauseSong()
         } else {
-            onVolumeChange(playerRef.current.playerInfo.volume)
+            onVolumeChange(volume)
             setSongTimer(0)
             playSong()
         }
@@ -144,7 +142,12 @@ export const MusicPlayer = () => {
     const seekTo = (timeInSeconds: number) => {
         if (playerRef.current.playerInfo.duration <= timeInSeconds) {
             onIndexIncrement()
-        } else playerRef.current.seekTo(timeInSeconds)
+        } else {
+            playerRef.current.seekTo(timeInSeconds)
+            const currTime = playerRef.current.getCurrentTime() * 1000
+            setSongTimer(currTime)
+            cachingService.savePlayingTime(currTime)
+        }
     }
 
     const timeBarDebounceId = useRef<number>()
@@ -173,9 +176,11 @@ export const MusicPlayer = () => {
     }
 
     const onIndexChange = (num: number) => {
-        pauseSong()
-        playerRef.current = null
-        dispatch(setPlayingIdx(currPlayingIdx + num))
+        if (playerRef.current) {
+            pauseSong()
+            playerRef.current = null
+            dispatch(setPlayingIdx(currPlayingIdx + num))
+        }
     }
 
     const opts = {
@@ -208,7 +213,7 @@ export const MusicPlayer = () => {
 
 
     const { songNameP, namesContainerRef, songNamePos } = useTextRollup(screenWidth, currSong)
-    // [songNameP, namesContainerRef, songNamePos]
+
 
 
     return (
