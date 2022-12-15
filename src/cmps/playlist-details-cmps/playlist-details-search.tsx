@@ -13,25 +13,18 @@ interface Props {
     screenWidth: number
 }
 
-// interface PseudoPlaylist {
-//     songs: Song[]
-// }
+
 
 export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist, screenWidth }: Props) => {
 
     const [searchResults, setSearchResults] = useState<Song[] | null>(null)
     const [searchTerm, setSearchTerm] = useState('')
-    // const [pseudoPlaylist, setPseudoPlaylist] = useState<PseudoPlaylist | null>(null)
     const dispatch = useAppDispatch()
-    // const playlist: PseudoPlaylist = {
-    //     songs: []
-    // }
 
     useEffect(() => {
         return () => {
             setSearchResults(null)
             setSearchTerm('')
-            console.log('i died');
 
         }
     }, [playlistId])
@@ -46,13 +39,11 @@ export const PlaylistDetailsSearch = ({ playlistId, onAddToPlaylist, screenWidth
         } catch (err) {
             console.log('err:', err)
         }
-        // console.log('value:', value)
 
     }
 
     const playSongFromPlaylist = (index: number) => {
         if (searchResults) {
-            // playlist.songs = searchResults
             dispatch(setPlaylist({ songs: searchResults, playlistId: null }))
             dispatch(setPlayingIdx(index))
         }

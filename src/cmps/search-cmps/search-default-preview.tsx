@@ -14,7 +14,6 @@ export const SearchDefaultPreview = ({ genre, image }: Props) => {
 
     const returnColors = (colors: string[]) => {
         const color = colors[0]
-        console.log('colors:', colors)
         setBackground(color)
     }
 

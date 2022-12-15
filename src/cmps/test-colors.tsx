@@ -5,7 +5,6 @@ export const TestColor = () => {
 
 
     const getColors = (colors:string[]) =>
-        console.log(colors)
 
     return (
         <div>

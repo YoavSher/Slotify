@@ -2,17 +2,15 @@ import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { FcGoogle } from 'react-icons/fc'
 
-interface Porps {
-    // type: string,
+interface Props {
     cbFunc: any
 }
 
 
-export const GoogleLoginBtn = ({ cbFunc }: Porps) => {
+export const GoogleLoginBtn = ({ cbFunc }: Props) => {
 
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            // console.log(tokenResponse);
             const userInfo = await axios.get(
                 'https://www.googleapis.com/oauth2/v3/userinfo',
                 { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } },
@@ -23,9 +21,7 @@ export const GoogleLoginBtn = ({ cbFunc }: Porps) => {
                 password: userInfo.data.sub,
                 email: userInfo.data.email
             }
-            // setUserCred(googleUser)
             cbFunc(googleUser)
-            // console.log('googleUser: ',googleUser);
         },
         onError: errorResponse => console.log(errorResponse),
     })

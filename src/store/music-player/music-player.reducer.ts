@@ -4,7 +4,6 @@ import { Song } from '../../interfaces/song'
 import { cachingService } from '../../services/music-player-caching.service'
 import { utilService } from '../../services/util.service'
 interface MusicPlayerState {
-    // currPlaylist: PseudoPlaylist | Playlist, //should be of type playlist we need to make that interface and make a dummy playlist the defaultand when putting a song alone allso get the dummy playlist
     currPlayingIdx: number,
     isSongPlaying: boolean,
     songs: Song[],
@@ -29,15 +28,12 @@ const musicPlayerSlice = createSlice({
     initialState,
     reducers: {
         addSongsToQueue: (state, action: PayloadAction<Song[]>) => {
-            console.log(action.payload)
-            console.log(state.songs)
             state.songs.splice(state.currPlayingIdx + 1, 0, ...action.payload)
             state.playlistId = null
             cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         },
         removeFromQueue: (state, action: PayloadAction<number>) => {
             state.songs.splice(action.payload, 1)
-            // state.playlistId = null
 
             cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         },

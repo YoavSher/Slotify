@@ -58,9 +58,9 @@ export const Login = () => {
 
     const showActionMsg = (txt: string) => {
         setMsg(txt)
-        // setTimeout(() => {
-        //     setMsg('')
-        // }, 10000)
+        setTimeout(() => {
+            setMsg('')
+        }, 2000)
     }
 
 

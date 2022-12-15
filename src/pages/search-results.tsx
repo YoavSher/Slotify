@@ -28,7 +28,7 @@ export const SearchResults = () => {
     const [showPlaylists, setShowPlaylists] = useState(true)
 
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
-    const { topResult, topSongs } = useSearchResults(songsSearchedResults, playlistsSearchedResults, params)
+    const { topPlaylists, topSongs } = useSearchResults(songsSearchedResults, playlistsSearchedResults, params)
     const { getResultsFromParams } = useGetResultsFromParams()
 
     useEffect(() => {
@@ -82,10 +82,10 @@ export const SearchResults = () => {
                                     {isModalOpen && songForModal && < SongsModal isMobile={isMobile} closeModal={closeModal} song={songForModal} modalPos={modalPos} />}
                                 </div>
                             </div>}
-                            {topResult && showPlaylists && <div className="playlists-results">
+                            {topPlaylists && showPlaylists && <div className="playlists-results">
                                 <h1>Playlists</h1>
                                 {showPlaylists && <div className="playlists-results-container">
-                                    {topResult.map(p => {
+                                    {topPlaylists.map(p => {
                                         return <PlaylistPreview key={p._id} playlistPre={p} />
                                     })}
                                 </div>}
@@ -106,19 +106,19 @@ export const SearchResults = () => {
 const useSearchResults = (songsSearchedResults: Song[] | null | undefined, playlistsSearchedResults: Playlist[] | null,
     params: Readonly<Params<string>>) => {
     const [topSongs, setTopSongs] = useState<Song[] | undefined>()
-    const [topResult, setTopResult] = useState<Playlist[]>()
+    const [topPlaylists, setTopPlaylists] = useState<Playlist[]>()
 
     useEffect(() => {
-        console.log('params:', params)
+
         getResults()
     }, [songsSearchedResults, playlistsSearchedResults, params])
 
     const getResults = () => {
         if (songsSearchedResults && playlistsSearchedResults) {
             const songs = [...songsSearchedResults]
-            setTopResult(playlistsSearchedResults)
+            setTopPlaylists(playlistsSearchedResults)
             setTopSongs(songs)
         }
     }
-    return { topResult, topSongs }
+    return { topPlaylists: topPlaylists, topSongs }
 }

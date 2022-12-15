@@ -17,7 +17,7 @@ async function addSongsFromSearch(songs: Song[]) {
     try {
         await httpService.post('song/', songs)
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }
 async function getLikedSongs(userId: number) {
@@ -25,7 +25,7 @@ async function getLikedSongs(userId: number) {
         const likedSongs = await httpService.get(`song/user/${userId}`, null)
         return likedSongs
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }
 
@@ -33,7 +33,7 @@ async function addLikedSong(videoId: string) {
     try {
         await httpService.post('song/user', { videoId })
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 
 }
@@ -41,7 +41,7 @@ async function removeLikedSong(videoId: string) {
     try {
         await httpService.delete(`song/user/${videoId}`, null)
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }
 
@@ -60,9 +60,7 @@ interface removedSong {
 }
 async function removeFromPlaylist(removedSong: removedSong) {
     try {
-        console.log('de')
         await httpService.delete(`song/playlist/${removedSong.playlistId}`, removedSong)
-        // return songs as Song[]
     } catch (err) {
         throw err
     }
@@ -71,20 +69,17 @@ async function removeFromPlaylist(removedSong: removedSong) {
 async function getPlaylistSongs(playlistId: number) {
     try {
         const songs = await httpService.get(`song/playlist/${playlistId}`, null)
-        console.log('songs:', songs)
         return songs as Song[]
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }
 
 async function searchSongs(searchTerm:string){
     try {
-        // console.log('searchTerm:', searchTerm)
         const songs = await httpService.get(`song/${searchTerm}`, null)
-        console.log('songs:', songs)
         return songs as Song[] 
     } catch (err) {
-        console.log('err:', err)
+        throw err
     }
 }

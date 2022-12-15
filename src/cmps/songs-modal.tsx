@@ -53,7 +53,6 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
     const modal = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        console.log(modal.current)
         setPos(calcModalPos())
     }, [])
 

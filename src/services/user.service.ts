@@ -1,8 +1,4 @@
-import { MiniPlaylist } from "../interfaces/mini-playlist"
 import { MiniUser } from "../interfaces/mini-user"
-import { Playlist } from "../interfaces/playlist"
-import { Song } from "../interfaces/song"
-import { storageService } from "./async-storage.service"
 import { httpService } from "./http.service"
 
 export const userService = {
@@ -30,7 +26,6 @@ interface Credentials {
 
 async function checkLoginToken() {
     try {
-        console.log('getting to the last point in the front')
         return await httpService.get('auth/', null)
     } catch (err) {
         throw err

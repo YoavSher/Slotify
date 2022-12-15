@@ -25,7 +25,6 @@ const useGetGenrePlaylists = () => {
     const [genrePlaylists, setGenrePlaylists] = useState<Playlist[]>([])
 
     useEffect(() => {
-        console.log('genre:', genre)
         loadPlaylist()
         return()=>{
             setGenrePlaylists([])  

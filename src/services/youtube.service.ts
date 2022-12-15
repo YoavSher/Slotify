@@ -9,8 +9,7 @@ export const youtubeService = {
     getDataFromYoutube
 }
 
-const API_KEY = 'AIzaSyBWpU91iAlKuAggBXKxl_IIN3pz4pVo-8I'
-// const API_KEY = 'AIzaSyAansJ7yEAvHhN37JgeevGanfgWuYVWBLc'
+const API_KEY = (Math.random() > 0.5) ? 'AIzaSyAansJ7yEAvHhN37JgeevGanfgWuYVWBLc' : 'AIzaSyBWpU91iAlKuAggBXKxl_IIN3pz4pVo-8I'
 const combinedCleaner = /\([^\)]*\)|\[[^\]]*\]|HD|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])|[`'~!@#$%^*()_|+=?;:",.<>\{\}\[\]\\\/]|&#39|39|&39|&quot|&amp;|vevo|music|-topic| - topic|official/ig
 
 
@@ -32,10 +31,7 @@ async function getDataFromYoutube(term: string) {
             return song
         })
         songs = songs.filter((song: Song) => song.duration > 0 && song.duration < 900000)
-        // songs = songs.splice(0, 5)
-        //send songs  to backend {post}api/songs
         songService.addSongsFromSearch(songs)
-        // console.log('songs:', songs)
         return songs
     } catch (err) {
         console.log('err:', err)

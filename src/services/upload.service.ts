@@ -25,7 +25,6 @@ async function uploadImg(ev: any) {
         })
 
         const resData = await res.json()
-        console.log('resData:', resData)
         return {
             url: resData.url,
             name: resData.original_filename,

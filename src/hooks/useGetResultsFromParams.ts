@@ -14,7 +14,6 @@ export const useGetResultsFromParams = () => {
     const location = useLocation()
     const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
     useEffect(() => {
-        console.log('location:', location)
         getResultsFromParams(searchTerm)
         return () => {
             dispatch(setSearchResults(null))
@@ -23,11 +22,8 @@ export const useGetResultsFromParams = () => {
     }, [location])
 
     const getResultsFromParams = async (term: string) => {
-        console.log('im results from params')
         try {
             let songsSearchResults: Song[] | undefined = await youtubeService.getDataFromYoutube(term)
-            // let songsSearchResults: Song[] | undefined
-            // console.log('songsSearchResults:', songsSearchResults)
             if (!songsSearchResults) songsSearchResults = await songService.searchSongs(term)
             if (songsSearchResults) {
                 let playlistsSearchResults = await playlistService.getSearchedPlaylist({ songs: songsSearchResults, searchTerm: term })

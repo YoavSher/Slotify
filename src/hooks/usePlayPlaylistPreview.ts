@@ -15,7 +15,6 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist, loggedInUser: Mini
 
     const onSetPlaylist = async (ev: MouseEvent<HTMLButtonElement>) => {
         ev.stopPropagation()
-        console.log('playlistPre:', playlistPre)
         if (isCurrPlaylistOnQueue && isSongPlaying) {
             dispatch(setIsSongPlaying(false))
         } else if (isCurrPlaylistOnQueue && !isSongPlaying) {
@@ -46,11 +45,7 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist, loggedInUser: Mini
             }
         }
     }
-    // change the booleans same style with the song preview 
-    const isThisPlaylist = () => {
-        if (isCurrPlaylistOnQueue && !isSongPlaying) return true
-        return false
-    }
+    const isThisPlaylist = (isCurrPlaylistOnQueue && !isSongPlaying)
     const isPlaylistPlaying = isSongPlaying && isCurrPlaylistOnQueue
 
     return { onSetPlaylist, isThisPlaylist, isPlaylistPlaying }
