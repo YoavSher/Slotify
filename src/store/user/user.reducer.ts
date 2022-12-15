@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Playlist } from '../../interfaces/playlist'
 import { Song } from '../../interfaces/song'
-import { User } from '../../services/user.service'
+import { User} from '../../services/user.service'
 
 interface UserState {
     loggedInUser: User | null,
@@ -50,11 +50,11 @@ const userSlice = createSlice({
                 state.playlists = null
                 state.recentPlaylists = null
             } else {
-                state.loggedInUser = action.payload
                 state.likedSongs = []
                 state.playlists = []
                 state.recentPlaylists = []
             }
+            state.loggedInUser = action.payload
         },
         onSongLike: (state, action: PayloadAction<Song>) => {
             if (state.likedSongs) {

@@ -15,7 +15,7 @@
         display: none;
     }
 
-    @media(min-width: 770px) {
+    @media(min-width:1020px) {
         min-height: 300px;
         overflow: hidden;
     }
@@ -23,7 +23,6 @@
     .topic {
         position: sticky;
         left: 0;
-        font-size: 1.5rem;
 
         @media(min-width: 770px) {
             position: static;
@@ -34,7 +33,7 @@
         display: flex;
         gap: 10px;
         position: absolute;
-        top: 25px;
+        top: 35px;
         bottom: 0;
         right: 0;
         left: 0;
@@ -44,7 +43,7 @@
         width: 1185px;
 
         @media(min-width: 770px) {
-            grid-gap: 25px;
+            grid-gap: 35px;
             display: grid;
             grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
             grid-auto-rows: 0;

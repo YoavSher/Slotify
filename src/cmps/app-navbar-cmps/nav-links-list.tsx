@@ -25,7 +25,7 @@ export const NavLinksList = ({ routes, onValidateLibrary }: Props) => {
             {routes.map(({ location, isRendered, icon, activeIcon, txt }) => {
                 if (isRendered) return (
                     <li>
-                        <NavLink onClick={(txt === 'Your Library') ? onValidateLibrary : () => { }} to={location} className='flex align-center'>
+                        <NavLink key={txt} onClick={(txt === 'Your Library') ? onValidateLibrary : () => { }} to={location} className='flex align-center'>
                             {isIconActive(location) ? <span>{activeIcon}</span> : <span>{icon}</span>}
                             <p>{txt}</p>
                         </NavLink>

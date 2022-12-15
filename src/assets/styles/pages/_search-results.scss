@@ -63,12 +63,12 @@
     }
 
     .search-results-container {
-       
+
         .search-results {
-        
+
 
             flex-direction: column;
-           
+
 
             .top-songs {
                 grid-column: 3/-1;
@@ -94,6 +94,8 @@
 
                     &:hover .top-song .img-container .photo-play {
                         opacity: 1;
+                        bottom: 8px;
+                        height: 75%;
                     }
 
                     &:hover {
