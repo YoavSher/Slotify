@@ -1,6 +1,7 @@
 .genre-page {
     @include main-content-scroll;
     padding: 12px 30px;
+    padding-left: 20px;
     top: 52px;
     color: #fff;
 
@@ -10,6 +11,7 @@
 
     h1 {
         margin: 30px 0;
+
         @media(min-width:770px) {
             margin-inline-start: 18px;
         }
@@ -25,6 +27,18 @@
         .playlist-preview {
             padding: 0;
             width: 170px;
+
+            @media(max-width:600px) {
+                width: 140px
+            }
+
+            @media(max-width:500px) {
+                width: 160px
+            }
+
+            @media(max-width:400px) {
+                width: 130px
+            }
         }
 
         @media(min-width:770px) {

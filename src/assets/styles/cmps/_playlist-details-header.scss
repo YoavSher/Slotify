@@ -100,6 +100,8 @@
             border: none;
             color: white;
             font-size: 1.7rem;
+            padding: 0;
+            margin: -1px;
 
             @media(min-width:500px) {
                 font-size: 2.3rem;

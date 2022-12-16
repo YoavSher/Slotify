@@ -1,18 +1,22 @@
 .playlist-details {
     color: #fff;
-    padding-left: 20xp;
+
     resize: none;
     @include main-content-scroll;
     margin: 0;
     outline: none;
     overflow-x: inherit;
-    padding: 50px 16px;
-    padding-top: 0;
+    padding: 0 16px 50px 0;
     box-sizing: border-box;
 
+    @media(min-width:770px) {
+        padding-left: 16px;
 
+    }
 
     .playlist-details-main {
+
+
         margin-left: 20px;
         margin-top: 75px;
 
@@ -38,6 +42,17 @@
                 span {
                     font-size: 12px;
                 }
+            }
+        }
+
+        .like-song {
+            .like-btn {
+                opacity: 1;
+                left: 14px;
+            }
+
+            svg {
+                width: 39px;
             }
         }
 
@@ -136,6 +151,18 @@
                 }
 
                 .top-songs-results {
+                    .like-song {
+                        .like-btn {
+                            transform: translateX(-4px);
+                            left: 0;
+                        }
+
+                        svg {
+                            width: 28px;
+                        }
+
+                    }
+
                     border: 1px solid transparent;
                     border-radius: 4px;
                     height: 56px;
