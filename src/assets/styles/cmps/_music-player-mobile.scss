@@ -31,7 +31,11 @@
     .mobile-right {
         display: flex;
         justify-content: flex-start;
-        width: 85%;
+        width: 75%;
+
+        @media(min-width:450px) {
+            width: 85%;
+        }
 
 
         .song-image {
