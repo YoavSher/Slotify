@@ -30,11 +30,11 @@ const usePlaylistLikingSystem = (playlist: Playlist) => {
         if (userPlaylists) {
             try {
                 if (isPlaylistLiked) {
-                    await playlistService.removeLikedPlaylist(currPlaylistId)
                     dispatch(onPlaylistDislike(currPlaylistId))
+                    await playlistService.removeLikedPlaylist(currPlaylistId)
                 } else {
-                    await playlistService.addLikedPlaylist(currPlaylistId)
                     dispatch(onPlaylistLike(playlist))
+                    await playlistService.addLikedPlaylist(currPlaylistId)
                 }
             } catch (err) {
                 console.log(err)

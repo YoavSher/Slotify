@@ -7,20 +7,23 @@
     }
 }
 
-.playlist-details-main {
-    .playlist-details-main {
-        .like-song {
-            .like-btn {
-                opacity: 1;
-                left: 14px;
-            }
+// .playlist-details-main {
+//     .playlist-details-main {
+        
 
-            svg {
-                width: 39px;
-            }
-        }
-    }
-}
+//         .playlist-details-main-content {
+//             background-color: red;
+//             // .songs-container {
+//             .like-song {
+//                 .like-btn {
+//                     transform: translateX(-4px);
+//                 }
+
+//             }
+//         }
+//     }
+// }
+
 
 
 .like-song {
@@ -39,6 +42,10 @@
         opacity: 0;
 
         &:hover {
+            opacity: 1;
+        }
+
+        @media(max-width:770px) {
             opacity: 1;
         }
 

@@ -17,6 +17,11 @@ interface Props {
 
 export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile, height, showActionMsg }: Props) => {
 
+
+
+    //:TODO make an ajax call for the user's playlists or 
+    // take from state.user.playlists and filter out only those that the creator id is the same
+
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
     const playlists = useAppSelector(state => state.user.playlists)
     const playlistsToShow = playlists?.filter(p => p.creatorId === loggedInUser?._id)

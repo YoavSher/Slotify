@@ -50,7 +50,12 @@
         height: 56px;
         border: 1px solid transparent;
         border-radius: 4px;
-        padding: 0 16px;
+        padding: 0;
+
+        @media(min-width:770px) {
+            padding: 0 16px;
+
+        }
 
         &:hover .song-actions button {
             opacity: 1;
@@ -67,6 +72,11 @@
         .top-song {
             height: 100%;
             flex: 1;
+
+            @media(max-width:450px) {
+                width: 80%;
+                overflow: hidden;
+            }
 
             .img-container {
                 height: 40px;
@@ -98,10 +108,11 @@
             }
 
             .song-description {
+
+
                 height: 100%;
                 display: grid;
-                grid-template-areas:
-                    'title'
+                grid-template-areas: 'title'
                     'channel';
                 grid-template-columns: 250px;
                 grid-template-rows: 14px 10px;
@@ -127,6 +138,8 @@
         }
 
         .add-to-playlist-btn {
+
+
             button {
                 @include cleared-btn;
                 cursor: pointer;
