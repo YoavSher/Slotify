@@ -17,6 +17,7 @@ import { cachingService } from '../services/music-player-caching.service';
 import { LikeButton } from './like-button';
 import { Slider } from '@mui/material';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useSongsShuffle } from '../hooks/useSongsShuffle';
 
 export const MusicPlayer = () => {
 
@@ -70,7 +71,11 @@ export const MusicPlayer = () => {
 
     const [volume, setVolume] = useState(50)
     const [isLoopingEnabled, setIsLoopingEnabled] = useState(false)
-
+    useEffect(() => {
+        if (location.pathname.includes('music-player-open')) {
+            setIsMobileFullScreen(true)
+        } else setIsMobileFullScreen(false)
+    }, [location])
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         // the function that catches the player object from the youtube component
         // and starts the control over it.
@@ -220,7 +225,7 @@ export const MusicPlayer = () => {
         <>
             {currSong && <YouTube className="iframe-container" videoId={currSong.videoId} opts={opts} onReady={onPlayerReady} />}
             {(isMobile && !isMobileFullScreen) ? (
-                <footer onClick={() => { setIsMobileFullScreen(true) }} className="music-player mobile">
+                <footer onClick={() => { navigate('/music-player-open') }} className="music-player mobile">
                     {currSong && <>
                         <section className="mobile-right">
                             <img className="song-image" src={currSong.image} alt="" />
@@ -252,7 +257,7 @@ export const MusicPlayer = () => {
                 </footer>)
                 : (<footer className={`${(isMobileFullScreen && isMobile) ? 'full' : ''} music-player`}>
                     {isMobileFullScreen && isMobile && <button className="close-modal-btn"
-                        onClick={() => { setIsMobileFullScreen(false) }}><BsChevronDown /> </button>}
+                        onClick={() => { navigate(-1) }}><BsChevronDown /> </button>}
                     <section {...handlers} className="left-section">
                         {currSong && <>
                             <img className="song-image" src={currSong.image} alt="" />
@@ -313,39 +318,39 @@ export const MusicPlayer = () => {
 }
 
 
-const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
-    const [isShuffled, setIsShuffled] = useState(false)
-    const unShuffledSongs = useRef<Song[] | null>(null)
-    const dispatch = useAppDispatch()
-    const playlistId = useAppSelector(state => state.musicPlayer.playlistId)
+// const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
+//     const [isShuffled, setIsShuffled] = useState(false)
+//     const unShuffledSongs = useRef<Song[] | null>(null)
+//     const dispatch = useAppDispatch()
+//     const playlistId = useAppSelector(state => state.musicPlayer.playlistId)
 
-    const toggleSongsShuffle = () => {
-        if (isShuffled) unShuffleSongs()
-        else shuffleSongs()
-    }
-    useEffect(() => {
-        if (isShuffled && playlistId) {
-            shuffleSongs()
-        } else {
-            setIsShuffled(false)
-        }
-    }, [playlistId])
+//     const toggleSongsShuffle = () => {
+//         if (isShuffled) unShuffleSongs()
+//         else shuffleSongs()
+//     }
+//     useEffect(() => {
+//         if (isShuffled && playlistId) {
+//             shuffleSongs()
+//         } else {
+//             setIsShuffled(false)
+//         }
+//     }, [playlistId])
 
-    const shuffleSongs = () => {
-        unShuffledSongs.current = songs
-        const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
-        const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
-        setIsShuffled(true)
-        dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
-    }
+//     const shuffleSongs = () => {
+//         unShuffledSongs.current = songs
+//         const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
+//         const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
+//         setIsShuffled(true)
+//         dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
+//     }
 
-    const unShuffleSongs = () => {
-        setIsShuffled(false)
-        if (unShuffledSongs.current) dispatch(reorderSongsList(unShuffledSongs.current))
-    }
+//     const unShuffleSongs = () => {
+//         setIsShuffled(false)
+//         if (unShuffledSongs.current) dispatch(reorderSongsList(unShuffledSongs.current))
+//     }
 
-    return { isShuffled, toggleSongsShuffle }
-}
+//     return { isShuffled, toggleSongsShuffle }
+// }
 
 const useTextRollup = (screenWidth: number, currSong: Song) => {
     // makes that if the text is too long for the container it will spin around back and forth.

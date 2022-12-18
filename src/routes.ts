@@ -54,6 +54,10 @@ const routes = [
         path: 'genre/:genre',
         component:  Genre
     },
+    {
+        path: 'music-player-open',
+        component:  Home
+    }
 
 ]
 

@@ -12,6 +12,10 @@
             opacity: 1;
 
         }
+        &:hover .recently-played-preview-container .recently-played-preview-content.title {
+            text-decoration: underline;
+
+        }
 
         &:hover {
             background: hsla(0, 0%, 100%, .2);
@@ -59,13 +63,13 @@
             padding: 0 16px;
 
             &.title {
-                a {
-                    color: #fff;
 
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
+                color: #fff;
+
+                // &:hover {
+                //     text-decoration: underline;
+                // }
+
             }
 
             &.icon-container {
@@ -77,9 +81,11 @@
                 right: 10px;
                 transition: all .3s ease;
                 z-index: 2;
+
                 &.playing {
                     opacity: 1;
                 }
+
                 button {
                     @include green-play-btn
                 }

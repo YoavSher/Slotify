@@ -65,7 +65,6 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
         ev.stopPropagation()
         if (!isMobile) return
         setAddModal(prev => !prev)
-
     }
 
 
@@ -96,7 +95,6 @@ export const SongsModal = ({ song, closeModal, modalPos, isMobile, renderedChild
                         showActionMsg={showActionMsg}
                         height={modal.current.clientHeight} />}
             </section>
-
         </>
     )
 }

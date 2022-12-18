@@ -20,10 +20,15 @@ export const Home = () => {
     }, [])
 
     const loadPlayList = async () => {
-        const playlists = await playlistService.query()
-        if (playlists) dispatch(setPlaylists(playlists))
+        try {
+            const playlists = await playlistService.query()
+            if (playlists) dispatch(setPlaylists(playlists))
+
+        } catch (err) {
+            console.log('err:', err)
+        }
     }
-    if (!playlists) return <Loader/>
+    if (!playlists) return <Loader />
     return (
         <>
             <section className="home-page">

@@ -58,8 +58,13 @@ const useLoadPlaylists = () => {
   }, [])
 
   const loadPlayLists = async () => {
-    const playlists = await playlistService.query()
-    if (playlists) dispatch(setPlaylists(playlists))
+    try {
+      const playlists = await playlistService.query()
+      if (playlists) dispatch(setPlaylists(playlists))
+
+    } catch (err) {
+      console.log('err:', err)
+    }
   }
 
 }

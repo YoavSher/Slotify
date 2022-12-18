@@ -14,7 +14,9 @@ export const useGetResultsFromParams = () => {
     const location = useLocation()
     const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
     useEffect(() => {
-        getResultsFromParams(searchTerm)
+        console.log('searchTerm: ', searchTerm);
+
+        if (searchTerm) getResultsFromParams(searchTerm)
         return () => {
             dispatch(setSearchResults(null))
             dispatch(setSearchedPlaylists(null))

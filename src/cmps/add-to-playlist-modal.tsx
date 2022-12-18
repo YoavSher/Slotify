@@ -18,7 +18,7 @@ interface Props {
 export const AddToPlaylistModal = ({ toggleModalMobile, modalPos, song, onOpenAddModal, isMobile, height, showActionMsg }: Props) => {
 
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
-    const playlists = useAppSelector(state => state.playlist.playlists)
+    const playlists = useAppSelector(state => state.user.playlists)
     const playlistsToShow = playlists?.filter(p => p.creatorId === loggedInUser?._id)
     const [filteredPlaylists, setFilteredPlaylists] = useState(playlistsToShow)
 
