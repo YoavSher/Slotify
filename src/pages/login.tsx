@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { ActionMsg } from "../cmps/action-msg"
 import { GoogleLoginBtn } from "../cmps/google-login-btn"
 import { Playlist } from "../interfaces/playlist"
-import { PlaylistSong, Song } from "../interfaces/song"
+import { likedSong, PlaylistSong, Song } from "../interfaces/song"
 import { playlistService } from "../services/playlist.service"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
@@ -39,7 +39,8 @@ export const Login = () => {
             if (user) {
                 dispatch(setUser(user))
                 onCloseModal()
-                const songs = await songService.getLikedSongs(user._id) as Song[]
+                const songs = await songService.getLikedSongs(user._id) as likedSong[]
+                songs.sort((a: likedSong, b: likedSong) => +b.addedAt - +a.addedAt)
                 dispatch(setLikedSongs(songs))
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))
@@ -47,7 +48,7 @@ export const Login = () => {
                 dispatch(setRecentPlaylists(recentlyPlayed))
             }
 
-        } catch (err) { 
+        } catch (err) {
             showActionMsg('Invalid username and password')
         }
 

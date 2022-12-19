@@ -31,7 +31,7 @@ async function getDataFromYoutube(term: string) {
             return song
         })
         songs = songs.filter((song: Song) => song.duration > 0 && song.duration < 900000)
-        songService.addSongsFromSearch(songs)
+        // songService.addSongsFromSearch(songs)
         return songs
     } catch (err) {
         console.log('err:', err)

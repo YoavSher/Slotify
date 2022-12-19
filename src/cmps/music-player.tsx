@@ -325,18 +325,26 @@ const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
     }
     useEffect(() => {
         if (isShuffled && playlistId) {
-            shuffleSongs()
+            const idx = utilService.getRandomNumber(songs.length - 1)
+            dispatch(setPlayingIdx(idx))
+            setTimeout(shuffleSongs, 250)
         } else {
             setIsShuffled(false)
         }
     }, [playlistId])
 
+// spotify's implementation of shuffle is,make the song index zero,and shuffle the remanining songs of the playlist,
+// then on unshuffle return the array to it's former shape,and pick the same song,make it the index.
+
+
+
+
     const shuffleSongs = () => {
-        unShuffledSongs.current = songs
-        const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
-        const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
+        unShuffledSongs.current = songs // keep the songs
+        const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1) // save what's before the current index
+        const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1)) // save whats after the current index
         setIsShuffled(true)
-        dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
+        dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx))) // insert the reordered playlist,without changing the index or the currently played song.
     }
 
     const unShuffleSongs = () => {
