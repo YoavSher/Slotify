@@ -15,6 +15,7 @@ export const usePlayPlaylistPreview = (playlistPre: Playlist, loggedInUser: Mini
 
     const onSetPlaylist = async (ev: MouseEvent<HTMLButtonElement>) => {
         ev.stopPropagation()
+        ev.preventDefault()
         if (isCurrPlaylistOnQueue && isSongPlaying) {
             dispatch(setIsSongPlaying(false))
         } else if (isCurrPlaylistOnQueue && !isSongPlaying) {

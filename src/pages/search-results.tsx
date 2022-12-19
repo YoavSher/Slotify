@@ -33,8 +33,15 @@ export const SearchResults = () => {
     const { getResultsFromParams } = useGetResultsFromParams()
     const { msg, showActionMsg } = useShowActionMsg()
     useEffect(() => {
-        if (params.searchTerm) getResultsFromParams(params.searchTerm)
+        console.log('params:', params.searchTerm)
+        // if (params.searchTerm) getResultsFromParams(params.searchTerm)
+        getResults()
     }, [])
+
+    const getResults = () => {
+        if (isMobile && params.searchTerm) getResultsFromParams(params.searchTerm)
+        return
+    }
 
     const onFilterResults = (filterBy: string) => {
         switch (filterBy) {

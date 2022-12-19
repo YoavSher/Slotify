@@ -15,8 +15,12 @@
             position: absolute;
             width: calc(100% - 8px);
             height: 2px;
-            bottom: -12px;
+            bottom: -18px;
             left: 4px;
+
+            @media(min-width: 770px) {
+                bottom: -12px;
+            }
 
             span:not(:last-child) {
                 top: 50%

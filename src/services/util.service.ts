@@ -10,7 +10,8 @@ export const utilService = {
     getDetailedTime,
     shuffle,
     getCurrentPartOfTheDay,
-    getRandomNumber
+    getRandomNumber,
+    getTotalSongsDuration
 }
 
 function makeId(length = 8) {
@@ -113,4 +114,15 @@ function getCurrentPartOfTheDay() {
 
 function getRandomNumber(max: number): number {
     return Math.floor(Math.random() * max)
+}
+
+function getTotalSongsDuration(duration: number) {
+    const hours = Math.floor(duration / 3600000) || 0
+    const minutes = Math.floor((duration % 3600000) / 60000) || 0
+    const seconds = Math.floor((duration % 60000) / 1000) || 0
+    const result = `${hours} hr ${minutes} min`
+    if (hours < 1) return `${minutes} min ${seconds}sec`
+    if (hours > 24) return 'over than 24 hours'
+    if (result) return result
+    return ''
 }

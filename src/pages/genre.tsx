@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet"
 import { useParams } from "react-router-dom"
+import { Loader } from "../cmps/loader"
 import { PlaylistPreview } from "../cmps/playlist-perview-cmps/playlist-preview"
 import { Playlist } from "../interfaces/playlist"
 import { playlistService } from "../services/playlist.service"
 
 export const Genre = () => {
     const { genrePlaylists, genre } = useGetGenrePlaylists()
+    if (genrePlaylists.length === 0) return <Loader />
     return (
         <section className="genre-page">
-             <Helmet><title>Slotify - {genre}</title></Helmet>
+            <Helmet><title>Slotify - {genre}</title></Helmet>
             <h1>{genre}</h1>
             <div className="playlists-container">
                 {genrePlaylists.map(p => <PlaylistPreview key={p._id} playlistPre={p} />)}
@@ -26,8 +28,8 @@ const useGetGenrePlaylists = () => {
 
     useEffect(() => {
         loadPlaylist()
-        return()=>{
-            setGenrePlaylists([])  
+        return () => {
+            setGenrePlaylists([])
         }
     }, [])
 

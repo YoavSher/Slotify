@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet'
 
 import { BsFillPlayCircleFill, BsPauseCircleFill } from 'react-icons/bs'
 import { FaPauseCircle } from 'react-icons/fa'
+import { BiShuffle } from 'react-icons/bi'
 
 
 import { Playlist } from "../interfaces/playlist"
@@ -26,6 +27,8 @@ import { Loader } from "../cmps/loader"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { onPlaylistDislike, updateUserPlaylist } from "../store/user/user.reducer"
 import { useShowActionMsg } from "../hooks/useShowActionMsg"
+import { useSongsShuffle } from "../hooks/useSongsShuffle"
+import { utilService } from "../services/util.service"
 
 export const PlaylistDetails = () => {
     const params = useParams()
@@ -35,23 +38,28 @@ export const PlaylistDetails = () => {
 
     const playlists = useAppSelector(state => state.playlist.playlists)
     const loggedInUser = useAppSelector(state => state.user.loggedInUser)
+    const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
+    const queueSongs = useAppSelector(state => state.musicPlayer.songs)
     const { isMobile, screenWidth } = useIsMobile()
 
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
+    const [songsDuration, setSongsDuration] = useState('')
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
     const isCurrentUserPlaylistOwner = loggedInUser?._id === currPlaylist?.creatorId
 
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
+    const { isShuffled, toggleSongsShuffle } = useSongsShuffle(queueSongs, currPlayingIdx)
 
-    useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs)
+    useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs, setSongsDuration)
     const { msg, showActionMsg } = useShowActionMsg()
     const {
         onAddPlaylistToQueue, playSongFromPlaylist,
         onClickPlay, isCurrPlaylistPlaying } = useMusicPlayerMethods(currPlaylist, songs, loggedInUser)
 
     const handleOnDragEnd = async (result: any) => {
+        if (!isCurrentUserPlaylistOwner) return
         if (playlistId) {
             try {
                 const updatedSongs = [...songs]
@@ -69,6 +77,7 @@ export const PlaylistDetails = () => {
     }
 
     const onChangeTitle = async (ev: FocusEvent<HTMLInputElement>) => {
+        if (!isCurrentUserPlaylistOwner) return
         let { value } = ev.target
         if (currPlaylist) {
             setCurrPlaylist((prevState) => {
@@ -80,6 +89,7 @@ export const PlaylistDetails = () => {
     }
 
     const onSaveChanges = async (newPlaylist = currPlaylist) => {
+        if (!isCurrentUserPlaylistOwner) return
         try {
             if (newPlaylist) {
                 dispatch(updateUserPlaylist(newPlaylist))
@@ -92,6 +102,7 @@ export const PlaylistDetails = () => {
     }
 
     const onChangePhoto = async (ev: ChangeEvent<HTMLInputElement>) => {
+        if (!isCurrentUserPlaylistOwner) return
         try {
             const newPhoto = await uploadService.uploadImg(ev)
             if (currPlaylist) {
@@ -115,6 +126,7 @@ export const PlaylistDetails = () => {
     }
 
     const onRemovePlaylist = async () => {
+        if (!isCurrentUserPlaylistOwner) return
         if (playlistId) {
             try {
                 dispatch(onPlaylistDislike(playlistId))
@@ -127,6 +139,7 @@ export const PlaylistDetails = () => {
     }
 
     const onAddToPlaylist = async (song: Song) => {
+        if (!isCurrentUserPlaylistOwner) return
         try {
             const { videoId } = song
             if (songs && playlistId) {
@@ -147,6 +160,7 @@ export const PlaylistDetails = () => {
     }
 
     const removeSongFromPlaylist = async (song: Song) => {
+        if (!isCurrentUserPlaylistOwner) return
         const { videoId } = song
         const idx = songs.findIndex(s => videoId === s.videoId)
         if (idx === -1) return
@@ -184,18 +198,28 @@ export const PlaylistDetails = () => {
                 onChangePhoto={onChangePhoto}
                 onChangeTitle={onChangeTitle}
                 onSaveChanges={onSaveChanges}
+                songsDuration={songsDuration}
                 isMobile={isMobile} />
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
-                    <button className="play-btn" onClick={onClickPlay}>
-                        <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
-                    </button>
-                    {loggedInUser && !isCurrentUserPlaylistOwner && < LikeButtonPlaylist playlist={currPlaylist} />}
-                    <button className="menu-btn" onClick={onTogglePlaylistModal}><span>• • •</span></button>
-                    {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
-                        <button onClick={onRemovePlaylist}>Delete</button>
-                        <button onClick={onAddPlaylistToQueue}>Add to queue</button>
-                    </section>}
+                    <div className="start-btns">
+                        <button className="play-btn" onClick={onClickPlay}>
+                            <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
+                        </button>
+                        {isMobile && <button className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`}
+                            onClick={toggleSongsShuffle}>
+                            <span ><BiShuffle /></span>
+                        </button>}
+                    </div>
+                    <div className="end-btns">
+                        {loggedInUser && !isCurrentUserPlaylistOwner && < LikeButtonPlaylist playlist={currPlaylist} />}
+                        <button className="menu-btn" onClick={onTogglePlaylistModal}><span>• • •</span></button>
+                        {isPlaylistModalOpen && <section style={{ position: 'absolute', left: '95px', top: '33px' }} className="playlist-modal options-modal">
+                            {isCurrentUserPlaylistOwner &&
+                                <button onClick={onRemovePlaylist}>Delete</button>}
+                            <button onClick={onAddPlaylistToQueue}>Add to queue</button>
+                        </section>}
+                    </div>
                 </div>
 
                 <div className="playlist-details-main-content">
@@ -228,7 +252,8 @@ export const PlaylistDetails = () => {
 
 const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     setCurrPlaylist: React.Dispatch<React.SetStateAction<Playlist | undefined>>,
-    setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
+    setSongs: React.Dispatch<React.SetStateAction<Song[]>>,
+    setSongsDuration: React.Dispatch<React.SetStateAction<string>>) => {
     useEffect(() => {
 
         loadPlaylist()
@@ -237,13 +262,20 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
             setSongs([])
         })
     }, [playlistId])
-
+    interface FullPlaylist {
+        playlist: Playlist,
+        songs: Song[]
+    }
     const loadPlaylist = async () => {
         try {
             if (playlistId !== null) {
-                const { playlist, songs } = await playlistService.getPlaylistById(playlistId)
+                const { playlist, songs }: FullPlaylist = await playlistService.getPlaylistById(playlistId)
                 setCurrPlaylist(playlist)
                 setSongs(songs)
+                let duration = 0
+                songs.forEach(s => duration += s.duration)
+                const totalDuration = utilService.getTotalSongsDuration(duration)
+                setSongsDuration(totalDuration)
             }
         } catch (err) {
             console.log('err:', err)
