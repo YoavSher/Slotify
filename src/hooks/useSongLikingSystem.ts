@@ -20,7 +20,7 @@ export const useSongLikingSystem = (song: Song) => {
                 } else {
                     const currSong = { ...song, addedAt: Date.now() }
                     dispatch(onSongLike(currSong))
-                    await songService.addLikedSong(currSongId)
+                    await songService.addLikedSong(song)
                 }
             } catch (err) {
                 console.log(err)

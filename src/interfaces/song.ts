@@ -10,6 +10,9 @@ export interface Song { // perhaps we should change to videoId so we dont get co
     idx?: number,
     name?: string
 }
+export interface likedSong extends Song {
+    addedAt: number
+}
 
 export interface PlaylistSong {
     videoId: string,

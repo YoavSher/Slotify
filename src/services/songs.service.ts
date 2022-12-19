@@ -29,9 +29,9 @@ async function getLikedSongs(userId: number) {
     }
 }
 
-async function addLikedSong(videoId: string) {
+async function addLikedSong(song: Song) {
     try {
-        await httpService.post('song/user', { videoId })
+        await httpService.post('song/user', { song })
     } catch (err) {
         throw err
     }
@@ -44,10 +44,13 @@ async function removeLikedSong(videoId: string) {
         throw err
     }
 }
-
-async function addSongToPlaylist(song: PlaylistSong) {
+interface AddSongBody {
+    playlistId: number
+    song: Song
+}
+async function addSongToPlaylist(body: AddSongBody) {
     try {
-        await httpService.post(`song/playlist`, song)
+        await httpService.post(`song/playlist`, body)
     } catch (err) {
         throw err
     }
@@ -75,10 +78,10 @@ async function getPlaylistSongs(playlistId: number) {
     }
 }
 
-async function searchSongs(searchTerm:string){
+async function searchSongs(searchTerm: string) {
     try {
         const songs = await httpService.get(`song/${searchTerm}`, null)
-        return songs as Song[] 
+        return songs as Song[]
     } catch (err) {
         throw err
     }

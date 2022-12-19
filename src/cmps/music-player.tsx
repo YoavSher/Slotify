@@ -336,13 +336,13 @@ export const MusicPlayer = () => {
 //         }
 //     }, [playlistId])
 
-//     const shuffleSongs = () => {
-//         unShuffledSongs.current = songs
-//         const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
-//         const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
-//         setIsShuffled(true)
-//         dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
-//     }
+    // const shuffleSongs = () => {
+    //     unShuffledSongs.current = songs
+    //     const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
+    //     const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
+    //     setIsShuffled(true)
+    //     dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
+    // }
 
 //     const unShuffleSongs = () => {
 //         setIsShuffled(false)

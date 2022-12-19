@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { setLikedPlaylists, setLikedSongs, setRecentPlaylists, setUser } from "../store/user/user.reducer"
 import { songService } from "../services/songs.service"
 import { userService } from "../services/user.service"
-import { Song } from "../interfaces/song"
+import { likedSong, Song } from "../interfaces/song"
 import { playlistService } from "../services/playlist.service"
 import { Playlist } from "../interfaces/playlist"
 
@@ -14,7 +14,8 @@ export const useCookieToGetUser = () => {
             const user = await userService.checkLoginToken()
             if (user) {
                 dispatch(setUser(user))
-                const songs = await songService.getLikedSongs(user._id) as Song[]
+                const songs = await songService.getLikedSongs(user._id) as likedSong[]
+                songs.sort((a: likedSong, b: likedSong) => +b.addedAt - +a.addedAt)
                 dispatch(setLikedSongs(songs))
                 const playlists = await playlistService.getUserPlaylists(user._id) as Playlist[]
                 dispatch(setLikedPlaylists(playlists))

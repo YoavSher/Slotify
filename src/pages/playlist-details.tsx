@@ -144,11 +144,11 @@ export const PlaylistDetails = () => {
             const { videoId } = song
             if (songs && playlistId) {
                 if (songs.some(s => s.videoId === videoId)) return
-                const newSong = { playlistId: playlistId, videoId, addedAt: Date.now(), idx: songs.length }
                 setSongs(prevState => {
                     return [...prevState, { ...song, addedAt: Date.now() }]
                 })
-                await songService.addSongToPlaylist(newSong)
+                const body = { playlistId, song: { ...song, addedAt: Date.now(), idx: songs.length } }
+                await songService.addSongToPlaylist(body)
                 showActionMsg('Song added to playlist')
             }
         } catch (err) {
