@@ -1,5 +1,6 @@
 import { AiFillCaretLeft } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../store/store.hooks'
 
 
 interface Props {
@@ -8,6 +9,8 @@ interface Props {
 }
 export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
     const navigate = useNavigate()
+    const screenWidth = useAppSelector(state => state.helper.screenWidth)
+    const isMobile = screenWidth < 700
     const modalTitle = () => {
         switch (type) {
             case 'create playlist':
@@ -34,6 +37,7 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
         setIsModalOpen(false)
     }
     const calcTop = () => {
+        if (isMobile) return
         switch (type) {
             case 'create playlist':
                 return {
@@ -50,9 +54,9 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
         }
     }
 
-    const goToLogin=()=>{
+    const goToLogin = () => {
         closeModal()
-        navigate('/login')   
+        navigate('/login')
     }
     return (
         <section className="need-to-login-modal" style={calcTop()}>
@@ -66,9 +70,9 @@ export const NeedToLoginModal = ({ type, setIsModalOpen }: Props) => {
                     </div>
                 </div>
             </div>
-            <div className="side-arrow">
+            {!isMobile && <div className="side-arrow">
                 <span><AiFillCaretLeft /></span>
-            </div>
+            </div>}
         </section>
     )
 }

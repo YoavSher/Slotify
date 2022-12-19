@@ -28,6 +28,7 @@ import { useIsMobile } from "../hooks/useIsMobile"
 import { onPlaylistDislike, updateUserPlaylist } from "../store/user/user.reducer"
 import { useShowActionMsg } from "../hooks/useShowActionMsg"
 import { useSongsShuffle } from "../hooks/useSongsShuffle"
+import { utilService } from "../services/util.service"
 
 export const PlaylistDetails = () => {
     const params = useParams()
@@ -44,13 +45,14 @@ export const PlaylistDetails = () => {
 
     const [currPlaylist, setCurrPlaylist] = useState<Playlist>()
     const [songs, setSongs] = useState<Song[]>([])
+    const [songsDuration, setSongsDuration] = useState('')
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false)
     const isCurrentUserPlaylistOwner = loggedInUser?._id === currPlaylist?.creatorId
 
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const { isShuffled, toggleSongsShuffle } = useSongsShuffle(queueSongs, currPlayingIdx)
 
-    useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs)
+    useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs, setSongsDuration)
     const { msg, showActionMsg } = useShowActionMsg()
     const {
         onAddPlaylistToQueue, playSongFromPlaylist,
@@ -196,6 +198,7 @@ export const PlaylistDetails = () => {
                 onChangePhoto={onChangePhoto}
                 onChangeTitle={onChangeTitle}
                 onSaveChanges={onSaveChanges}
+                songsDuration={songsDuration}
                 isMobile={isMobile} />
             <div className="playlist-details-main">
                 <div className="playlist-details-main action-btns flex align-center">
@@ -249,7 +252,8 @@ export const PlaylistDetails = () => {
 
 const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
     setCurrPlaylist: React.Dispatch<React.SetStateAction<Playlist | undefined>>,
-    setSongs: React.Dispatch<React.SetStateAction<Song[]>>) => {
+    setSongs: React.Dispatch<React.SetStateAction<Song[]>>,
+    setSongsDuration: React.Dispatch<React.SetStateAction<string>>) => {
     useEffect(() => {
 
         loadPlaylist()
@@ -258,13 +262,20 @@ const useGetPlaylist = (playlistId: number | null, playlists: Playlist[] | null,
             setSongs([])
         })
     }, [playlistId])
-
+    interface FullPlaylist {
+        playlist: Playlist,
+        songs: Song[]
+    }
     const loadPlaylist = async () => {
         try {
             if (playlistId !== null) {
-                const { playlist, songs } = await playlistService.getPlaylistById(playlistId)
+                const { playlist, songs }: FullPlaylist = await playlistService.getPlaylistById(playlistId)
                 setCurrPlaylist(playlist)
                 setSongs(songs)
+                let duration = 0
+                songs.forEach(s => duration += s.duration)
+                const totalDuration = utilService.getTotalSongsDuration(duration)
+                setSongsDuration(totalDuration)
             }
         } catch (err) {
             console.log('err:', err)

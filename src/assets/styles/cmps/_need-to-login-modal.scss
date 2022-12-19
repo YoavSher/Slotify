@@ -1,7 +1,7 @@
 .need-to-login-modal {
     position: absolute;
-    left: 200px;
-    top: 200px;
+    left: 40px;
+    bottom: 140px;
     max-width: 336px;
     background-color: #0d72ea;
     border-radius: 8px;
@@ -12,6 +12,11 @@
     outline: 0;
     text-align: start;
     z-index:100;
+    @media(min-width:770px){
+    top: 200px;
+    left: 200px;  
+    bottom: initial;
+    }
     .modal-content {
         min-width: 300px;
         padding: 16px;

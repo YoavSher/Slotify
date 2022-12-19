@@ -15,13 +15,14 @@ interface Props {
     onSaveChanges: any,
     isMobile: boolean,
     songsLength: number,
-    isCurrentUserPlaylistOwner: boolean
+    isCurrentUserPlaylistOwner: boolean,
+    songsDuration: string
 }
 
 
 
 
-export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, onSaveChanges, isMobile, songsLength, isCurrentUserPlaylistOwner }: Props) => {
+export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, songsDuration, onChangeTitle, onSaveChanges, isMobile, songsLength, isCurrentUserPlaylistOwner }: Props) => {
     const [background, setBackground] = useState<string>('#181818')
     const returnColors = (colors: string[]) => {
         const color = `linear-gradient(transparent 0,rgba(18,18,18,1) 100%),${colors[0]}`
@@ -49,7 +50,8 @@ export const PlaylistDetailsHeader = ({ playlist, onChangePhoto, onChangeTitle, 
                     type="text" className="playlist-title"
                     onChange={onChangeTitle} onBlur={() => onSaveChanges(undefined)} value={playlist.name} />
                 <h5>{playlist?.fullName}
-                    {songsLength > 0 && <span> • {songsLength} songs</span>}</h5>
+                    {songsLength > 0 && <><span> • {songsLength} songs, </span>
+                        <span style={{ 'opacity': 0.7 }}>{songsDuration}</span></>}</h5>
             </div>
         </header>
     )
