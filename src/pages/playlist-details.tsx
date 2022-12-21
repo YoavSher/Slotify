@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet'
 
 import { BsFillPlayCircleFill, BsPauseCircleFill } from 'react-icons/bs'
 import { FaPauseCircle } from 'react-icons/fa'
-import { BiShuffle } from 'react-icons/bi'
 
 
 import { Playlist } from "../interfaces/playlist"
@@ -27,7 +26,6 @@ import { Loader } from "../cmps/loader"
 import { useIsMobile } from "../hooks/useIsMobile"
 import { onPlaylistDislike, updateUserPlaylist } from "../store/user/user.reducer"
 import { useShowActionMsg } from "../hooks/useShowActionMsg"
-import { useSongsShuffle } from "../hooks/useSongsShuffle"
 import { utilService } from "../services/util.service"
 
 export const PlaylistDetails = () => {
@@ -50,7 +48,6 @@ export const PlaylistDetails = () => {
     const isCurrentUserPlaylistOwner = loggedInUser?._id === currPlaylist?.creatorId
 
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
-    const { isShuffled, toggleSongsShuffle } = useSongsShuffle(queueSongs, currPlayingIdx)
 
     useGetPlaylist(playlistId, playlists, setCurrPlaylist, setSongs, setSongsDuration)
     const { msg, showActionMsg } = useShowActionMsg()
@@ -215,10 +212,6 @@ export const PlaylistDetails = () => {
                         <button className="play-btn" onClick={onClickPlay}>
                             <span>{isCurrPlaylistPlaying ? <FaPauseCircle /> : <BsFillPlayCircleFill />}</span>
                         </button>
-                        {isMobile && <button className={`shuffle-btn ${(isShuffled) ? 'shuffled' : ''}`}
-                            onClick={toggleSongsShuffle}>
-                            <span ><BiShuffle /></span>
-                        </button>}
                     </div>
                     <div className="end-btns">
                         {loggedInUser && !isCurrentUserPlaylistOwner && < LikeButtonPlaylist playlist={currPlaylist} />}

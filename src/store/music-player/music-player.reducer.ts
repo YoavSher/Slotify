@@ -45,8 +45,15 @@ const musicPlayerSlice = createSlice({
             state.isSongPlaying = action.payload
         },
         addToQueue: ((state, action: PayloadAction<Song>) => {
-            state.songs.push(action.payload)
+            const index = state.songs.findIndex((song) => song.videoId === action.payload.videoId)
             state.playlistId = null
+            if (index === -1) {
+                state.songs.push(action.payload)
+            } else if (index < state.currPlayingIdx) {
+                state.songs = state.songs.filter((song) => song.videoId !== action.payload.videoId)
+                state.currPlayingIdx--
+                state.songs.push(action.payload)
+            }
             cachingService.saveCurrentPlaylist({ songs: state.songs, playlistId: state.playlistId })
         }),
         replacePlaylist: ((state, action: PayloadAction<Song>) => {
