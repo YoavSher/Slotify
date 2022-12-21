@@ -11,10 +11,11 @@ import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 export const useGetResultsFromParams = () => {
     const dispatch = useAppDispatch()
     const playlists = useAppSelector(state => state.playlist.playlists)
+    const searchTerm = useAppSelector(state => state.searchSong.searchTerm)
     const location = useLocation()
-    const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
+    // const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
     useEffect(() => {
-        console.log('searchTerm: ', searchTerm);
+        // console.log('searchTerm: ', searchTerm);
 
         if (searchTerm) getResultsFromParams(searchTerm)
         return () => {

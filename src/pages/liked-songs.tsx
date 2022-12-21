@@ -1,16 +1,11 @@
+import { useEffect, useState } from 'react'
 import { Helmet } from "react-helmet"
 import { BsFillPlayCircleFill } from "react-icons/bs"
 import { RiHeartFill } from "react-icons/ri"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
-// import { Song } from "../interfaces/song"
-// import { setPlayingIdx, setPlaylist } from "../store/music-player/music-player.reducer"
-import { useAppDispatch, useAppSelector } from "../store/store.hooks"
-import { useEffect, useState, MouseEvent, MouseEventHandler } from 'react'
-// import { setLikedSongs, setUser } from "../store/user/user.reducer"
-// import { userService } from "../services/user.service"
+import {  useAppSelector } from "../store/store.hooks"
 import { useSongModal } from "../hooks/useSongModal"
-// import { songService } from "../services/songs.service"
 import { FaPauseCircle } from "react-icons/fa"
 import { BiShuffle } from 'react-icons/bi'
 import { useMusicPlayerMethods } from "../hooks/useMusicPlayerMethods"

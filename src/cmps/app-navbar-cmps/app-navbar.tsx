@@ -38,9 +38,16 @@ export const AppNavbar = () => {
             openModal('create playlist')
         }
         else {
-            const newPlaylist = await playlistService.createPlaylist()
-            dispatch(onPlaylistLike(newPlaylist))
-            navigate(`playlist/${newPlaylist._id}`)
+            try {
+                const newPlaylist = await playlistService.createPlaylist()
+                if (newPlaylist) {
+                    console.log('newPlaylist:', newPlaylist)
+                    dispatch(onPlaylistLike(newPlaylist))
+                    navigate(`playlist/${newPlaylist._id}`)
+                }
+            } catch (err) {
+                console.log('err:', err)
+            }
         }
     }
 

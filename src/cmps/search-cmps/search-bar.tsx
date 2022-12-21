@@ -9,7 +9,7 @@ import { songService } from "../../services/songs.service"
 
 import { utilService } from "../../services/util.service"
 import { youtubeService } from "../../services/youtube.service"
-import { setSearchedPlaylists, setSearchResults } from "../../store/search/search.reducer"
+import { setSearchedPlaylists, setSearchResults, setSearchTerm } from "../../store/search/search.reducer"
 import { useAppDispatch, useAppSelector } from "../../store/store.hooks"
 
 
@@ -17,13 +17,14 @@ export const SearchBar = () => {
 
     const navigate = useNavigate()
     const location = useLocation()
-    const searchTerm = location.pathname.slice(8).replaceAll(/%20/gi, ' ')
+    const dispatch = useAppDispatch()
     const { getResultsFromParams } = useGetResultsFromParams()
-
+    const searchTerm = useAppSelector(state => state.searchSong.searchTerm)
 
     const onSearch = (ev: ChangeEvent<HTMLInputElement>) => {
         let { value } = ev.target
         value = value.includes('/') ? value.replace(/\//g, '-') : value
+        dispatch(setSearchTerm(value))
         getResultsFromParams(value)
         value ? navigate(`/search/${value}`) : navigate(`/search`)
     }
@@ -35,7 +36,7 @@ export const SearchBar = () => {
                     <input type="text"
                         onChange={utilService.debounce(onSearch, 1200)}
                         placeholder="What do you want to listen to?"
-                        defaultValue={searchTerm}
+                        defaultValue={searchTerm || ''}
                     />
                 </form>
                 <div className="search-icon-container"><span><FiSearch /></span></div>

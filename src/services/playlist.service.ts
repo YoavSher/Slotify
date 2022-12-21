@@ -42,7 +42,7 @@ async function getPlaylistById(playlistId: number) {
     }
 }
 
-async function createPlaylist() {
+async function createPlaylist(): Promise<Playlist | undefined> {
     try {
 
         const newPlaylist = await httpService.post('playlist/', null)

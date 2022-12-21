@@ -31,10 +31,6 @@ const routes = [
         component: SearchResults
     },
     {
-        path: 'search/:searchTerm',
-        component:  SearchResults
-    }, //to use the search form the params
-    {
         path: 'playlist/:playlistId',
         component: PlaylistDetails
     },
@@ -51,9 +47,13 @@ const routes = [
         component:  Library
     },
     {
-        path: 'genre/:genre',
+        path: 'search/genre/:genre',
         component:  Genre
     },
+    {
+        path: 'search/:searchTerm',
+        component:  SearchResults
+    }, //to use the search form the params
     {
         path: 'music-player-open',
         component:  Home

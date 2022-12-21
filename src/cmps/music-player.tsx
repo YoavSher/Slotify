@@ -318,40 +318,6 @@ export const MusicPlayer = () => {
 }
 
 
-// const useSongsShuffle = (songs: Song[], currPlayingIdx: number) => {
-//     const [isShuffled, setIsShuffled] = useState(false)
-//     const unShuffledSongs = useRef<Song[] | null>(null)
-//     const dispatch = useAppDispatch()
-//     const playlistId = useAppSelector(state => state.musicPlayer.playlistId)
-
-//     const toggleSongsShuffle = () => {
-//         if (isShuffled) unShuffleSongs()
-//         else shuffleSongs()
-//     }
-//     useEffect(() => {
-//         if (isShuffled && playlistId) {
-//             shuffleSongs()
-//         } else {
-//             setIsShuffled(false)
-//         }
-//     }, [playlistId])
-
-    // const shuffleSongs = () => {
-    //     unShuffledSongs.current = songs
-    //     const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
-    //     const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
-    //     setIsShuffled(true)
-    //     dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
-    // }
-
-//     const unShuffleSongs = () => {
-//         setIsShuffled(false)
-//         if (unShuffledSongs.current) dispatch(reorderSongsList(unShuffledSongs.current))
-//     }
-
-//     return { isShuffled, toggleSongsShuffle }
-// }
-
 const useTextRollup = (screenWidth: number, currSong: Song) => {
     // makes that if the text is too long for the container it will spin around back and forth.
     const songNameP = useRef<HTMLParagraphElement>(null)

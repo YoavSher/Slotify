@@ -1,4 +1,3 @@
-import { MouseEvent, MouseEventHandler, useState } from "react"
 import { Helmet } from "react-helmet"
 import { ActionMsg } from "../cmps/action-msg"
 
@@ -7,8 +6,6 @@ import { SongsModal } from "../cmps/songs-modal"
 import { SongsQueueList } from "../cmps/songs-queue-list"
 import { useShowActionMsg } from "../hooks/useShowActionMsg"
 import { useSongModal } from "../hooks/useSongModal"
-import { CustomEvent } from "../interfaces/boundingRect"
-import { Song } from "../interfaces/song"
 import { useAppSelector } from "../store/store.hooks"
 
 
@@ -24,7 +21,7 @@ export const Queue = () => {
     const songs = useAppSelector(state => state.musicPlayer.songs)
     const currPlayingIdx = useAppSelector(state => state.musicPlayer.currPlayingIdx)
     const { msg, showActionMsg } = useShowActionMsg()
-   
+
     return (
         <>
             <Helmet><title>Slotify - Play Queue </title></Helmet>

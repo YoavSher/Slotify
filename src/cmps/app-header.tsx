@@ -22,8 +22,10 @@ export const AppHeader = () => {
         if (!loggedInUser) return
         try {
             const newPlaylist = await playlistService.createPlaylist()
-            dispatch(onPlaylistLike(newPlaylist))
-            navigate(`playlist/${newPlaylist._id}`)
+            if (newPlaylist) {
+                dispatch(onPlaylistLike(newPlaylist))
+                navigate(`playlist/${newPlaylist._id}`)
+            }
         } catch (err) {
             console.log(err)
         }

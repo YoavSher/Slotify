@@ -3,7 +3,7 @@ import { Params, useParams } from "react-router-dom"
 
 import { Song } from "../interfaces/song"
 
-import { useAppSelector } from "../store/store.hooks"
+import { useAppDispatch, useAppSelector } from "../store/store.hooks"
 import { Helmet } from "react-helmet"
 import { SongPreview } from "../cmps/song-preview-cmps/song-preview"
 import { SongsModal } from "../cmps/songs-modal"
@@ -17,6 +17,7 @@ import { SearchFilter } from "../cmps/search-cmps/search-filter"
 import { SearchDefault } from "../cmps/search-cmps/seach-default"
 import { SearchBar } from "../cmps/search-cmps/search-bar"
 import { useShowActionMsg } from "../hooks/useShowActionMsg"
+import { setSearchTerm } from "../store/search/search.reducer"
 
 
 
@@ -27,15 +28,19 @@ export const SearchResults = () => {
     const params = useParams()
     const [showSongs, setShowSongs] = useState(true)
     const [showPlaylists, setShowPlaylists] = useState(true)
-
+    const dispatch = useAppDispatch()
     const { toggleModal, closeModal, isModalOpen, songForModal, modalPos } = useSongModal()
     const { topPlaylists, topSongs } = useSearchResults(songsSearchedResults, playlistsSearchedResults, params)
     const { getResultsFromParams } = useGetResultsFromParams()
     const { msg, showActionMsg } = useShowActionMsg()
+    
     useEffect(() => {
-        console.log('params:', params.searchTerm)
-        // if (params.searchTerm) getResultsFromParams(params.searchTerm)
+       
+        if (params.searchTerm) dispatch(setSearchTerm(params.searchTerm))
         getResults()
+        return () => {
+            dispatch(setSearchTerm(''))
+        }
     }, [])
 
     const getResults = () => {

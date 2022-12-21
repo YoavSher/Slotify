@@ -15,6 +15,7 @@ export const Home = () => {
     const playlists = useAppSelector(state => state.playlist.playlists)
     const userRecentPlaylists = useAppSelector(state => state.user.recentPlaylists)
     const dispatch = useAppDispatch()
+    
     useEffect(() => {
         loadPlayList()
     }, [])

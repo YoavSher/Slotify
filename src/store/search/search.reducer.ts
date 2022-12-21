@@ -10,7 +10,7 @@ interface searchState {
 }
 
 const initialState: searchState = {
-    searchTerm: null,
+    searchTerm: '',
     searchResults: null,
     searchedPlaylists: null
 }
@@ -30,6 +30,6 @@ const searchSlice = createSlice({
         }
     }
 })
-export const { setSearchResults, setSearchedPlaylists } = searchSlice.actions
+export const { setSearchResults, setSearchedPlaylists ,setSearchTerm} = searchSlice.actions
 
 export default searchSlice.reducer

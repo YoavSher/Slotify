@@ -17,13 +17,10 @@ export const SearchDefaultPreview = ({ genre, image }: Props) => {
         setBackground(color)
     }
 
-    const onGoToPage = () => {
-        navigate(`/genre/${genre}`)
-    }
 
     return (
         <section className="search-default-preview"
-         style={{ background }} onClick={() => navigate(`/genre/${genre}`)}>
+            style={{ background }} onClick={() => navigate(`/search/genre/${genre}`)}>
             <h1>{genre}</h1>
             <div className="img-container">
                 <ColorExtractor getColors={returnColors}>

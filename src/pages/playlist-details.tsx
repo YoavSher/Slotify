@@ -147,6 +147,10 @@ export const PlaylistDetails = () => {
                 setSongs(prevState => {
                     return [...prevState, { ...song, addedAt: Date.now() }]
                 })
+                let duration = song.duration
+                songs.forEach(s => duration += s.duration)
+                const totalDuration = utilService.getTotalSongsDuration(duration)
+                setSongsDuration(totalDuration)
                 const body = { playlistId, song: { ...song, addedAt: Date.now(), idx: songs.length } }
                 await songService.addSongToPlaylist(body)
                 showActionMsg('Song added to playlist')
@@ -169,6 +173,11 @@ export const PlaylistDetails = () => {
                 setSongs(prevState => {
                     return prevState.filter(s => s.videoId !== song.videoId)
                 })
+                let duration = 0
+                songs.forEach(s => duration += s.duration)
+                duration -= song.duration
+                const totalDuration = utilService.getTotalSongsDuration(duration)
+                setSongsDuration(totalDuration)
                 await songService.removeFromPlaylist({ playlistId, videoId, idx })
                 showActionMsg('Song removed')
             }

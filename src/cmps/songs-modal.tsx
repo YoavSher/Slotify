@@ -1,7 +1,6 @@
-import { useState, useEffect, MouseEventHandler, MouseEvent, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
 
 import { AiFillCaretRight } from 'react-icons/ai'
-import { useLocation } from "react-router-dom"
 import { useSongLikingSystem } from "../hooks/useSongLikingSystem"
 
 import { Song } from "../interfaces/song"
