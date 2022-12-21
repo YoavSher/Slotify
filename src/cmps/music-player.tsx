@@ -25,7 +25,7 @@ export const MusicPlayer = () => {
     const queueSongs = useAppSelector(state => state.musicPlayer.songs)
     const isSongPlaying = useAppSelector(state => state.musicPlayer.isSongPlaying)
     const { isMobile, screenWidth } = useIsMobile()
-    const currSong = queueSongs[currPlayingIdx]
+    const [currSong, setCurrSong] = useState<Song | null>(null)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const location = useLocation()
@@ -35,12 +35,11 @@ export const MusicPlayer = () => {
     const playingTimeFromCache = useRef<number | null>()
     const [isMobileFullScreen, setIsMobileFullScreen] = useState(false)
 
-
+    useEffect(() => {
+        setCurrSong(queueSongs[currPlayingIdx])
+    }, [queueSongs, currPlayingIdx])
 
     useEffect(() => {
-        // at the componentDidMount stage checks if there are
-        //  previous playlist,volume,playing time and playing index cached if so takes them 
-        // and load them to the store for the app to use.
         const previousPlaylistInfo = cachingService.getPlaylist()
         const volume = cachingService.getCurrentVolume()
         if (volume || volume === 0) onVolumeChange(volume)
@@ -71,11 +70,13 @@ export const MusicPlayer = () => {
 
     const [volume, setVolume] = useState(50)
     const [isLoopingEnabled, setIsLoopingEnabled] = useState(false)
+
     useEffect(() => {
         if (location.pathname.includes('music-player-open')) {
             setIsMobileFullScreen(true)
         } else setIsMobileFullScreen(false)
     }, [location])
+
     const onPlayerReady: YouTubeProps['onReady'] = (ev) => {
         // the function that catches the player object from the youtube component
         // and starts the control over it.
@@ -97,7 +98,7 @@ export const MusicPlayer = () => {
         // the interval that synchronize the time of the current song
         //  from the youtube component,and the local state.
         durationIntervalId.current = window.setInterval(() => {
-            if (playerRef.current && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
+            if (playerRef.current && currSong && playerRef.current.getCurrentTime() + 1 >= currSong.duration / 1000) {
                 setSongTimer(0)
                 if (!isLoopingEnabled) {
                     dispatch(setPlayingIdx(currPlayingIdx + 1))
@@ -207,6 +208,7 @@ export const MusicPlayer = () => {
 
         }
     }
+
     const getFullDuration = () => {
         return playerRef.current.playerInfo.duration * 1000 || 0
     }
@@ -336,13 +338,13 @@ export const MusicPlayer = () => {
 //         }
 //     }, [playlistId])
 
-    // const shuffleSongs = () => {
-    //     unShuffledSongs.current = songs
-    //     const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
-    //     const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
-    //     setIsShuffled(true)
-    //     dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
-    // }
+// const shuffleSongs = () => {
+//     unShuffledSongs.current = songs
+//     const beforePlayingIdx = songs.slice(0, currPlayingIdx + 1)
+//     const afterPlayingIdx = utilService.shuffle(songs.slice(currPlayingIdx + 1))
+//     setIsShuffled(true)
+//     dispatch(reorderSongsList(beforePlayingIdx.concat(afterPlayingIdx)))
+// }
 
 //     const unShuffleSongs = () => {
 //         setIsShuffled(false)
@@ -352,7 +354,7 @@ export const MusicPlayer = () => {
 //     return { isShuffled, toggleSongsShuffle }
 // }
 
-const useTextRollup = (screenWidth: number, currSong: Song) => {
+const useTextRollup = (screenWidth: number, currSong: Song | null) => {
     // makes that if the text is too long for the container it will spin around back and forth.
     const songNameP = useRef<HTMLParagraphElement>(null)
     const namesContainerRef = useRef<HTMLDivElement>(null)
