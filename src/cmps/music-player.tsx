@@ -40,6 +40,7 @@ export const MusicPlayer = () => {
     }, [queueSongs, currPlayingIdx])
 
     useEffect(() => {
+        //loads the cached information of the last play of the user
         const previousPlaylistInfo = cachingService.getPlaylist()
         const volume = cachingService.getCurrentVolume()
         if (volume || volume === 0) onVolumeChange(volume)
@@ -81,13 +82,14 @@ export const MusicPlayer = () => {
         // the function that catches the player object from the youtube component
         // and starts the control over it.
         playerRef.current = ev.target
+        onVolumeChange(volume)
         if (playingTimeFromCache.current) {
             setSongTimer(playingTimeFromCache.current)
             playerRef.current.seekTo(playingTimeFromCache.current / 1000)
             playingTimeFromCache.current = null
             pauseSong()
         } else {
-            onVolumeChange(volume)
+            
             setSongTimer(0)
             playSong()
         }
@@ -385,7 +387,7 @@ const useTextRollup = (screenWidth: number, currSong: Song | null) => {
                             return prev + travelUnit
                         }
                     })
-                }, 250)
+                }, 300)
             }
 
         }

@@ -90,6 +90,10 @@
         z-index: 95;
         gap: 5px;
 
+        h5 {
+            padding-left: 2px;
+        }
+
         @media(min-width:1020px) {
             gap: 15px;
 
