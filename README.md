@@ -44,7 +44,7 @@ Shows the user's own playlists and playlists and songs marked as 'liked'
 ![image](https://user-images.githubusercontent.com/109622690/209153857-3b546f0c-04da-4ff8-92c4-645327ef5018.png)
 #### Search
 The default search page shows music themes for the user to browse.
-Using the search bar to search songs and playlists
+Use the search bar to search songs and playlists
 ![image](https://user-images.githubusercontent.com/109622690/209154175-af6ece02-ea02-4dbb-b9e3-dfc3d3341fea.png)
 
 ## Mobile
