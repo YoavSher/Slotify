@@ -10,6 +10,7 @@ Listen to music, search for songs, and build custom playlists. Each search resul
 * Create, update and remove playlists
 * Add, and remove songs
 * Drag and Drop songs in own playlists
+* Tracking last played playlists
 * Shuffle songs order
 * Marking songs and playlists as 'liked'
 * Add songs and playlists to Queue
