@@ -53,7 +53,7 @@ The mobile version of the app is almost a different app, with a unique  mobile d
 
 Home |  Playlist details |Library| Full music playler |Search
 :---:|:-----------------:|:-----:|:------------------:|:------:
-<img src="https://user-images.githubusercontent.com/109622690/209157492-3d18d330-9beb-4fd0-a188-6e6de9a010fa.png"  height="400">|<img src="https://user-images.githubusercontent.com/109622690/209157736-0ef7ee99-5700-4c0c-98d5-8e971abb1352.png"  height="400">|<img src="https://user-images.githubusercontent.com/109622690/209160093-41f9bde8-500b-49d6-9e4c-837da1e1bebd.png"  height="400">|<img src="https://user-images.githubusercontent.com/109622690/209160661-fe73c43e-b2d6-4f13-9820-251bd2386c73.png"  height="400">|<img src="https://user-images.githubusercontent.com/109622690/209161128-4dbb28cc-9b9d-47f6-a922-4ac30e1046bb.png"  height="400">
+<img src="https://user-images.githubusercontent.com/109622690/209157492-3d18d330-9beb-4fd0-a188-6e6de9a010fa.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209157736-0ef7ee99-5700-4c0c-98d5-8e971abb1352.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209160093-41f9bde8-500b-49d6-9e4c-837da1e1bebd.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209160661-fe73c43e-b2d6-4f13-9820-251bd2386c73.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209161128-4dbb28cc-9b9d-47f6-a922-4ac30e1046bb.png"  height="350">
 
 
 
