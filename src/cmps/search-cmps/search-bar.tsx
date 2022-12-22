@@ -32,7 +32,7 @@ export const SearchBar = () => {
     return (
         <section className="search-bar-container">
             <div className="search-form-container">
-                <form>
+                <form onSubmit={(event)=>{event.preventDefault()}}>
                     <input type="text"
                         onChange={utilService.debounce(onSearch, 1200)}
                         placeholder="What do you want to listen to?"
