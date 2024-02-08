@@ -10,8 +10,8 @@ interface Photo{
 }
 
 async function uploadImg(ev: any) {
-    const CLOUD_NAME = "dcwibf9o5"
-    const UPLOAD_PRESET = "vt0iqgff"
+    const CLOUD_NAME = "dmbdybipt"
+    const UPLOAD_PRESET = "nbp9fztt"
     const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
 
     const formData = new FormData()
