@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+# Slotify - Music playing app with React.js
+Music playing app inspired by Spotify.
+                check it out - [Slotify](https://slotify.onrender.com/).
+                
+Listen to music, search for songs, and build custom playlists. Each search results in the top searched songs and playlists. Users can make custom playlists and add existing playlists to their Library.
+![image](https://user-images.githubusercontent.com/109622690/209142844-dca705c0-0d2d-4c22-87f1-e0c280230c3b.png)
+## Application Features
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* Search songs and playlists
+* Create, update and remove playlists
+* Add, and remove songs
+* Drag and Drop songs in own playlists
+* Tracking last played playlists
+* Shuffle songs order
+* Marking songs and playlists as 'liked'
+* Add songs and playlists to Queue
+* Signup and login with a google account
+* Download the app using PWA
 
-## Available Scripts
+## Technologies
+* MySQL
+* Express
+* Node.js
+* REST API
+* React.js
+* Sass
+* TypeScript
 
-In the project directory, you can run:
+## Showcase
+#### Home
+The Home page shows the app's default playlists, as well as the user's recently played playlists.
+The user can activate the music player from the playlist preview, without needing to enter the playlist
+![image](https://user-images.githubusercontent.com/109622690/209155614-ecbc5349-d66e-4f1b-8c42-67ef3098e9a7.png)
+#### Create playlist
+With the Create playlist button, the user can create a new playlist, change the title, upload a photo
+and add new songs
+![image](https://user-images.githubusercontent.com/109622690/209146331-09b179e6-1f03-4f06-87d5-2005b22fe649.png)
+#### Playlist display
+Shows the selected playlist. Here the user can mark playlists and songs as 'liked', add them to the library,
+as well as update or delete own playlists.
+![image](https://user-images.githubusercontent.com/109622690/209153156-91938f52-62e8-446e-a93d-4b7bea67e3a2.png)
+#### Library
+Shows the user's own playlists and playlists and songs marked as 'liked'
+![image](https://user-images.githubusercontent.com/109622690/209153857-3b546f0c-04da-4ff8-92c4-645327ef5018.png)
+#### Search
+The default search page shows music themes for the user to browse.
+Use the search bar to search songs and playlists
+![image](https://user-images.githubusercontent.com/109622690/209154175-af6ece02-ea02-4dbb-b9e3-dfc3d3341fea.png)
 
-### `npm start`
+## Mobile
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The mobile version of the app is almost a different app, with a unique  mobile design and features like the full music player and swiping the song image to move through the playlist.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Home |  Playlist details |Library| Full music playler |Search
+:---:|:-----------------:|:-----:|:------------------:|:------:
+<img src="https://user-images.githubusercontent.com/109622690/209157492-3d18d330-9beb-4fd0-a188-6e6de9a010fa.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209157736-0ef7ee99-5700-4c0c-98d5-8e971abb1352.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209160093-41f9bde8-500b-49d6-9e4c-837da1e1bebd.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209160661-fe73c43e-b2d6-4f13-9820-251bd2386c73.png"  height="350">|<img src="https://user-images.githubusercontent.com/109622690/209161128-4dbb28cc-9b9d-47f6-a922-4ac30e1046bb.png"  height="350">
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
